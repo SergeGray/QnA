@@ -8,8 +8,7 @@ RSpec.describe Question, type: :model do
 
   it "destroys dependent answers" do
     question = FactoryBot.create(:question)
-    answer = FactoryBot.create(:answer)
-    question.answers << answer
+    question.answers << FactoryBot.create(:answer)
 
     expect { question.destroy }.to change { Answer.count }.by(-1)
   end
