@@ -1,5 +1,5 @@
 class QuestionsController < ApplicationController
-  before_action :set_question, only: :show
+  before_action :set_question, only: %i[show edit]
 
   def index
     @questions = Question.all
@@ -10,6 +10,8 @@ class QuestionsController < ApplicationController
   def new
     @question = Question.new
   end
+
+  def edit; end
 
   private
 
