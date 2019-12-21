@@ -6,5 +6,10 @@ FactoryBot.define do
     trait :invalid do
       title { nil }
     end
+
+    trait :new do
+      title { "How do I convert Integer to String in Ruby?" }
+      body { "I've tried literally everything!" }
+    end
   end
 end
