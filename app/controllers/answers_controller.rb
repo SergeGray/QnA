@@ -1,5 +1,5 @@
 class AnswersController < ApplicationController
-  before_action :set_question, only: :new
+  before_action :set_question, only: %i[new create]
   before_action :set_answer, only: :edit
 
   def new
@@ -7,6 +7,17 @@ class AnswersController < ApplicationController
   end
 
   def edit; end
+
+  def create
+    @answer = @question.answers.new(answer_params)
+
+    if @answer.save
+      redirect_to @question
+    else
+      render :new
+    end
+  end
+
 
   private
 
@@ -16,5 +27,9 @@ class AnswersController < ApplicationController
 
   def set_answer
     @answer = Answer.find(params[:id])
+  end
+
+  def answer_params
+    params.require(:answer).permit(:body)
   end
 end
