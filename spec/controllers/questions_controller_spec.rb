@@ -97,11 +97,13 @@ RSpec.describe QuestionsController, type: :controller do
       end
 
       it 'changes question attributes' do
-        question.reload
-
-        expect(
-          question.slice(:title, :body)
-        ).to eq(attributes_for(:question, :new).stringify_keys!)
+        expect { question.reload }
+          .to change(question, :title).to(
+        attributes_for(:question, :new)[:title]
+        )
+          .and change(question, :body).to(
+        attributes_for(:question, :new)[:body]
+        )
       end
       it 'redirects to updated question' do
         expect(response).to redirect_to(question)
@@ -117,11 +119,7 @@ RSpec.describe QuestionsController, type: :controller do
       end
 
       it 'does not change the question' do
-        question.reload
-
-        expect(
-          question.slice(:title, :body)
-        ).to eq(attributes_for(:question).stringify_keys!)
+        expect { question.reload }.to_not change(question, :attributes)
       end
 
       it 're-renders edit view' do
