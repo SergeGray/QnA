@@ -1,6 +1,6 @@
 class AnswersController < ApplicationController
   before_action :set_question, only: %i[new create]
-  before_action :set_answer, only: :edit
+  before_action :set_answer, only: %i[edit update]
 
   def new
     @answer = @question.answers.new
@@ -18,6 +18,13 @@ class AnswersController < ApplicationController
     end
   end
 
+  def update
+    if @answer.update(answer_params)
+      redirect_to @answer.question
+    else
+      render :edit
+    end
+  end
 
   private
 
