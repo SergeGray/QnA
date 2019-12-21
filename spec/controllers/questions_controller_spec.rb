@@ -99,12 +99,12 @@ RSpec.describe QuestionsController, type: :controller do
       it 'changes question attributes' do
         expect { question.reload }
           .to change(question, :title).to(
-        attributes_for(:question, :new)[:title]
-        )
-          .and change(question, :body).to(
-        attributes_for(:question, :new)[:body]
-        )
+            attributes_for(:question, :new)[:title]
+          ).and change(question, :body).to(
+            attributes_for(:question, :new)[:body]
+          )
       end
+
       it 'redirects to updated question' do
         expect(response).to redirect_to(question)
       end

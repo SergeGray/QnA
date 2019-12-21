@@ -32,15 +32,15 @@ RSpec.describe AnswersController, type: :controller do
     context 'with valid attributes' do
       it 'saves a new answer to database' do
         expect do
-          post :create, params: { 
+          post :create, params: {
             question_id: question.id,
             answer: attributes_for(:answer)
           }
         end.to change(question.answers, :count).by(1)
       end
-      
+
       it 'redirects to question' do
-        post :create, params: { 
+        post :create, params: {
           question_id: question.id,
           answer: attributes_for(:answer)
         }
