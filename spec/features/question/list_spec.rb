@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 feature 'User can view the list questions', %q{
-  In order to  find a question I am interested in
+  In order to find a question I am interested in
   As any user
   I want to be able to see the list of questions
 } do
