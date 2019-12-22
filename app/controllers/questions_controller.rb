@@ -1,6 +1,7 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: %i[index show]
   before_action :set_question, only: %i[show edit update destroy]
+  before_action :check_ownership, only: %i[edit update destroy]
 
   def index
     @questions = Question.all
@@ -48,5 +49,12 @@ class QuestionsController < ApplicationController
 
   def question_params
     params.require(:question).permit(:title, :body)
+  end
+
+  def check_ownership
+    return if current_user == @question.user
+
+    redirect_to questions_path,
+                alert: "You can't change other people's questions!"
   end
 end

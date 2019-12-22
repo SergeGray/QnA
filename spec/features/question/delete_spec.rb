@@ -7,14 +7,14 @@ feature 'User can delete their question', %q{
 } do
 
   given(:user) { create(:user) }
-  given!(:question) { create(:question) }
   
-  background do
-    sign_in(user)
-    visit questions_path
-  end
+  background { sign_in(user) }
+
 
   scenario 'User tries to delete their question' do
+    question = create(:question, user: user)
+
+    visit questions_path
     click_link 'Destroy'
         
     expect(page).to have_content(
@@ -23,6 +23,12 @@ feature 'User can delete their question', %q{
     expect(page).to_not have_content(question.title)
   end
 
-  scenario "User tries to delete somebody else's question"
+  scenario "User tries to delete somebody else's question" do
+    create(:question)
+
+    visit questions_path
+
+    expect(page).to_not have_link('Destroy')
+  end
 end
 

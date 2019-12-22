@@ -2,6 +2,4 @@ tr
   td= question.title
   td= question.body
   td= link_to 'Show', question_path(question)
-  td= link_to 'Destroy',
-              question_path(question),
-              method: :delete
+  td= destroy_link(question)
