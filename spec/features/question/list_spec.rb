@@ -9,7 +9,7 @@ feature 'User can view the list questions', %q{
   given!(:question1) { create(:question) }
   given!(:question2) { create(:question, :new) }
 
-  scenario 'Any user can view a list of all questions' do
+  scenario 'User tries to view a list of all questions' do
     visit questions_path
     expect(page).to have_content question1.title
     expect(page).to have_content question2.title

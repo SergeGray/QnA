@@ -9,7 +9,7 @@ feature 'User can view a question', %q{
   given!(:question) { create(:question) }
   given!(:answer) { create(:answer, question: question) }
 
-  scenario 'Any user can view a question with answers to it' do
+  scenario 'User tries to view a question' do
     visit questions_path
     click_link 'Show'
     expect(page).to have_content question.title
