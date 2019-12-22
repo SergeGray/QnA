@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe QuestionsController, type: :controller do
-  let(:question) { create(:question) }
   let(:user) { create(:user) }
+  let(:question) { create(:question, user: user) }
 
   describe 'GET #index' do
     let(:questions) { create_list(:question, 3) }
@@ -47,14 +47,27 @@ RSpec.describe QuestionsController, type: :controller do
   describe 'GET #edit' do
     before { login(user) }
 
-    before { get :edit, params: { id: question } }
+    context "on another user's question" do
+      let(:user2) { create(:user) }
+      let(:question2) { create(:question, user: user2) }
 
-    it 'assigns the requested question to @question' do
-      expect(assigns(:question)).to eq(question)
+      before { get :edit, params: { id: question2 } }
+
+      it 'redirects to index view' do
+        expect(response).to redirect_to(questions_path)
+      end
     end
 
-    it 'renders edit view' do
-      expect(response).to render_template(:edit)
+    context "on user's own question" do
+      before { get :edit, params: { id: question } }
+
+      it 'assigns the requested question to @question' do
+        expect(assigns(:question)).to eq(question)
+      end
+
+      it 'renders edit view' do
+        expect(response).to render_template(:edit)
+      end
     end
   end
 
@@ -92,6 +105,26 @@ RSpec.describe QuestionsController, type: :controller do
 
   describe 'PATCH #update' do
     before { login(user) }
+
+    context "on another user's question" do
+      let(:user2) { create(:user) }
+      let(:question2) { create(:question, user: user2) }
+
+      before do
+        patch :update, params: {
+          id: question2,
+          question: attributes_for(:question, :new)
+        }
+      end
+
+      it 'does not change the question' do
+        expect { question2.reload }.to_not change(question2, :attributes)
+      end
+
+      it 'redirects to index view' do
+        expect(response).to redirect_to(questions_path)
+      end
+    end
 
     context 'with valid attributes' do
       before do
@@ -140,17 +173,35 @@ RSpec.describe QuestionsController, type: :controller do
   describe 'DELETE #destroy' do
     before { login(user) }
 
-    let!(:question) { create(:question) }
+    context "on another user's question" do
+      let(:user2) { create(:user) }
+      let!(:question2) { create(:question, user: user2) }
 
-    it 'deletes the question' do
-      expect do
-        delete :destroy, params: { id: question }
-      end.to change(Question, :count).by(-1)
+      it 'does not delete the question' do
+        expect do
+          delete :destroy, params: { id: question2 }
+        end.to_not change(Question, :count)
+      end
+
+      it 'redirects to index view' do
+        delete :destroy, params: { id: question2 }
+        expect(response).to redirect_to(questions_path)
+      end
     end
 
-    it 'redirects to index view' do
-      delete :destroy, params: { id: question }
-      expect(response).to redirect_to questions_path
+    context "on user's own question" do
+      let!(:question) { create(:question, user: user) }
+
+      it 'deletes the question' do
+        expect do
+          delete :destroy, params: { id: question }
+        end.to change(Question, :count).by(-1)
+      end
+
+      it 'redirects to index view' do
+        delete :destroy, params: { id: question }
+        expect(response).to redirect_to questions_path
+      end
     end
   end
 end
