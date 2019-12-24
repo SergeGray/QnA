@@ -2,6 +2,7 @@ FactoryBot.define do
   factory :answer do
     body { "Use puts method." }
     question
+    user
 
     trait :invalid do
       body { nil }

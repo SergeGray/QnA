@@ -1,11 +1,10 @@
 require 'rails_helper'
 
-feature 'User can sign in', %q{
+feature 'User can sign in', %q(
   In order to ask question
   As an unauthenticated user
   I want to be able to sign in
-} do
-
+) do
   given(:user) { create(:user) }
 
   background { visit new_user_session_path }

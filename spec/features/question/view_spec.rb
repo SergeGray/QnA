@@ -1,11 +1,10 @@
 require 'rails_helper'
 
-feature 'User can view a question', %q{
+feature 'User can view a question', %q(
   In order to see more information about a question I'm interested in
   As any user
   I want to be able to view a question with answers to it
-} do
-
+) do
   given!(:question) { create(:question) }
   given!(:answer) { create(:answer, question: question) }
 

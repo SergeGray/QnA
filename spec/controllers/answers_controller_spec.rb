@@ -2,8 +2,8 @@ require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
   let(:question) { create(:question) }
-  let(:answer) { create(:answer) }
   let(:user) { create(:user) }
+  let(:answer) { create(:answer, user: user) }
 
   before { login(user) }
 
@@ -28,6 +28,15 @@ RSpec.describe AnswersController, type: :controller do
             answer: attributes_for(:answer)
           }
         end.to change(question.answers, :count).by(1)
+      end
+
+      it 'assigns the new answer to current user' do
+        expect do
+          post :create, params: {
+            question_id: question.id,
+            answer: attributes_for(:answer)
+          }
+        end.to change(user.answers, :count).by(1)
       end
 
       it 'redirects to question' do
@@ -60,6 +69,25 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'PATCH #update' do
+    context "on someone else's answer" do
+      let(:answer2) { create(:answer) }
+
+      before do
+        patch :update, params: {
+          id: answer2,
+          answer: attributes_for(:answer, :new)
+        }
+      end
+
+      it "doesn't change answer attributes" do
+        expect { answer.reload }.to_not change(answer2, :attributes)
+      end
+
+      it 'redirects to question' do
+        expect(response).to redirect_to(answer2.question)
+      end
+    end
+
     context 'with valid attributes' do
       before do
         patch :update, params: {
@@ -89,7 +117,7 @@ RSpec.describe AnswersController, type: :controller do
         }
       end
 
-      it 'does not change the question' do
+      it 'does not change the answer' do
         expect { answer.reload }.to_not change(answer, :attributes)
       end
 
@@ -100,17 +128,34 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    let!(:answer) { create(:answer) }
+    context "on someone else's answer" do
+      let!(:answer) { create(:answer) }
 
-    it 'deletes the answer' do
-      expect do
+      it 'does not delete the answer' do
+        expect do
+          delete :destroy, params: { id: answer }
+        end.to_not change(Answer, :count)
+      end
+
+      it 'redirects to question' do
         delete :destroy, params: { id: answer }
-      end.to change(Answer, :count).by(-1)
+        expect(response).to redirect_to answer.question
+      end
     end
 
-    it 'redirects to question' do
-      delete :destroy, params: { id: answer }
-      expect(response).to redirect_to answer.question
+    context "on user's own answer" do
+      let!(:answer) { create(:answer, user: user) }
+
+      it 'deletes the answer' do
+        expect do
+          delete :destroy, params: { id: answer }
+        end.to change(Answer, :count).by(-1)
+      end
+
+      it 'redirects to question' do
+        delete :destroy, params: { id: answer }
+        expect(response).to redirect_to answer.question
+      end
     end
   end
 end
