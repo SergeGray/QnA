@@ -6,5 +6,6 @@ p= @question.body
 h2 Answers
 table
   th Body
-= render @question.answers
+  th Actions
+  = render @question.answers
 = render 'answers/form'

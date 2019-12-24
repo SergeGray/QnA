@@ -1,5 +1,5 @@
 tr
   td= question.title
   td= question.body
-  td= link_to 'Show', question_path(question)
-  td= destroy_link(question)
+  td= link_to 'Show', question
+  td= link_to 'Destroy', question, method: :delete
