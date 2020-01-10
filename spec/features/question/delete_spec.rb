@@ -6,30 +6,37 @@ feature 'User can delete their question', %q(
   I want to be able to delete my question
 ) do
   given(:user) { create(:user) }
+  given!(:question) { create(:question) }
 
-  background { sign_in(user) }
+  describe 'Authorized user' do
+    background { sign_in(user) }
 
-  scenario 'User tries to delete their question' do
-    question = create(:question, user: user)
+    scenario 'tries to delete their question' do
+      question.update!(user: user)
+      visit questions_path
 
-    visit questions_path
-    click_link 'Destroy'
+      expect(page).to have_content(question.title)
 
-    expect(page).to have_content(
-      'Your question was successfully destroyed'
-    )
-    expect(page).to_not have_content(question.title)
+      click_link 'Destroy'
+
+      expect(page).to have_content(
+        'Your question was successfully destroyed'
+      )
+      expect(page).to_not have_content(question.title)
+    end
+
+    scenario "tries to delete somebody else's question" do
+      visit questions_path
+
+      expect(page).to have_content(question.title)
+      expect(page).to_not have_link("Destroy")
+    end
   end
 
-  scenario "User tries to delete somebody else's question" do
-    question = create(:question)
-
+  scenario "Guest tries to delete a question" do
     visit questions_path
-    click_link 'Destroy'
 
-    expect(page).to have_content(
-      "You can't change other people's Question!"
-    )
     expect(page).to have_content(question.title)
+    expect(page).to_not have_link("Destroy")
   end
 end

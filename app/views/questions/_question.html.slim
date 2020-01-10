@@ -2,4 +2,6 @@ tr
   td= question.title
   td= question.body
   td= link_to 'Show', question
-  td= link_to 'Destroy', question, method: :delete
+  td
+    - if current_user == question.user
+      = link_to 'Destroy', question, method: :delete
