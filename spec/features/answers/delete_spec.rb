@@ -7,34 +7,38 @@ feature 'User can delete their answer', %q(
 ) do
   given(:user) { create(:user) }
   given(:question) { create(:question) }
+  given!(:answer) { create(:answer, question: question) }
 
-  background { sign_in(user) }
+  describe 'Authenticated User' do
+    background { sign_in(user) }
 
-  scenario 'User tries to delete their answer' do
-    answer = create(:answer, question: question, user: user)
+    scenario 'tries to delete their answer' do
+      answer.update!(user: user)
 
-    visit question_path(question)
-    expect(page).to have_content(answer.body)
+      visit question_path(question)
 
-    click_link 'Destroy'
+      expect(page).to have_content(answer.body)
 
-    expect(page).to have_content(
-      'Your answer was successfully destroyed'
-    )
-    expect(page).to_not have_content(answer.body)
+      click_link 'Destroy'
+
+      expect(page).to have_content(
+        'Your answer was successfully destroyed'
+      )
+      expect(page).to_not have_content(answer.body)
+    end
+
+    scenario "tries to delete somebody else's answer" do
+      visit question_path(question)
+
+      expect(page).to have_content(answer.body)
+      expect(page).to_not have_link('Destroy')
+    end
   end
 
-  scenario "User tries to delete somebody else's answer" do
-    answer = create(:answer, question: question)
-
+  scenario "Guest tries to delete an answer" do
     visit question_path(question)
-    expect(page).to have_content(answer.body)
 
-    click_link 'Destroy'
-
-    expect(page).to have_content(
-      "You can't change other people's Answer!"
-    )
     expect(page).to have_content(answer.body)
+    expect(page).to_not have_link('Destroy')
   end
 end

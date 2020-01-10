@@ -7,5 +7,5 @@ h2 Answers
 table
   th Body
   th Actions
-  = render @question.answers
+  = render @question.answers.persisted
 = render 'answers/form'

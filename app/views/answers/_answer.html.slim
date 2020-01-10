@@ -1,6 +1,7 @@
-- if answer.persisted?
-  tr
-    td= answer.body
-    td= link_to 'Destroy',
+tr
+  td= answer.body
+  td
+    - if current_user == answer.user
+      = link_to 'Destroy',
                 destroy_answer_path(answer),
                 method: :delete
