@@ -2,7 +2,9 @@ class AnswersController < ApplicationController
   before_action :authenticate_user!
   before_action :set_question, only: :create
   before_action :set_answer, only: %i[edit update destroy]
-  before_action :check_ownership, only: %i[edit update destroy]
+  before_action only: %i[edit update destroy] do
+    check_ownership(@answer, question_path(@answer.question))
+  end
 
   def edit; end
 
@@ -45,12 +47,5 @@ class AnswersController < ApplicationController
       .require(:answer)
       .permit(:body)
       .merge(user_id: current_user.id)
-  end
-
-  def check_ownership
-    return if current_user == @answer.user
-
-    redirect_to question_path(@answer.question),
-                alert: "You can't change other people's answers!"
   end
 end
