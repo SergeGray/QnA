@@ -14,6 +14,8 @@ feature 'User can delete their answer', %q(
     answer = create(:answer, question: question, user: user)
 
     visit question_path(question)
+    expect(page).to have_content(answer.body)
+
     click_link 'Destroy'
 
     expect(page).to have_content(
@@ -27,6 +29,7 @@ feature 'User can delete their answer', %q(
 
     visit question_path(question)
     expect(page).to have_content(answer.body)
+
     click_link 'Destroy'
 
     expect(page).to have_content(
