@@ -28,7 +28,7 @@ feature 'User can delete their question', %q(
     click_link 'Destroy'
 
     expect(page).to have_content(
-      "You can't change other people's questions!"
+      "You can't change other people's Question!"
     )
     expect(page).to have_content(question.title)
   end

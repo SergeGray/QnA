@@ -30,7 +30,7 @@ feature 'User can delete their answer', %q(
     click_link 'Destroy'
 
     expect(page).to have_content(
-      "You can't change other people's answers!"
+      "You can't change other people's Answer!"
     )
     expect(page).to have_content(answer.body)
   end
