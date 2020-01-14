@@ -3,5 +3,5 @@ tr
   td= question.body
   td= link_to 'Show', question
   td
-    - if current_user == question.user
+    - if current_user&.author_of?(question)
       = link_to 'Destroy', question, method: :delete
