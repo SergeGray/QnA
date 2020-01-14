@@ -4,7 +4,5 @@ Rails.application.routes.draw do
     resources :answers, except: %i[index show], shallow: true
   end
 
-  get 'answers/:id', to: 'answers#destroy', as: 'destroy_answer'
-
   root to: 'questions#index'
 end

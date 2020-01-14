@@ -3,5 +3,5 @@ tr
   td
     - if current_user&.author_of?(answer)
       = link_to 'Destroy',
-                destroy_answer_path(answer),
+                answer,
                 method: :delete
