@@ -32,4 +32,13 @@ feature 'User can sign up', %q(
 
     expect(page).to have_content 'Email has already been taken'
   end
+
+  scenario 'User tries to sign up with wrong password confirmation' do
+    fill_in 'Email', with: 'email@example.com'
+    fill_in 'Password', with: '123123'
+    fill_in 'Password confirmation', with: '000000'
+    click_button 'Sign up'
+
+    expect(page).to have_content "Password confirmation doesn't match Password"
+  end
 end

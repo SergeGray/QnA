@@ -15,6 +15,8 @@ feature 'User can answer a question', %q(
     end
 
     scenario 'tries to answer a question' do
+      expect(page).to_not have_content 'Just use puts.'
+
       fill_in 'Body', with: 'Just use puts.'
       click_button 'Answer'
 

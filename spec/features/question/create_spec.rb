@@ -15,6 +15,9 @@ feature 'User can create question', %q(
     end
 
     scenario 'tries to create a question' do
+      expect(page).to_not have_content 'How do I do this'
+      expect(page).to_not have_content 'Help'
+
       fill_in 'Title', with: 'How do I do this'
       fill_in 'Body', with: 'Help'
       click_button 'Submit'
