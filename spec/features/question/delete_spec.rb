@@ -15,28 +15,26 @@ feature 'User can delete their question', %q(
       question.update!(user: user)
       visit questions_path
 
-      expect(page).to have_content(question.title)
+      expect(page).to have_content question.title
 
       click_link 'Destroy'
 
-      expect(page).to have_content(
-        'Your question was successfully destroyed'
-      )
-      expect(page).to_not have_content(question.title)
+      expect(page).to have_content 'Your question was successfully destroyed'
+      expect(page).to_not have_content question.title
     end
 
     scenario "tries to delete somebody else's question" do
       visit questions_path
 
-      expect(page).to have_content(question.title)
-      expect(page).to_not have_link("Destroy")
+      expect(page).to have_content question.title
+      expect(page).to_not have_link "Destroy"
     end
   end
 
   scenario "Guest tries to delete a question" do
     visit questions_path
 
-    expect(page).to have_content(question.title)
-    expect(page).to_not have_link("Destroy")
+    expect(page).to have_content question.title
+    expect(page).to_not have_link "Destroy"
   end
 end

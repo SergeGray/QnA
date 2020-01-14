@@ -17,28 +17,26 @@ feature 'User can delete their answer', %q(
 
       visit question_path(question)
 
-      expect(page).to have_content(answer.body)
+      expect(page).to have_content answer.body
 
       click_link 'Destroy'
 
-      expect(page).to have_content(
-        'Your answer was successfully destroyed'
-      )
-      expect(page).to_not have_content(answer.body)
+      expect(page).to have_content 'Your answer was successfully destroyed'
+      expect(page).to_not have_content answer.body
     end
 
     scenario "tries to delete somebody else's answer" do
       visit question_path(question)
 
-      expect(page).to have_content(answer.body)
-      expect(page).to_not have_link('Destroy')
+      expect(page).to have_content answer.body
+      expect(page).to_not have_link 'Destroy'
     end
   end
 
   scenario "Guest tries to delete an answer" do
     visit question_path(question)
 
-    expect(page).to have_content(answer.body)
-    expect(page).to_not have_link('Destroy')
+    expect(page).to have_content answer.body
+    expect(page).to_not have_link 'Destroy'
   end
 end
