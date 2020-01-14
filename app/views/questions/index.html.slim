@@ -3,4 +3,5 @@ table
   th Body
   th colspan="3" Link
   = render @questions
-= link_to 'Ask a question', new_question_path
+
+= link_to 'Ask a question', new_question_path if current_user
