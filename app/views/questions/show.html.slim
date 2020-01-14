@@ -8,4 +8,4 @@ table
   th Body
   th Actions
   = render @question.answers.persisted
-= render 'answers/form'
+= render 'answers/form' if current_user
