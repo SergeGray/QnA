@@ -11,8 +11,7 @@ feature 'User can view a question', %q(
   given!(:answer3) { create(:answer, body: 'This answer is not related') }
 
   scenario 'User tries to view a question' do
-    visit questions_path
-    click_link('Show', match: :first)
+    visit question_path(question)
     expect(page).to have_content question.title
     expect(page).to have_content question.body
     expect(page).to have_content answer1.body

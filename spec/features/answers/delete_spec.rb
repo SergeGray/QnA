@@ -12,17 +12,19 @@ feature 'User can delete their answer', %q(
   describe 'Authenticated User' do
     background { sign_in(user) }
 
-    scenario 'tries to delete their answer' do
-      answer.update!(user: user)
+    describe 'owns an answer' do
+      given!(:answer) { create(:answer, question: question, user: user) }
 
-      visit question_path(question)
+      scenario 'and tries to delete it' do
+        visit question_path(question)
 
-      expect(page).to have_content answer.body
+        expect(page).to have_content answer.body
 
-      click_link 'Destroy'
+        click_link 'Destroy'
 
-      expect(page).to have_content 'Your answer was successfully destroyed'
-      expect(page).to_not have_content answer.body
+        expect(page).to have_content 'Your answer was successfully destroyed'
+        expect(page).to_not have_content answer.body
+      end
     end
 
     scenario "tries to delete somebody else's answer" do
