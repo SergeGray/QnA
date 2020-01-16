@@ -9,7 +9,7 @@ class AnswersController < ApplicationController
   def edit; end
 
   def create
-    @answer = @question.answers.new(answer_params)
+    @answer = current_user.answers.new(answer_params.merge(question: @question))
 
     if @answer.save
       redirect_to @question, notice: 'Your answer was successfully created.'
@@ -43,9 +43,6 @@ class AnswersController < ApplicationController
   end
 
   def answer_params
-    params
-      .require(:answer)
-      .permit(:body)
-      .merge(user_id: current_user.id)
+    params.require(:answer).permit(:body)
   end
 end
