@@ -13,8 +13,6 @@ class AnswersController < ApplicationController
 
     if @answer.save
       redirect_to @question, notice: 'Your answer was successfully created.'
-    else
-      render 'questions/show'
     end
   end
 

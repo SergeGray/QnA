@@ -53,7 +53,8 @@ RSpec.describe AnswersController, type: :controller do
         expect do
           post :create, params: {
             question_id: question.id,
-            answer: attributes_for(:answer, :invalid)
+            answer: attributes_for(:answer, :invalid),
+            format: :js
           }
         end.to_not change(Answer, :count)
       end
@@ -61,9 +62,10 @@ RSpec.describe AnswersController, type: :controller do
       it 're-renders question show view' do
         post :create, params: {
           question_id: question.id,
-          answer: attributes_for(:answer, :invalid)
+          answer: attributes_for(:answer, :invalid),
+          format: :js
         }
-        expect(response).to render_template('questions/show')
+        expect(response).to render_template :create
       end
     end
   end
