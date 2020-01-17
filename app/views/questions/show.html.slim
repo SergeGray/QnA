@@ -1,11 +1,14 @@
-= render 'shared/errors', resource: @answer
-
 h1= @question.title
 p= @question.body
 
-h2 Answers
-table
-  th Body
-  th Actions
-  = render @question.answers
+.answers
+  h2 Answers
+  table
+    th Body
+    th Actions
+    = render @question.answers
+
+.answer-errors
+  = render 'shared/errors', resource: @answer
+
 = render 'answers/form' if current_user
