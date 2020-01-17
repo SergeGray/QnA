@@ -15,7 +15,7 @@ RSpec.describe AnswersController, type: :controller do
     end
 
     it 'renders edit view' do
-      expect(response).to render_template(:edit)
+      expect(response).to render_template :edit
     end
   end
 
@@ -25,7 +25,8 @@ RSpec.describe AnswersController, type: :controller do
         expect do
           post :create, params: {
             question_id: question.id,
-            answer: attributes_for(:answer)
+            answer: attributes_for(:answer),
+            format: :js
           }
         end.to change(question.answers, :count).by(1)
       end
@@ -34,17 +35,19 @@ RSpec.describe AnswersController, type: :controller do
         expect do
           post :create, params: {
             question_id: question.id,
-            answer: attributes_for(:answer)
+            answer: attributes_for(:answer),
+            format: :js
           }
         end.to change(user.answers, :count).by(1)
       end
 
-      it 'redirects to question' do
+      it 'renders the create template again' do
         post :create, params: {
           question_id: question.id,
-          answer: attributes_for(:answer)
+          answer: attributes_for(:answer),
+          format: :js
         }
-        expect(response).to redirect_to assigns(:question)
+        expect(response).to render_template :create
       end
     end
 
@@ -59,7 +62,7 @@ RSpec.describe AnswersController, type: :controller do
         end.to_not change(Answer, :count)
       end
 
-      it 're-renders question show view' do
+      it 'renders the create template again' do
         post :create, params: {
           question_id: question.id,
           answer: attributes_for(:answer, :invalid),
