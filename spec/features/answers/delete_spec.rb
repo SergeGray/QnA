@@ -2,7 +2,7 @@ require 'rails_helper'
 
 feature 'User can delete their answer', %q(
   In order to prevent bad or outdated answers from being seen
-  As an authenticated user
+  As an author of the answer
   I want to be able to delete my answer
 ) do
   given(:user) { create(:user) }

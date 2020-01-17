@@ -80,7 +80,8 @@ RSpec.describe AnswersController, type: :controller do
       before do
         patch :update, params: {
           id: answer2,
-          answer: attributes_for(:answer, :new)
+          answer: attributes_for(:answer, :new),
+          format: :js
         }
       end
 
@@ -97,7 +98,8 @@ RSpec.describe AnswersController, type: :controller do
       before do
         patch :update, params: {
           id: answer,
-          answer: attributes_for(:answer, :new)
+          answer: attributes_for(:answer, :new),
+          format: :js
         }
       end
 
@@ -110,15 +112,17 @@ RSpec.describe AnswersController, type: :controller do
           .to change(answer, :body).to(attributes_for(:answer, :new)[:body])
       end
 
-      it 'redirects to question' do
-        expect(response).to redirect_to(answer.question)
+      it 'renders update view' do
+        expect(response).to render_template :update
       end
     end
+
     context 'with invalid attributes' do
       before do
         patch :update, params: {
           id: answer,
-          answer: attributes_for(:answer, :invalid)
+          answer: attributes_for(:answer, :invalid),
+          format: :js
         }
       end
 
@@ -126,8 +130,8 @@ RSpec.describe AnswersController, type: :controller do
         expect { answer.reload }.to_not change(answer, :attributes)
       end
 
-      it 're-renders edit view' do
-        expect(response).to render_template(:edit)
+      it 'renders update view' do
+        expect(response).to render_template :update
       end
     end
   end
