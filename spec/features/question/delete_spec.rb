@@ -2,7 +2,7 @@ require 'rails_helper'
 
 feature 'User can delete their question', %q(
   In order to prevent bad or outdated questions from being seen
-  As an authenticated user
+  As an author of the question
   I want to be able to delete my question
 ) do
   given(:user) { create(:user) }
