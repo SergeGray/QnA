@@ -44,33 +44,6 @@ RSpec.describe QuestionsController, type: :controller do
     end
   end
 
-  describe 'GET #edit' do
-    before { login(user) }
-
-    context "on another user's question" do
-      let(:user2) { create(:user) }
-      let(:question2) { create(:question, user: user2) }
-
-      before { get :edit, params: { id: question2 } }
-
-      it 'redirects to index view' do
-        expect(response).to redirect_to(questions_path)
-      end
-    end
-
-    context "on user's own question" do
-      before { get :edit, params: { id: question } }
-
-      it 'assigns the requested question to @question' do
-        expect(assigns(:question)).to eq(question)
-      end
-
-      it 'renders edit view' do
-        expect(response).to render_template(:edit)
-      end
-    end
-  end
-
   describe 'POST #create' do
     before { login(user) }
 
@@ -113,7 +86,8 @@ RSpec.describe QuestionsController, type: :controller do
       before do
         patch :update, params: {
           id: question2,
-          question: attributes_for(:question, :new)
+          question: attributes_for(:question, :new),
+          format: :js
         }
       end
 
@@ -130,7 +104,8 @@ RSpec.describe QuestionsController, type: :controller do
       before do
         patch :update, params: {
           id: question,
-          question: attributes_for(:question, :new)
+          question: attributes_for(:question, :new),
+          format: :js
         }
       end
 
@@ -147,8 +122,8 @@ RSpec.describe QuestionsController, type: :controller do
           )
       end
 
-      it 'redirects to updated question' do
-        expect(response).to redirect_to(question)
+      it 'renders the update template' do
+        expect(response).to render_template(:update)
       end
     end
 
@@ -156,7 +131,8 @@ RSpec.describe QuestionsController, type: :controller do
       before do
         patch :update, params: {
           id: question,
-          question: attributes_for(:question, :invalid)
+          question: attributes_for(:question, :invalid),
+          format: :js
         }
       end
 
@@ -164,8 +140,8 @@ RSpec.describe QuestionsController, type: :controller do
         expect { question.reload }.to_not change(question, :attributes)
       end
 
-      it 're-renders edit view' do
-        expect(response).to render_template(:edit)
+      it 'renders the update template' do
+        expect(response).to render_template(:update)
       end
     end
   end
