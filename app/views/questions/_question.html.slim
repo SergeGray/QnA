@@ -2,6 +2,18 @@ tr
   td= question.title
   td= question.body
   td= link_to 'Show', question
-  td
-    - if current_user&.author_of?(question)
-      = link_to 'Destroy', question, method: :delete
+  - if current_user&.author_of?(question)
+    td
+      = link_to 'Edit',
+                '#',
+                class: 'edit-question-link',
+                data: { question_id: question.id }
+      = form_with model: question,
+                  class: 'hidden',
+                  html: { id: "edit-question-#{question.id}" } do |f|
+        = f.label :title
+        = f.text_field :title
+        = f.label :body
+        = f.text_area :body
+        = f.submit 'Save'
+    td= link_to 'Destroy', question, method: :delete

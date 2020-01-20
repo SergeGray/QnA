@@ -20,7 +20,7 @@ class QuestionsController < ApplicationController
   def edit; end
 
   def create
-    @question = current_user.questions.new(question_params)
+    @question = current_user.questions.create(question_params)
 
     if @question.save
       redirect_to @question, notice: 'Your question was successfully created.'
@@ -30,11 +30,10 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    if @question.update(question_params)
-      redirect_to @question
-    else
-      render :edit
-    end
+    @question.update(question_params)
+    @questions = Question.all
+
+    flash[:notice] = 'Your question was successfully updated.'
   end
 
   def destroy

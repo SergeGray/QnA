@@ -1,4 +1,7 @@
-table
+.question-errors
+  = render 'shared/errors', resource: @question
+
+table class="questions"
   th Title
   th Body
   th colspan="3" Link
