@@ -1,4 +1,4 @@
-tr
+= content_tag :tr, class: "answer-#{answer.id}" do
   td= answer.body
   - if current_user&.author_of?(answer)
     td
@@ -14,4 +14,6 @@ tr
         = f.submit 'Save'
     td= link_to 'Destroy',
                 answer,
-                method: :delete
+                class: 'delete-answer-link',
+                method: :delete,
+                remote: true
