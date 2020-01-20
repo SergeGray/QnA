@@ -31,7 +31,6 @@ class QuestionsController < ApplicationController
 
   def update
     @question.update(question_params)
-    @questions = Question.all
 
     flash[:notice] = 'Your question was successfully updated.'
   end

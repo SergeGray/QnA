@@ -142,12 +142,12 @@ RSpec.describe AnswersController, type: :controller do
 
       it 'does not delete the answer' do
         expect do
-          delete :destroy, params: { id: answer }
+          delete :destroy, params: { id: answer, format: :js }
         end.to_not change(Answer, :count)
       end
 
       it 'redirects to question' do
-        delete :destroy, params: { id: answer }
+        delete :destroy, params: { id: answer, format: :js }
         expect(response).to redirect_to answer.question
       end
     end
@@ -157,13 +157,13 @@ RSpec.describe AnswersController, type: :controller do
 
       it 'deletes the answer' do
         expect do
-          delete :destroy, params: { id: answer }
+          delete :destroy, params: { id: answer, format: :js }
         end.to change(Answer, :count).by(-1)
       end
 
-      it 'redirects to question' do
-        delete :destroy, params: { id: answer }
-        expect(response).to redirect_to answer.question
+      it 'renders destroy template' do
+        delete :destroy, params: { id: answer, format: :js }
+        expect(response).to render_template :destroy
       end
     end
   end

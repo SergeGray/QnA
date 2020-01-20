@@ -9,7 +9,7 @@ feature 'User can delete their answer', %q(
   given(:question) { create(:question) }
   given!(:answer) { create(:answer, question: question) }
 
-  describe 'Authenticated User' do
+  describe 'Authenticated User', js: true do
     background { sign_in(user) }
 
     describe 'owns an answer' do
