@@ -30,6 +30,7 @@ feature 'User can select best answer', %q(
         click_link 'Select as best'
 
         expect(page).to have_content 'Best answer'
+        expect(page).to have_content 'Answer successfully set as best'
       end
 
       describe 'with an existing best answer' do
@@ -53,6 +54,8 @@ feature 'User can select best answer', %q(
           within(".answer-#{answer2.id}") do
             expect(page).to_not have_content 'Best answer'
           end
+
+          expect(page).to have_content 'Answer successfully set as best'
         end
 
         scenario 'tries to select the same best answer' do
