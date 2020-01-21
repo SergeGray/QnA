@@ -16,9 +16,7 @@ feature 'User can edit his answer', %q(
   end
 
   describe 'Authenticated user', js: true do
-    background do
-      sign_in(user)
-    end
+    background { sign_in(user) }
 
     describe 'owns the answer' do
       given!(:answer) { create(:answer, question: question, user: user) }
