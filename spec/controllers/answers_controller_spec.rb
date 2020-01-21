@@ -136,6 +136,38 @@ RSpec.describe AnswersController, type: :controller do
     end
   end
 
+  describe 'PATCH #select' do
+    let!(:answer) { create(:answer, question: question) }
+
+    context "on someone else's question" do
+      it 'does not select answer as best' do
+        patch :select, params: { id: answer, format: :js }
+        expect { answer.reload }.to_not change(answer, :best)
+      end
+    end
+
+    context "on user's own question" do
+      let!(:answer2) { create(:answer, question: question, best: true) }
+
+      before do
+        question.update(user: user)
+        patch :select, params: { id: answer, format: :js }
+      end
+
+      it 'selects the answer as best' do
+        expect { answer.reload }.to change(answer, :best).to true
+      end
+
+      it 'unselects the previous best answer' do
+        expect { answer2.reload }.to change(answer2, :best).to false
+      end
+
+      it 'renders the select template' do
+        expect(response).to render_template :select
+      end
+    end
+  end
+
   describe 'DELETE #destroy' do
     context "on someone else's answer" do
       let!(:answer) { create(:answer) }

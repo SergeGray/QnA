@@ -1,9 +1,13 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
   before_action :set_question, only: :create
-  before_action :set_answer, only: %i[edit update destroy]
+  before_action :set_answer, only: %i[edit update select destroy]
   before_action only: %i[edit update destroy] do
     check_ownership(@answer, question_path(@answer.question))
+  end
+
+  before_action only: :select do
+    check_ownership(@answer.question, questions_path)
   end
 
   def edit; end
@@ -18,6 +22,12 @@ class AnswersController < ApplicationController
   def update
     @answer.update(answer_params)
     flash[:notice] = 'Your answer was successfully updated.'
+  end
+
+  def select
+    @answer.select_as_best!
+    @question = @answer.question
+    flash[:notice] = 'Answer successfully set as best'
   end
 
   def destroy
