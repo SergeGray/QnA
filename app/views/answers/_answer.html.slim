@@ -1,6 +1,6 @@
 = content_tag :tr, class: "answer-#{answer.id}" do
   td
-    - if answer.best
+    - if answer.best?
       b Best answer
   td= answer.body
   - if current_user&.author_of?(answer)
@@ -21,7 +21,7 @@
                 method: :delete,
                 remote: true
   td
-    - if current_user&.author_of?(answer.question) && !answer.best
+    - if current_user&.author_of?(answer.question) && !answer.best?
       = link_to 'Select as best',
                 select_answer_path(answer),
                 method: :patch,

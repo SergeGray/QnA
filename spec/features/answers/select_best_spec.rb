@@ -41,6 +41,9 @@ feature 'User can select best answer', %q(
         background { visit question_path(question) }
 
         scenario 'tries to select another best answer' do
+          expect(page.text.index(answer.body))
+            .to be > page.text.index(answer2.body)
+
           within(".answer-#{answer2.id}") do
             expect(page).to have_content 'Best answer'
           end
@@ -56,6 +59,8 @@ feature 'User can select best answer', %q(
           end
 
           expect(page).to have_content 'Answer successfully set as best'
+          expect(page.text.index(answer.body))
+            .to be < page.text.index(answer2.body)
         end
 
         scenario 'tries to select the same best answer' do
