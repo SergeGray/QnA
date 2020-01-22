@@ -147,12 +147,11 @@ RSpec.describe AnswersController, type: :controller do
     end
 
     context "on user's own question" do
+      let!(:question) { create(:question, user: user) }
+      let!(:answer) { create(:answer, question: question) }
       let!(:answer2) { create(:answer, question: question, best: true) }
 
-      before do
-        question.update(user: user)
-        patch :select, params: { id: answer, format: :js }
-      end
+      before { patch :select, params: { id: answer, format: :js } }
 
       it 'selects the answer as best' do
         expect { answer.reload }.to change(answer, :best).to true

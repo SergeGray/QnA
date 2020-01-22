@@ -6,8 +6,6 @@ function preventDeleteFollow(resource) {
   $('.' + resource + 's').on(
     'click',
     '.delete-' + resource + '-link',
-    function(e) {
-      e.preventDefault();
-    }
+    function(event) { event.preventDefault() }
   );
 }
