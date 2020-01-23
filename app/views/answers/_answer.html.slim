@@ -3,6 +3,10 @@
     - if answer.best?
       b Best answer
   td= answer.body
+  td
+    - if answer.files.attached?
+      - answer.files.each do |file|
+        p= link_to file.filename.to_s, url_for(file)
   - if current_user&.author_of?(answer)
     td
       = link_to 'Edit',
@@ -12,9 +16,13 @@
       = form_with model: answer,
                   class: 'hidden',
                   html: { id: "edit-answer-#{answer.id}" } do |f|
-        = f.label :body
-        = f.text_area :body
-        = f.submit 'Save'
+        p
+          = f.label :body
+          = f.text_area :body
+        p
+          = f.label :files
+          = f.file_field :files , multiple: true
+        p= f.submit 'Save'
     td= link_to 'Destroy',
                 answer,
                 class: 'delete-answer-link',
