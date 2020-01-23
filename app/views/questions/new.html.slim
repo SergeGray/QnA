@@ -1,8 +1,13 @@
 = render 'shared/errors', resource: @question
 
 = form_with model: @question, local: true do |f|
-  = f.label :title
-  = f.text_field :title
-  = f.label :body
-  = f.text_area :body
-  = f.submit 'Submit'
+  p
+    = f.label :title
+    = f.text_field :title
+  p
+    = f.label :body
+    = f.text_area :body
+  p
+    = f.label :file
+    = f.file_field :file 
+  p= f.submit 'Submit'
