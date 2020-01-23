@@ -1,6 +1,10 @@
 = content_tag :tr, class: "question-#{question.id}" do
   td= question.title
   td= question.body
+  td
+    - if question.files.attached?
+      - question.files.each do |file|
+        p= link_to file.filename.to_s, url_for(file)
   td= link_to 'Show', question
   - if current_user&.author_of?(question)
     td
@@ -11,9 +15,14 @@
       = form_with model: question,
                   class: 'hidden',
                   html: { id: "edit-question-#{question.id}" } do |f|
-        = f.label :title
-        = f.text_field :title
-        = f.label :body
-        = f.text_area :body
-        = f.submit 'Save'
+        p
+          = f.label :title
+          = f.text_field :title
+        p
+          = f.label :body
+          = f.text_area :body
+        p
+          = f.label :files
+          = f.file_field :files , multiple: true
+        p= f.submit 'Save'
     td= link_to 'Destroy', question, method: :delete
