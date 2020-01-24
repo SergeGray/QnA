@@ -37,7 +37,7 @@ feature 'User can select best answer', %q(
         given!(:answer2) do
           create(:answer, :new, question: question, best: true)
         end
-        
+
         background { visit question_path(question) }
 
         scenario 'tries to select another best answer' do
@@ -47,13 +47,13 @@ feature 'User can select best answer', %q(
           within(".answer-#{answer2.id}") do
             expect(page).to have_content 'Best answer'
           end
-          
+
           within(".answer-#{answer.id}") do
             click_link 'Select as best'
 
             expect(page).to have_content 'Best answer'
           end
-          
+
           within(".answer-#{answer2.id}") do
             expect(page).to_not have_content 'Best answer'
           end

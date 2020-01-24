@@ -3,10 +3,8 @@
     - if answer.best?
       b Best answer
   td= answer.body
-  td
-    - if answer.files.attached?
-      - answer.files.each do |file|
-        p= link_to file.filename.to_s, url_for(file)
+  = content_tag :td, class: "answer-#{answer.id}-files" do
+    = render 'shared/files', resource: answer
   - if current_user&.author_of?(answer)
     td
       = link_to 'Edit',

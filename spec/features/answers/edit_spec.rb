@@ -59,7 +59,7 @@ feature 'User can edit his answer', %q(
 
         expect(page).to have_content "Body can't be blank"
       end
-      
+
       scenario 'tries to attach files to answer' do
         within '.answers' do
           attach_file 'File', [
