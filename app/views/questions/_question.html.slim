@@ -1,10 +1,8 @@
 = content_tag :tr, class: "question-#{question.id}" do
   td= question.title
   td= question.body
-  td
-    - if question.files.attached?
-      - question.files.each do |file|
-        p= link_to file.filename.to_s, url_for(file)
+  = content_tag :td, class: "question-#{question.id}-files" do
+    = render 'shared/files', resource: question
   td= link_to 'Show', question
   - if current_user&.author_of?(question)
     td
