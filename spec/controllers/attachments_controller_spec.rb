@@ -7,10 +7,7 @@ RSpec.describe AttachmentsController, type: :controller do
   describe 'DELETE #destroy' do
     before do
       login(user)
-      question.files.attach(
-        io: File.open("#{Rails.root}/spec/spec_helper.rb"),
-        filename: 'spec_helper.rb'
-      )
+      question.files.attach(create_file_blob)
     end
 
     context "on another user's question" do
