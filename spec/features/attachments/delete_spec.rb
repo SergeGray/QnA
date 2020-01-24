@@ -10,14 +10,8 @@ feature 'User can delete their attachments', %q(
   given!(:answer) { create(:answer, question: question) }
 
   background do
-    question.files.attach(
-      io: File.open("#{Rails.root}/spec/spec_helper.rb"),
-      filename: 'spec_helper.rb'
-    )
-    answer.files.attach(
-      io: File.open("#{Rails.root}/spec/rails_helper.rb"),
-      filename: 'rails_helper.rb'
-    )
+    question.files.attach(create_file_blob)
+    answer.files.attach(create_file_blob)
   end
 
   describe 'Authorized user', js: true do
@@ -30,11 +24,11 @@ feature 'User can delete their attachments', %q(
         visit question_path(question)
 
         within ".question-#{question.id}-files" do
-          expect(page).to have_link 'spec_helper.rb'
+          expect(page).to have_link 'image'
 
           click_link 'Delete file'
 
-          expect(page).to_not have_link 'spec_helper.rb'
+          expect(page).to_not have_link 'image'
         end
       end
     end
@@ -46,11 +40,11 @@ feature 'User can delete their attachments', %q(
         visit question_path(question)
 
         within ".answer-#{answer.id}-files" do
-          expect(page).to have_link 'rails_helper.rb'
+          expect(page).to have_link 'image'
 
           click_link 'Delete file'
 
-          expect(page).to_not have_link 'rails_helper.rb'
+          expect(page).to_not have_link 'image'
         end
       end
     end
