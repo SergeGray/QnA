@@ -5,10 +5,7 @@ p= @question.body
   = render 'shared/files', resource: @question
 
 .question-links
-  p Links:
-  ul
-    - @question.links.each do |link|
-      li= link_to link.name, link.url
+  = render 'shared/links', resource: @question
 
 h2 Answers
 table.answers

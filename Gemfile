@@ -28,6 +28,7 @@ gem 'jbuilder', '~> 2.7'
 # Reduces boot times through caching; required in config/boot.rb
 gem "aws-sdk-s3", require: false
 gem 'bootsnap', '>= 1.4.2', require: false
+gem 'cocoon'
 gem 'devise'
 gem 'jquery-rails'
 gem 'pg'
