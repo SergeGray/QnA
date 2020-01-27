@@ -6,6 +6,7 @@ feature 'User can create question', %q(
   I want to be able to ask a question
 ) do
   given(:user) { create(:user) }
+  given(:link) { 'http://google.com' }
 
   describe 'Authenticated user' do
     background do
@@ -45,6 +46,34 @@ feature 'User can create question', %q(
 
       expect(page).to have_link 'rails_helper.rb'
       expect(page).to have_link 'spec_helper.rb'
+    end
+
+    scenario 'asks a question with an attached link', js: true do
+      fill_in 'Title', with: 'How do I do this'
+      fill_in 'Body', with: 'Help'
+
+      click_link 'add link'
+
+      fill_in 'Name', with: 'Example link'
+      fill_in 'Url', with: link
+
+      click_button 'Submit'
+
+      expect(page).to have_link 'Example link', href: link
+    end
+
+    scenario 'asks a question with an invalid link', js: true do
+      fill_in 'Title', with: 'How do I do this'
+      fill_in 'Body', with: 'Help'
+
+      click_link 'add link'
+
+      fill_in 'Name', with: 'Example link'
+
+      click_button 'Submit'
+
+      expect(page).to_not have_link 'Example link'
+      expect(page).to have_content "Links url can't be blank"
     end
   end
 

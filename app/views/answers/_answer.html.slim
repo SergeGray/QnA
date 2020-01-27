@@ -3,11 +3,8 @@
     - if answer.best?
       b Best answer
   td= answer.body
-  td.answer-links
-    p Links:
-    ul
-      - answer.links.each do |link|
-        li= link_to link.name, link.url
+  = content_tag :td, class: "answer-#{answer.id}-links" do
+    = render 'shared/links', resource: answer
   = content_tag :td, class: "answer-#{answer.id}-files" do
     = render 'shared/files', resource: answer
   - if current_user&.author_of?(answer)
@@ -25,6 +22,12 @@
         p
           = f.label :files
           = f.file_field :files , multiple: true, direct_upload: true
+        p Links:
+        #links
+          = f.fields_for :links do |link|
+            = render 'shared/link_fields', f: link
+          = link_to_add_association 'add link', f, :links,
+              partial: 'shared/link_fields'
         p= f.submit 'Save'
     td= link_to 'Destroy',
                 answer,

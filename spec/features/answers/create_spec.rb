@@ -7,6 +7,7 @@ feature 'User can answer a question', %q(
 ) do
   given(:user) { create(:user) }
   given(:question) { create(:question) }
+  given(:link) { 'http://example.com' }
 
   describe 'Authenticated user', js: true do
     background do
@@ -41,6 +42,37 @@ feature 'User can answer a question', %q(
 
       expect(page).to have_link 'rails_helper.rb'
       expect(page).to have_link 'spec_helper.rb'
+    end
+
+    scenario 'tries to answer with an attached link' do
+      fill_in 'Body', with: 'Question body'
+
+      click_link 'add link'
+
+      fill_in 'Name', with: 'Example link'
+      fill_in 'Url', with: link
+
+      click_button 'Answer'
+
+      within('.answers') do
+        expect(page).to have_link 'Example link', href: link
+      end
+    end
+
+    scenario 'tries to answer with an invalid link' do
+      fill_in 'Body', with: 'Question body'
+
+      click_link 'add link'
+
+      fill_in 'Name', with: 'Example link'
+
+      click_button 'Answer'
+
+      within('.answers') do
+        expect(page).to_not have_link 'Example link'
+      end
+
+      expect(page).to have_content "Links url can't be blank"
     end
   end
 

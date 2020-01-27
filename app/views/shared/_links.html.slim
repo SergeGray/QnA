@@ -1,7 +1,4 @@
-= form.fields_for :links do |l|
-  p
-    = l.label :name
-    = l.text_field :name
-  p
-    = l.label :url
-    = l.text_field :url
+p Links:
+ul
+  - resource.links.each do |link|
+    li= link_to link.name, link.url

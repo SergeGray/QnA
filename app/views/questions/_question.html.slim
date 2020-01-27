@@ -1,6 +1,11 @@
 = content_tag :tr, class: "question-#{question.id}" do
   td= question.title
   td= question.body
+  = content_tag :td, class: "question-#{question.id}-links" do
+    p Links:
+    ul
+      - question.links.each do |link|
+        li= link_to link.name, link.url
   = content_tag :td, class: "question-#{question.id}-files" do
     = render 'shared/files', resource: question
   td= link_to 'Show', question
@@ -22,5 +27,11 @@
         p
           = f.label :files
           = f.file_field :files , multiple: true, direct_upload: true
+        p Links:
+        p#links
+          = f.fields_for :links do |link|
+            = render 'shared/link_fields', f: link
+          = link_to_add_association 'add link', f, :links,
+              partial: 'shared/link_fields'
         p= f.submit 'Save'
     td= link_to 'Destroy', question, method: :delete

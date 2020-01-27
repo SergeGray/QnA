@@ -7,6 +7,7 @@ feature 'User can edit his question', %q(
 ) do
   given!(:user) { create(:user) }
   given!(:question) { create(:question) }
+  given(:link) { 'http://google.com' }
 
   scenario 'Unauthenticated user tries to edit a question' do
     visit questions_path
@@ -73,6 +74,28 @@ feature 'User can edit his question', %q(
 
         expect(page).to have_link 'rails_helper.rb'
         expect(page).to have_link 'spec_helper.rb'
+      end
+
+      scenario 'tries to attach a link to it' do
+        click_link 'add link'
+
+        fill_in 'Name', with: 'Example link'
+        fill_in 'Url', with: link
+
+        click_button 'Save'
+
+        expect(page).to have_link 'Example link', href: link
+      end
+
+      scenario 'tries to attach an invalid link' do
+        click_link 'add link'
+
+        fill_in 'Name', with: 'Example link'
+
+        click_button 'Save'
+
+        expect(page).to_not have_link 'Example link'
+        expect(page).to have_content "Links url can't be blank"
       end
     end
 
