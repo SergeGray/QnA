@@ -3,6 +3,11 @@
     - if answer.best?
       b Best answer
   td= answer.body
+  td.answer-links
+    p Links:
+    ul
+      - answer.links.each do |link|
+        li= link_to link.name, link.url
   = content_tag :td, class: "answer-#{answer.id}-files" do
     = render 'shared/files', resource: answer
   - if current_user&.author_of?(answer)

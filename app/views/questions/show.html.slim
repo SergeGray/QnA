@@ -4,7 +4,7 @@ p= @question.body
 = content_tag :div, class: "question-#{@question.id}-files" do
   = render 'shared/files', resource: @question
 
-.links
+.question-links
   p Links:
   ul
     - @question.links.each do |link|
