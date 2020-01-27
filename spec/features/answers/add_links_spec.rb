@@ -1,8 +1,8 @@
 require 'rails_helper'
 
-feature 'User can add links to question', %q(
-  In order to provide additional information to my question
-  As an author of the question
+feature 'User can add links to answer', %q(
+  In order to provide additional information to my answer
+  As an author of the answer
   I want to be able to attach links to it
 ) do
   given(:user) { create(:user) }
@@ -13,21 +13,22 @@ feature 'User can add links to question', %q(
 
   background { sign_in(user) }
 
-  describe 'owns the question' do
+  describe 'owns the answer' do
     scenario 'tries to add a link to it'
   end
 
-  scenario 'tries to add a link when creating question' do
-    visit new_question_path
+  scenario 'tries to add a link when creating answer', js: true do
+    visit question_path(question)
 
-    fill_in 'Title', with: 'Question title'
     fill_in 'Body', with: 'Question body'
 
     fill_in 'Name', with: 'Example link'
     fill_in 'Url', with: link
 
-    click_button 'Submit'
+    click_button 'Answer'
 
-    expect(page).to have_link 'Example link', href: link
+    within('.answers') do
+      expect(page).to have_link 'Example link', href: link
+    end
   end
 end
