@@ -65,6 +65,7 @@ feature 'User can answer a question', %q(
       click_link 'add link'
 
       fill_in 'Name', with: 'Example link'
+      fill_in 'Url', with: 'invalid format'
 
       click_button 'Answer'
 
@@ -72,7 +73,7 @@ feature 'User can answer a question', %q(
         expect(page).to_not have_link 'Example link'
       end
 
-      expect(page).to have_content "Links url can't be blank"
+      expect(page).to have_content "Links url is invalid"
     end
   end
 

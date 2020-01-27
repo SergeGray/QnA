@@ -69,11 +69,12 @@ feature 'User can create question', %q(
       click_link 'add link'
 
       fill_in 'Name', with: 'Example link'
+      fill_in 'Url', with: 'invalid format'
 
       click_button 'Submit'
 
       expect(page).to_not have_link 'Example link'
-      expect(page).to have_content "Links url can't be blank"
+      expect(page).to have_content "Links url is invalid"
     end
   end
 
