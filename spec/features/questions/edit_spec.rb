@@ -72,6 +72,8 @@ feature 'User can edit his question', %q(
         ]
         click_button 'Save'
 
+        click_link 'Show'
+
         expect(page).to have_link 'rails_helper.rb'
         expect(page).to have_link 'spec_helper.rb'
       end
@@ -83,6 +85,8 @@ feature 'User can edit his question', %q(
         fill_in 'Url', with: link
 
         click_button 'Save'
+
+        click_link 'Show'
 
         expect(page).to have_link 'Example link', href: link
       end
