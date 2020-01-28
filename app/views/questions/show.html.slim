@@ -1,6 +1,10 @@
 h1= @question.title
 p= @question.body
 
+-if @question.award.present?
+  = content_tag :div, class: "question-#{@question.id}-award" do
+    = render @question.award
+
 = content_tag :div, class: "question-#{@question.id}-files" do
   = render 'shared/files', resource: @question
 

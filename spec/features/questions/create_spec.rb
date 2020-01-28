@@ -34,47 +34,56 @@ feature 'User can create question', %q(
       expect(page).to have_content "Title can't be blank"
     end
 
-    scenario 'asks a question with attached files' do
-      fill_in 'Title', with: 'How do I do this'
-      fill_in 'Body', with: 'Help'
+    describe 'when creating a question with valid attributes' do
+      before do
+        fill_in 'Title', with: 'How do I do this'
+        fill_in 'Body', with: 'Help'
+      end
 
-      attach_file 'File', [
-        "#{Rails.root}/spec/rails_helper.rb",
-        "#{Rails.root}/spec/spec_helper.rb"
-      ]
-      click_button 'Submit'
+      scenario 'tries to attach files' do
+        attach_file 'File', [
+          "#{Rails.root}/spec/rails_helper.rb",
+          "#{Rails.root}/spec/spec_helper.rb"
+        ]
+        click_button 'Submit'
 
-      expect(page).to have_link 'rails_helper.rb'
-      expect(page).to have_link 'spec_helper.rb'
-    end
+        expect(page).to have_link 'rails_helper.rb'
+        expect(page).to have_link 'spec_helper.rb'
+      end
 
-    scenario 'asks a question with an attached link', js: true do
-      fill_in 'Title', with: 'How do I do this'
-      fill_in 'Body', with: 'Help'
+      scenario 'tries to attach a link', js: true do
+        click_link 'add link'
 
-      click_link 'add link'
+        fill_in 'Name', with: 'Example link'
+        fill_in 'Url', with: link
 
-      fill_in 'Name', with: 'Example link'
-      fill_in 'Url', with: link
+        click_button 'Submit'
 
-      click_button 'Submit'
+        expect(page).to have_link 'Example link', href: link
+      end
 
-      expect(page).to have_link 'Example link', href: link
-    end
+      scenario 'tries to attach an invalid link', js: true do
+        click_link 'add link'
 
-    scenario 'asks a question with an invalid link', js: true do
-      fill_in 'Title', with: 'How do I do this'
-      fill_in 'Body', with: 'Help'
+        fill_in 'Name', with: 'Example link'
+        fill_in 'Url', with: 'invalid format'
 
-      click_link 'add link'
+        click_button 'Submit'
 
-      fill_in 'Name', with: 'Example link'
-      fill_in 'Url', with: 'invalid format'
+        expect(page).to_not have_link 'Example link'
+        expect(page).to have_content 'Links url is invalid'
+      end
 
-      click_button 'Submit'
+      scenario 'tries to create a reward', js: true do
+        fill_in 'question[award_attributes][title]', with: 'Example title'
+        attach_file 'Image', "#{Rails.root}/spec/fixtures/files/image.png"
 
-      expect(page).to_not have_link 'Example link'
-      expect(page).to have_content "Links url is invalid"
+        click_button 'Submit'
+
+        expect(page).to have_content 'Example title'
+        expect(page.find("#award-#{Award.last.id}")['src'])
+          .to have_content 'image.png'
+      end
     end
   end
 
