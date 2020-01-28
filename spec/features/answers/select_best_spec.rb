@@ -33,6 +33,30 @@ feature 'User can select best answer', %q(
         expect(page).to have_content 'Answer successfully set as best'
       end
 
+      describe 'with an award' do
+        given!(:user2) { create(:user) }
+        given!(:award) { create(:award, question: question) }
+        given!(:answer) { create(:answer, question: question, user: user2) }
+
+        scenario 'tries to select best answer' do
+          visit question_path(question)
+
+          click_link 'Select as best'
+          click_link 'View awards'
+
+          expect(page).to_not have_content award.title
+   
+          using_session(user2) do
+            sign_in(user2)
+            click_link 'View awards'
+
+            expect(page).to have_content award.title
+            expect(page.find("#award-#{Award.last.id}")['src'])
+              .to have_content award.image.filename.to_s
+          end
+        end
+      end
+
       describe 'with an existing best answer' do
         given!(:answer2) do
           create(:answer, :new, question: question, best: true)
