@@ -18,6 +18,7 @@ class Answer < ApplicationRecord
   def select_as_best!
     transaction do
       question.answers.best.update_all(best: false)
+      question.award&.update!(user: user)
       update!(best: true)
     end
   end
