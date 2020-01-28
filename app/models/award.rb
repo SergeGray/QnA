@@ -4,5 +4,5 @@ class Award < ApplicationRecord
 
   has_one_attached :image
 
-  validates :title, presence: true
+  validates :title, :image, presence: true
 end

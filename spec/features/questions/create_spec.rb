@@ -74,7 +74,7 @@ feature 'User can create question', %q(
         expect(page).to have_content 'Links url is invalid'
       end
 
-      scenario 'tries to create a reward', js: true do
+      scenario 'tries to create a reward' do
         fill_in 'question[award_attributes][title]', with: 'Example title'
         attach_file 'Image', "#{Rails.root}/spec/fixtures/files/image.png"
 
@@ -83,6 +83,15 @@ feature 'User can create question', %q(
         expect(page).to have_content 'Example title'
         expect(page.find("#award-#{Award.last.id}")['src'])
           .to have_content 'image.png'
+      end
+
+      scenario 'tries to create a reward with invalid parameters' do
+        fill_in 'question[award_attributes][title]', with: 'Example title'
+
+        click_button 'Submit'
+
+        expect(page).to_not have_content 'Example title'
+        expect(page).to have_content "Award image can't be blank"
       end
     end
   end
