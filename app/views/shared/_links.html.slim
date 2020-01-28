@@ -1,4 +1,8 @@
 p Links:
 ul
   - resource.links.each do |link|
-    li= link_to link.name, link.url
+    li
+      - if link.gist?
+        = embed_gist(link)
+      - else
+        = link_to link.name, link.url
