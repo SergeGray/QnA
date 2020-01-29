@@ -24,7 +24,9 @@
         p#links
           = f.fields_for :links do |link|
             = render 'shared/link_fields', f: link
-          = link_to_add_association 'add link', f, :links,
-              partial: 'shared/link_fields'
+          = link_to_add_association 'add link',
+                                    f,
+                                    :links,
+                                    partial: 'shared/link_fields'
         p= f.submit 'Save'
     td= link_to 'Destroy', question, method: :delete
