@@ -13,11 +13,11 @@ RSpec.describe Link, type: :model do
 
   describe '#gist?' do
     it 'returns false if a link is not a gist' do
-      expect(link.gist?).to be false
+      expect(link).to_not be_gist
     end
 
     it 'returns true if a link is a gist' do
-      expect(gist.gist?).to be true
+      expect(gist).to be_gist
     end
   end
 end
