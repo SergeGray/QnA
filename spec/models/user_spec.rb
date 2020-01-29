@@ -9,10 +9,10 @@ RSpec.describe User, type: :model do
   it { should validate_presence_of(:password) }
 
   describe '#author_of?' do
-    let(:user) { create(:user) }
+    let(:user) { build(:user, id: 1) }
 
     context 'when the user is owner of the resource' do
-      let!(:question) { create(:question, user: user) }
+      let!(:question) { build(:question, user: user) }
 
       it 'returns true' do
         expect(user).to be_author_of(question)
@@ -20,7 +20,7 @@ RSpec.describe User, type: :model do
     end
 
     context 'when the user is not the owner of the resource' do
-      let(:question) { create(:question) }
+      let(:question) { build(:question) }
 
       it 'returns false' do
         expect(user).to_not be_author_of(question)

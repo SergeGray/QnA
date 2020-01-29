@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Link, type: :model do
-  let(:link) { create(:link) }
-  let(:gist) { create(:link, :gist) }
+  let(:link) { build(:link) }
+  let(:gist) { build(:link, :gist) }
 
   it { should belong_to :linkable }
 
