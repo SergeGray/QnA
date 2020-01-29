@@ -53,7 +53,7 @@ feature 'User can select best answer', %q(
           click_link 'View awards'
 
           expect(page).to_not have_content award.title
-   
+
           using_session(user2) do
             click_link 'View awards'
 

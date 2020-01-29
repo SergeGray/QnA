@@ -6,7 +6,6 @@ RSpec.describe AttachmentsController, type: :controller do
   let(:question) { create(:question) }
 
   describe 'DELETE #destroy' do
-
     before { question.files.attach(create_file_blob) }
 
     context 'when logged in' do
@@ -43,7 +42,7 @@ RSpec.describe AttachmentsController, type: :controller do
 
     context 'when not logged in' do
       before do
-        delete :destroy, params: { id: question.files.first, format: :js } 
+        delete :destroy, params: { id: question.files.first, format: :js }
       end
 
       it_behaves_like 'malicious action'
