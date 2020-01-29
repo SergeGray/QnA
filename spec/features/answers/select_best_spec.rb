@@ -41,13 +41,20 @@ feature 'User can select best answer', %q(
         scenario 'tries to select best answer' do
           visit question_path(question)
 
+          using_session(user2) do
+            sign_in(user2)
+            click_link 'View awards'
+
+            expect(page).to_not have_content award.title
+            expect(page).to_not have_selector("#award-#{Award.last.id}")
+          end
+
           click_link 'Select as best'
           click_link 'View awards'
 
           expect(page).to_not have_content award.title
    
           using_session(user2) do
-            sign_in(user2)
             click_link 'View awards'
 
             expect(page).to have_content award.title
