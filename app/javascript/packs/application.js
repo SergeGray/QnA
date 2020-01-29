@@ -7,7 +7,6 @@ require("@rails/ujs").start()
 require("turbolinks").start()
 require("@rails/activestorage").start()
 require("jquery")
-require("src/cocoon")
 require("utilities/hidden_form")
 require("utilities/prevent_delete_follow")
 require("channels")
@@ -19,3 +18,5 @@ require("channels")
 //
 // const images = require.context('../images', true)
 // const imagePath = (name) => images(name, true)
+
+import "cocoon-js";
