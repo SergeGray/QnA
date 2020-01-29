@@ -6,7 +6,7 @@ feature 'User can view his awards', %q(
   I want to be able to view my awards
 ) do
   given!(:user) { create(:user) }
-  given!(:user2) { create(:user2) }
+  given!(:user2) { create(:user) }
   given!(:award) { create(:award, user: user) }
 
   scenario 'Authenticated user tries to see his awards' do
@@ -25,8 +25,7 @@ feature 'User can view his awards', %q(
     click_link 'View awards'
 
     expect(page).to_not have_content award.title
-    expect(page.find("#award-#{Award.last.id}")['src'])
-      .to_not have_content award.image.filename.to_s 
+    expect(page).to_not have_selector("#award-#{Award.last.id}")
   end
 
   scenario 'Guest tries to see awards' do

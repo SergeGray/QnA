@@ -84,6 +84,11 @@ feature 'User can edit his question', %q(
         fill_in 'Name', with: 'Example link'
         fill_in 'Url', with: link
 
+        within_window open_new_window do
+          visit question_path(question)
+          expect(page).to_not have_link 'Example link', href: link
+        end
+
         click_button 'Save'
 
         click_link 'Show'

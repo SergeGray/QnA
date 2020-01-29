@@ -57,6 +57,12 @@ feature 'User can create question', %q(
         fill_in 'Name', with: 'Example link'
         fill_in 'Url', with: link
 
+        within_window open_new_window do
+          visit questions_path
+          expect(page).to_not have_link 'Example link', href: link
+          expect(page).to_not have_link 'Show'
+        end
+
         click_button 'Submit'
 
         expect(page).to have_link 'Example link', href: link
@@ -74,9 +80,15 @@ feature 'User can create question', %q(
         expect(page).to have_content 'Links url is invalid'
       end
 
-      scenario 'tries to create a reward' do
+      scenario 'tries to create a reward', js: true do
         fill_in 'question[award_attributes][title]', with: 'Example title'
         attach_file 'Image', "#{Rails.root}/spec/fixtures/files/image.png"
+
+        within_window open_new_window do
+          visit questions_path
+          expect(page).to_not have_content 'Example title'
+          expect(page).to_not have_link 'Show'
+        end
 
         click_button 'Submit'
 
