@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe ApplicationHelper, type: :helper do
-  let(:gist) { create(:link, :gist) }
+  let(:gist) { build(:link, :gist) }
   let(:iframe) do
     content_tag(
       :iframe,
