@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'shared/model_examples'
 
 RSpec.describe Question, type: :model do
   it { should have_many(:answers).dependent(:destroy) }
@@ -11,7 +10,10 @@ RSpec.describe Question, type: :model do
 
   it { should accept_nested_attributes_for :award }
 
-  it_behaves_like 'linkable'
+  it_behaves_like Linkable
+  it_behaves_like Votable do
+    let(:resource) { create(:question) }
+  end
 
   it 'has many attached files' do
     expect(Question.new.files)
