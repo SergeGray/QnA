@@ -74,6 +74,26 @@ feature 'User can vote on an answer', %q(
           expect(page).to have_content 'Score: 0'
         end
       end
+
+      context 'with another answer' do
+        given!(:answer2) { create(:answer, question: question) }
+
+        scenario 'tries to vote for one of them' do
+          visit question_path(question)
+
+          within(".answer-#{answer2.id}") do
+            expect(page).to have_content 'Score: 0'
+          end
+
+          within(".answer-#{answer.id}") do
+            click_link 'Upvote'
+          end
+
+          within(".answer-#{answer2.id}") do
+            expect(page).to have_content 'Score: 0'
+          end
+        end
+      end
     end
 
     context 'owns the answer' do
