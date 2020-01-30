@@ -8,7 +8,6 @@ require("turbolinks").start()
 require("@rails/activestorage").start()
 require("jquery")
 require("utilities/hidden_form")
-require("utilities/prevent_delete_follow")
 require("channels")
 
 
