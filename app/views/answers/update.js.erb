@@ -3,5 +3,5 @@ $('.answer-errors').html('<%= render 'shared/errors', resource: @answer %>');
 <% if @answer.errors.blank? %>
   $('.answer-' + '<%= @answer.id %>').replaceWith('<%= j render @answer %>');
   $('.nested-fields').remove();
-  $('.notice').html('<%= j notice %>');
+  $('.notice').html('Your answer was successfully updated.');
 <% end %>

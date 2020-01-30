@@ -32,8 +32,6 @@ class QuestionsController < ApplicationController
 
   def update
     @question.update(question_params)
-
-    flash[:notice] = 'Your question was successfully updated.'
   end
 
   def destroy

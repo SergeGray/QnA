@@ -16,23 +16,19 @@ class AnswersController < ApplicationController
     @answer = current_user.answers.create(
       answer_params.merge(question: @question)
     )
-    flash[:notice] = 'Your answer was successfully created.'
   end
 
   def update
     @answer.update(answer_params)
-    flash[:notice] = 'Your answer was successfully updated.'
   end
 
   def select
     @answer.select_as_best!
     @question = @answer.question
-    flash[:notice] = 'Answer successfully set as best'
   end
 
   def destroy
     @answer.destroy
-    flash[:notice] = 'Your answer was successfully destroyed'
   end
 
   private
