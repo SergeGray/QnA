@@ -7,37 +7,37 @@ $(document).on('turbolinks:load', function() {
   $(document).on('ajax:success', function(event) {
     let question = event.detail[0];
 
-    $('.question-score').html(question.score);
+    $('.resource-score').html(question.score);
   });
 });
 
 function hideCurrent() {
-  let opinion = $('.question-voting').data('opinion');
+  let opinion = $('.resource-voting').data('opinion');
   out: if (opinion == null) {
-    $('.cancel-question-link').hide();
+    $('.cancel-resource-link').hide();
   } else if (opinion) {
-    $('.upvote-question-link').hide();
+    $('.upvote-resource-link').hide();
   } else {
-    $('.downvote-question-link').hide();
+    $('.downvote-resource-link').hide();
   };
 };
 
 function switchButtons(button) {
-  $('.question-voting')
-    .on('click', '.' + button + '-question-link', function(event) {
+  $('.resource-voting')
+    .on('click', '.' + button + '-resource-link', function(event) {
       let opposite = button == 'upvote' ? 'downvote' : 'upvote';
       event.preventDefault();
       $(this).hide();
-      $('.cancel-question-link').show();
-      $('.' + opposite + '-question-link').show();
+      $('.cancel-resource-link').show();
+      $('.' + opposite + '-resource-link').show();
   });
 };
 
 function cancelVote() {
-  $('.question-voting').on('click', '.cancel-question-link', function(event) {
+  $('.resource-voting').on('click', '.cancel-resource-link', function(event) {
     event.preventDefault();
     $(this).hide();
-    $('.upvote-question-link').show();
-    $('.downvote-question-link').show();
+    $('.upvote-resource-link').show();
+    $('.downvote-resource-link').show();
   });
 };
