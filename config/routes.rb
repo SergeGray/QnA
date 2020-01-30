@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   concern :votable do
     member do
       post :upvote, :downvote
+      delete :cancel
     end
   end
 

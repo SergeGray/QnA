@@ -10,7 +10,7 @@ feature 'User can vote on a question', %q(
 
   describe 'Authenticated user', js: true do
     background { sign_in(user) }
-    
+
     context 'does not own the question' do
       background { visit question_path(question) }
 
@@ -48,8 +48,21 @@ feature 'User can vote on a question', %q(
         expect(page).to_not have_link 'Downvote'
       end
 
+      scenario 'tries to cancel their vote' do
+        expect(page).to_not have_link 'Cancel vote'
 
-      scenario 'tries to cancel their vote'
+        click_link 'Upvote'
+
+        expect(page).to have_link 'Cancel vote'
+
+        click_link 'Cancel vote'
+
+        expect(page).to_not have_link 'Cancel vote'
+
+        expect(page).to have_link 'Upvote'
+        expect(page).to have_link 'Downvote'
+        expect(page).to have_content 'Score: 0'
+      end
     end
 
     context 'owns the question' do
@@ -59,6 +72,7 @@ feature 'User can vote on a question', %q(
         visit question_path(question)
 
         expect(page).to_not have_link 'Upvote'
+        expect(page).to_not have_link 'Cancel vote'
         expect(page).to_not have_link 'Downvote'
       end
     end
@@ -68,6 +82,7 @@ feature 'User can vote on a question', %q(
     visit question_path(question)
 
     expect(page).to_not have_link 'Upvote'
+    expect(page).to_not have_link 'Cancel vote'
     expect(page).to_not have_link 'Downvote'
   end
 end

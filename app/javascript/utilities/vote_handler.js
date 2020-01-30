@@ -2,6 +2,7 @@ $(document).on('turbolinks:load', function() {
   hideCurrent();
   switchButtons('upvote');
   switchButtons('downvote');
+  cancelVote();
 
   $(document).on('ajax:success', function(event) {
     let question = event.detail[0];
@@ -13,7 +14,7 @@ $(document).on('turbolinks:load', function() {
 function hideCurrent() {
   let opinion = $('.question-voting').data('opinion');
   out: if (opinion == null) {
-    break out;
+    $('.cancel-question-link').hide();
   } else if (opinion) {
     $('.upvote-question-link').hide();
   } else {
@@ -24,9 +25,19 @@ function hideCurrent() {
 function switchButtons(button) {
   $('.question-voting')
     .on('click', '.' + button + '-question-link', function(event) {
-    let opposite = button == 'upvote' ? 'downvote' : 'upvote';
+      let opposite = button == 'upvote' ? 'downvote' : 'upvote';
+      event.preventDefault();
+      $(this).hide();
+      $('.cancel-question-link').show();
+      $('.' + opposite + '-question-link').show();
+  });
+};
+
+function cancelVote() {
+  $('.question-voting').on('click', '.cancel-question-link', function(event) {
     event.preventDefault();
     $(this).hide();
-    $('.' + opposite + '-question-link').show();
+    $('.upvote-question-link').show();
+    $('.downvote-question-link').show();
   });
 };
