@@ -17,6 +17,17 @@ RSpec.shared_examples_for VotableActions do
         expect { post :upvote, params: { id: resource } }
           .to_not change(resource, :score)
       end
+
+      it 'renders score, resource class, and resource id as json' do
+        post :upvote, params: { id: resource }
+        expect(response.body).to eq(
+          {
+            score: resource.score,
+            class_name: resource.class.name.downcase,
+            id: resource.id
+          }.to_json
+        )
+      end
     end
 
     context 'Resource author' do
@@ -49,6 +60,17 @@ RSpec.shared_examples_for VotableActions do
         post :downvote, params: { id: resource, positive: true }
         expect { post :downvote, params: { id: resource } }
           .to_not change(resource, :score)
+      end
+
+      it 'renders score, resource class, and resource id as json' do
+        post :downvote, params: { id: resource }
+        expect(response.body).to eq(
+          {
+            score: resource.score,
+            class_name: resource.class.name.downcase,
+            id: resource.id
+          }.to_json
+        )
       end
     end
 
@@ -86,6 +108,17 @@ RSpec.shared_examples_for VotableActions do
         it 'removes a vote' do
           expect { delete :cancel, params: { id: resource } }
             .to change(resource, :score).by(-1)
+        end
+
+        it 'renders score, resource class, and resource id as json' do
+          delete :cancel, params: { id: resource }
+          expect(response.body).to eq(
+            {
+              score: resource.score,
+              class_name: resource.class.name.downcase,
+              id: resource.id
+            }.to_json
+          )
         end
       end
     end
