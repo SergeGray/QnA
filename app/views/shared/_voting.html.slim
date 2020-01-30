@@ -1,22 +1,24 @@
 = content_tag :div,
-              class: 'resource-voting',
-              data: { opinion: resource.opinion(current_user) } do
+              class: 'voting',
+              data: { opinion: resource.opinion(current_user),
+                      class_name: resource_name(resource),
+                      id: resource.id } do
   = 'Score: '
-  = content_tag :b, class: 'resource-score' do
+  = content_tag :b, class: "#{resource_name(resource)}-#{resource.id}-score" do
     = resource.score
   - if user_signed_in? && !current_user.author_of?(resource)
     = link_to 'Upvote',
               polymorphic_path(resource, action: :upvote),
-              class: 'upvote-resource-link',
+              class: "upvote-#{resource_name(resource)}-#{resource.id}-link",
               method: :post,
               remote: true
     = link_to 'Cancel vote',
               polymorphic_path(resource, action: :cancel),
-              class: 'cancel-resource-link',
+              class: "cancel-#{resource_name(resource)}-#{resource.id}-link",
               method: :delete,
               remote: true
     = link_to 'Downvote',
               polymorphic_path(resource, action: :downvote),
-              class: 'downvote-resource-link',
+              class: "downvote-#{resource_name(resource)}-#{resource.id}-link",
               method: :post,
               remote: true

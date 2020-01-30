@@ -2,6 +2,7 @@ module VotableActions
   extend ActiveSupport::Concern
 
   included do
+    before_action :authenticate_user!
     before_action :set_resource, only: %i[upvote downvote cancel]
     before_action :deny_owner, only: %i[upvote downvote cancel]
   end
@@ -32,7 +33,11 @@ module VotableActions
   end
 
   def render_json
-    render json: { score: @votable.score }
+    render json: { 
+      score: @votable.score,
+      class_name: @votable.class.name.downcase,
+      id: @votable.id
+    }
   end
 
   def votable_model

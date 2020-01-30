@@ -13,7 +13,7 @@ RSpec.shared_examples_for VotableActions do
       end
 
       it 'does not change the resource score more than once' do
-        post :upvote, params: { id: resource, positive: true }
+        post :upvote, params: { id: resource }
         expect { post :upvote, params: { id: resource } }
           .to_not change(resource, :score)
       end

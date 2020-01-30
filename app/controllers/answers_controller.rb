@@ -1,4 +1,6 @@
 class AnswersController < ApplicationController
+  include VotableActions
+
   before_action :authenticate_user!
   before_action :set_question, only: :create
   before_action :set_answer, only: %i[edit update select destroy]

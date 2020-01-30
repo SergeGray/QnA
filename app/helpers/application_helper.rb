@@ -7,4 +7,8 @@ module ApplicationHelper
                 src: "#{GIST_RECEIVER}#{link.url}",
                 class: "gist-link-#{link.id}"
   end
+
+  def resource_name(resource)
+    resource.class.name.downcase
+  end
 end

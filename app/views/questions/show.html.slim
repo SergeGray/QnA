@@ -1,6 +1,8 @@
 h1= @question.title
 p= @question.body
-= render 'shared/voting', resource: @question
+
+= content_tag :td, class: "question-#{@question.id}-voting" do
+  = render 'shared/voting', resource: @question
 
 -if @question.award.present?
   .question-award

@@ -1,13 +1,17 @@
 require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
+  it_behaves_like VotableActions do
+    let(:resource) { create(:answer) }
+  end
+
   let(:question) { create(:question) }
   let(:user) { create(:user) }
   let(:answer) { create(:answer, user: user) }
 
-  before { login(user) }
-
   describe 'POST #create' do
+    before { login(user) }
+
     context 'with valid attributes' do
       it 'saves a new answer to database' do
         expect do
@@ -62,6 +66,8 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'PATCH #update' do
+    before { login(user) }
+
     context "on someone else's answer" do
       let(:answer2) { create(:answer) }
 
@@ -125,6 +131,8 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'PATCH #select' do
+    before { login(user) }
+
     let!(:answer) { create(:answer, question: question) }
 
     context "on someone else's question" do
@@ -156,6 +164,8 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
+    before { login(user) }
+
     context "on someone else's answer" do
       let!(:answer) { create(:answer) }
 
