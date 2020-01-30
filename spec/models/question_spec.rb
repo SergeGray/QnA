@@ -1,5 +1,5 @@
 require 'rails_helper'
-require 'shared_model_examples'
+require 'shared/model_examples'
 
 RSpec.describe Question, type: :model do
   it { should have_many(:answers).dependent(:destroy) }
