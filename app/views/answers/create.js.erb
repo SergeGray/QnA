@@ -4,5 +4,5 @@ $('.answer-errors').html('<%= render 'shared/errors', resource: @answer %>');
   $('.answers').append('<%= j render @answer %>');
   $('.new-answer #answer_body').val('');
   $('.nested-fields').remove();
-  $('.notice').html('<%= j notice %>');
+  $('.notice').html('Your answer was successfully created.');
 <% end %>
