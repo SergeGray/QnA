@@ -9,7 +9,10 @@ Rails.application.routes.draw do
   end
 
   resources :questions, concerns: :votable do
-    resources :answers, except: %i[index show], shallow: true do
+    resources :answers,
+              except: %i[index show],
+              shallow: true,
+              concerns: :votable do
       patch :select, on: :member
     end
   end

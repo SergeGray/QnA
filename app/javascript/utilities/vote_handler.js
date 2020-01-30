@@ -1,43 +1,48 @@
 $(document).on('turbolinks:load', function() {
-  hideCurrent();
-  switchButtons('upvote');
-  switchButtons('downvote');
-  cancelVote();
+  $('.voting').each( function() {
+    let opinion = $(this).data('opinion');
+    let className = $(this).data('className');
+    let id = $(this).data('id');
+    let linkName = className + '-' + id + '-link';
+    hideCurrent(opinion, linkName);
+    switchButtons($(this), 'upvote', linkName);
+    switchButtons($(this), 'downvote', linkName);
+    cancelVote($(this), linkName);
+  });
 
   $(document).on('ajax:success', function(event) {
     let question = event.detail[0];
 
-    $('.resource-score').html(question.score);
+    $('.' + question.class_name + '-' + question.id + '-score')
+      .html(question.score);
   });
 });
 
-function hideCurrent() {
-  let opinion = $('.resource-voting').data('opinion');
+function hideCurrent(opinion, linkName) {
   out: if (opinion == null) {
-    $('.cancel-resource-link').hide();
+    $('.cancel-' + linkName).hide();
   } else if (opinion) {
-    $('.upvote-resource-link').hide();
+    $('.upvote-' + linkName).hide();
   } else {
-    $('.downvote-resource-link').hide();
+    $('.downvote-' + linkName).hide();
   };
 };
 
-function switchButtons(button) {
-  $('.resource-voting')
-    .on('click', '.' + button + '-resource-link', function(event) {
-      let opposite = button == 'upvote' ? 'downvote' : 'upvote';
-      event.preventDefault();
-      $(this).hide();
-      $('.cancel-resource-link').show();
-      $('.' + opposite + '-resource-link').show();
+function switchButtons(object, button, linkName) {
+  object.on('click', '.' + button + '-' + linkName, function(event) {
+    let opposite = button == 'upvote' ? 'downvote' : 'upvote';
+    event.preventDefault();
+    $(this).hide();
+    $('.cancel-' + linkName).show();
+    $('.' + opposite + '-' + linkName).show();
   });
 };
 
-function cancelVote() {
-  $('.resource-voting').on('click', '.cancel-resource-link', function(event) {
+function cancelVote(object, linkName) {
+  object.on('click', '.cancel-' + linkName, function(event) {
     event.preventDefault();
     $(this).hide();
-    $('.upvote-resource-link').show();
-    $('.downvote-resource-link').show();
+    $('.upvote-' + linkName).show();
+    $('.downvote-' + linkName).show();
   });
 };

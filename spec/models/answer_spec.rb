@@ -13,6 +13,9 @@ RSpec.describe Answer, type: :model do
   it { should validate_uniqueness_of(:best).scoped_to(:question_id) }
 
   it_behaves_like Linkable
+  it_behaves_like Votable do
+    let(:resource) { create(:answer) }
+  end
 
   it 'has many attached files' do
     expect(Answer.new.files)

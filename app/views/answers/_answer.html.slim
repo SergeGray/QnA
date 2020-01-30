@@ -3,6 +3,8 @@
     - if answer.best?
       b Best answer
   td= answer.body
+  = content_tag :td, class: "answer-#{answer.id}-voting" do
+    = render 'shared/voting', resource: answer
   = content_tag :td, class: "answer-#{answer.id}-links" do
     = render 'shared/links', resource: answer
   = content_tag :td, class: "answer-#{answer.id}-files" do
