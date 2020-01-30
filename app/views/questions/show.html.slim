@@ -1,5 +1,19 @@
 h1= @question.title
 p= @question.body
+.question-voting
+  = 'Score: '
+  = content_tag :b, class: 'question-score' do
+    = @question.score
+  = link_to 'Upvote',
+            upvote_question_path,
+            class: 'upvote-question-link',
+            method: :post,
+            remote: true
+  = link_to 'Downvote',
+            downvote_question_path,
+            class: 'downvote-question-link',
+            method: :post,
+            remote: true
 
 -if @question.award.present?
   = content_tag :div, class: "question-#{@question.id}-award" do
