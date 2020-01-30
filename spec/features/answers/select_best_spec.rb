@@ -5,15 +5,15 @@ feature 'User can select best answer', %q(
   As an author of the question
   I want to be able to select the best answer for that question
 ) do
+  given!(:user) { create(:user) }
+  given!(:question) { create(:question) }
+  given!(:answer) { create(:answer, question: question) }
+
   scenario 'Guest tries to select best answer' do
     visit question_path(question)
 
     expect(page).to_not have_link 'Select as best'
   end
-
-  given!(:user) { create(:user) }
-  given!(:question) { create(:question) }
-  given!(:answer) { create(:answer, question: question) }
 
   describe 'Authenticated user', js: true do
     background { sign_in(user) }
