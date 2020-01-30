@@ -15,7 +15,7 @@ RSpec.shared_examples_for Votable do
 
   describe '#upvote!' do
     let(:user) { create(:user) }
-    
+
     context 'with no vote from user' do
       it 'increases the score' do
         expect { resource.upvote!(user) }
@@ -41,7 +41,6 @@ RSpec.shared_examples_for Votable do
       end
     end
   end
-  
 
   describe '#downvote!' do
     let(:user) { create(:user) }
@@ -49,7 +48,7 @@ RSpec.shared_examples_for Votable do
     context 'with no vote from user' do
       it 'decreases the score' do
         expect { resource.downvote!(user) }
-          .to change(resource, :score).by -1
+          .to change(resource, :score).by(-1)
       end
     end
 
@@ -67,7 +66,36 @@ RSpec.shared_examples_for Votable do
 
       it 'changes the vote from positive to negative' do
         expect { resource.downvote!(user) }
-          .to change(resource, :score).by -2
+          .to change(resource, :score).by(-2)
+      end
+    end
+  end
+
+  describe '#clear!' do
+    let(:user) { create(:user) }
+
+    context 'with no vote from user' do
+      it 'does not change the score' do
+        expect { resource.clear!(user) }
+          .to_not change(resource, :score)
+      end
+    end
+
+    context 'with an existing negative vote from user' do
+      before { resource.downvote!(user) }
+
+      it 'removes the negative vote' do
+        expect { resource.clear!(user) }
+          .to change(resource, :score).by 1
+      end
+    end
+
+    context 'with an existing positive vote from user' do
+      before { resource.upvote!(user) }
+
+      it 'removes the positive vote' do
+        expect { resource.clear!(user) }
+          .to change(resource, :score).by(-1)
       end
     end
   end

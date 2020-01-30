@@ -17,6 +17,10 @@ module Votable
     vote(user, false)
   end
 
+  def clear!(user)
+    votes.where(user: user).destroy_all
+  end
+
   def opinion(user)
     votes.find_by(user: user)&.positive?
   end
@@ -25,7 +29,7 @@ module Votable
 
   def vote(user, positive)
     transaction do
-      votes.where(user: user).destroy_all
+      clear!(user)
       votes.create!(user: user, positive: positive)
     end
   end
