@@ -4,6 +4,7 @@ $(document).on('turbolinks:load', function() {
     let className = $(this).data('className');
     let id = $(this).data('id');
     let linkName = className + '-' + id + '-link';
+
     hideCurrent(opinion, linkName);
     switchButtons($(this), 'upvote', linkName);
     switchButtons($(this), 'downvote', linkName);
@@ -19,7 +20,7 @@ $(document).on('turbolinks:load', function() {
 });
 
 function hideCurrent(opinion, linkName) {
-  out: if (opinion == null) {
+  if (opinion == null) {
     $('.cancel-' + linkName).hide();
   } else if (opinion) {
     $('.upvote-' + linkName).hide();
@@ -31,6 +32,7 @@ function hideCurrent(opinion, linkName) {
 function switchButtons(object, button, linkName) {
   object.on('click', '.' + button + '-' + linkName, function(event) {
     let opposite = button == 'upvote' ? 'downvote' : 'upvote';
+
     event.preventDefault();
     $(this).hide();
     $('.cancel-' + linkName).show();
