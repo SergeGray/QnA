@@ -10,7 +10,7 @@ function hiddenForm(resource) {
     function(event) {
       event.preventDefault();
       $(this).hide();
-      var resourceId = $(this).data(resource + 'Id');
+      let resourceId = $(this).data(resource + 'Id');
       $('form#edit-' + resource + '-' + resourceId).removeClass('hidden');
     }
   );
