@@ -1,5 +1,5 @@
 require 'rails_helper'
-require 'shared_controller_examples'
+require 'shared/controller_examples'
 
 RSpec.describe AttachmentsController, type: :controller do
   let(:user) { create(:user) }
