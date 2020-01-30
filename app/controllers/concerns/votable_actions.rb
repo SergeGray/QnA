@@ -33,7 +33,7 @@ module VotableActions
   end
 
   def render_json
-    render json: { 
+    render json: {
       score: @votable.score,
       class_name: @votable.class.name.downcase,
       id: @votable.id

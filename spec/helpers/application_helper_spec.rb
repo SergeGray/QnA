@@ -16,4 +16,11 @@ RSpec.describe ApplicationHelper, type: :helper do
       expect(embed_gist(gist)).to eq(iframe)
     end
   end
+
+  describe '#resource_name' do
+    let(:question) { build(:question) }
+    it 'returns resource class name as a downcased string' do
+      expect(resource_name(question)).to eq('question')
+    end
+  end
 end
