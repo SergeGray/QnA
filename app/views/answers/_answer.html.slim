@@ -3,12 +3,14 @@
     - if answer.best?
       b Best answer
   td= answer.body
-  = content_tag :td, class: "answer-#{answer.id}-voting" do
-    = render 'shared/voting', resource: answer
+  td= render 'shared/voting', resource: answer
+
   = content_tag :td, class: "answer-#{answer.id}-links" do
     = render 'shared/links', resource: answer
+
   = content_tag :td, class: "answer-#{answer.id}-files" do
     = render 'shared/files', resource: answer
+
   - if current_user&.author_of?(answer)
     td
       = link_to 'Edit',
