@@ -23,7 +23,7 @@ feature 'User can delete their attachments', %q(
       scenario 'tries to delete it' do
         visit question_path(question)
 
-        within ".question-#{question.id}-files" do
+        within ".question-files" do
           expect(page).to have_link 'image'
 
           click_link 'Delete file'
@@ -69,7 +69,7 @@ feature 'User can delete their attachments', %q(
   scenario 'Guest tries to delete a question attachment' do
     visit question_path(question)
 
-    within ".question-#{question.id}-files" do
+    within ".question-files" do
       expect(page).to_not have_link 'Delete file'
     end
   end

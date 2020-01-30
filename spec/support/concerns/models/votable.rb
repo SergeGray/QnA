@@ -69,6 +69,24 @@ RSpec.shared_examples_for Votable do
         expect { resource.downvote!(user) }
           .to change(resource, :score).by -2
       end
-      end
     end
+  end
+
+  describe '#opinion' do
+    let(:user) { create(:user) }
+
+    it 'returns nil with no vote from user' do
+      expect(resource.opinion(user)).to be nil
+    end
+
+    it 'returns true with a positive vote from user' do
+      resource.upvote!(user)
+      expect(resource.opinion(user)).to be true
+    end
+
+    it 'returns false with a negative vote from user' do
+      resource.downvote!(user)
+      expect(resource.opinion(user)).to be false
+    end
+  end
 end

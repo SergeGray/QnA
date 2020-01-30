@@ -1,28 +1,31 @@
 h1= @question.title
 p= @question.body
-.question-voting
+= content_tag :div,
+              class: 'question-voting',
+              data: { opinion: @question.opinion(current_user) }
   = 'Score: '
-  = content_tag :b, class: 'question-score' do
+  b.question-score
     = @question.score
-  = link_to 'Upvote',
-            upvote_question_path,
-            class: 'upvote-question-link',
-            method: :post,
-            remote: true
-  = link_to 'Downvote',
-            downvote_question_path,
-            class: 'downvote-question-link',
-            method: :post,
-            remote: true
+  - if current_user && !current_user.author_of?(@question)
+    = link_to 'Upvote',
+              upvote_question_path,
+              class: 'upvote-question-link',
+              method: :post,
+              remote: true
+    = link_to 'Downvote',
+              downvote_question_path,
+              class: 'downvote-question-link',
+              method: :post,
+              remote: true
 
 -if @question.award.present?
-  = content_tag :div, class: "question-#{@question.id}-award" do
+  .question-award
     = render @question.award
 
-= content_tag :div, class: "question-#{@question.id}-files" do
+.question-files
   = render 'shared/files', resource: @question
 
-= content_tag :div, class: "question-#{@question.id}-links" do
+.question-links
   = render 'shared/links', resource: @question
 
 h2 Answers

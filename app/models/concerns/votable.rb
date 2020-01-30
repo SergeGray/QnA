@@ -1,5 +1,4 @@
 module Votable
-  VALUES = { positive: true, negative: false }.freeze
   extend ActiveSupport::Concern
 
   included do
@@ -11,19 +10,23 @@ module Votable
   end
 
   def upvote!(user)
-    vote(user, :positive)
+    vote(user, true)
   end
 
   def downvote!(user)
-    vote(user, :negative)
+    vote(user, false)
+  end
+
+  def opinion(user)
+    votes.find_by(user: user)&.positive?
   end
 
   private
 
-  def vote(user, value)
+  def vote(user, positive)
     transaction do
       votes.where(user: user).destroy_all
-      votes.create!(user: user, positive: VALUES[value])
+      votes.create!(user: user, positive: positive)
     end
   end
 end

@@ -20,7 +20,7 @@ feature 'User can delete their links', %q(
       scenario 'tries to delete a link from it' do
         visit question_path(question)
 
-        within ".question-#{question.id}-links" do
+        within ".question-links" do
           expect(page).to have_link question_link.name
 
           click_link 'Delete link'
@@ -66,7 +66,7 @@ feature 'User can delete their links', %q(
   scenario 'Guest tries to delete a question link' do
     visit question_path(question)
 
-    within ".question-#{question.id}-links" do
+    within ".question-links" do
       expect(page).to_not have_link 'Delete link'
     end
   end
