@@ -1,6 +1,4 @@
-= form_with url: question_answers_path(@question),
-            model: @answer,
-            class: 'new-answer' do |f|
+= form_with model: [@question, @answer], class: 'new-answer' do |f|
   p
     = f.label :body
     = f.text_area :body
