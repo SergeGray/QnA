@@ -11,7 +11,7 @@ feature 'User can vote on a question', %q(
   describe 'Authenticated user', js: true do
     background { sign_in(user) }
     
-    describe 'does not own the question' do
+    context 'does not own the question' do
       background { visit question_path(question) }
 
       scenario 'tries to upvote a question' do
@@ -22,21 +22,52 @@ feature 'User can vote on a question', %q(
         expect(page).to have_content 'Score: 1'
       end
 
-      scenario 'tries to downvote a question'
+      scenario 'tries to downvote a question' do
+        expect(page).to have_content 'Score: 0'
+
+        click_link 'Downvote'
+
+        expect(page).to have_content 'Score: -1'
+      end
+
+      scenario 'tries to change their vote to the opposite' do
+        expect(page).to have_content 'Score: 0'
+
+        click_link 'Downvote'
+
+        expect(page).to have_content 'Score: -1'
+
+        click_link 'Upvote'
+
+        expect(page).to have_content 'Score: 1'
+      end
+
+      scenario 'tries to vote more than once' do
+        click_link 'Downvote'
+
+        expect(page).to_not have_link 'Downvote'
+      end
+
 
       scenario 'tries to cancel their vote'
-
-      scenario 'tries to change their vote to the opposite'
-
-      scenario 'tries to vote more than once'
     end
 
-    describe 'owns the question' do
+    context 'owns the question' do
       given!(:question) { create(:question, user: user) }
 
-      scenario 'tries to vote on it'
+      scenario 'tries to vote on it' do
+        visit question_path(question)
+
+        expect(page).to_not have_link 'Upvote'
+        expect(page).to_not have_link 'Downvote'
+      end
     end
   end
 
-  scenario 'Guest tries to vote on a question'
+  scenario 'Guest tries to vote on a question' do
+    visit question_path(question)
+
+    expect(page).to_not have_link 'Upvote'
+    expect(page).to_not have_link 'Downvote'
+  end
 end
