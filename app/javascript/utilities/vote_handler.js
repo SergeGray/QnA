@@ -20,7 +20,7 @@ $(document).on('turbolinks:load', function() {
 });
 
 function hideCurrent(voteValue, linkName) {
-  if (voteValue == 0) {
+  if (voteValue === 0) {
     $('.cancel-' + linkName).hide();
   } else if (voteValue > 0) {
     $('.upvote-' + linkName).hide();
