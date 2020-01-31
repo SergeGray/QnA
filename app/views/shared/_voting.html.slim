@@ -1,6 +1,6 @@
 = content_tag :div,
               class: 'voting',
-              data: { opinion: resource.opinion(current_user),
+              data: { vote_value: resource.vote_value(current_user),
                       class_name: resource_name(resource),
                       id: resource.id } do
   = 'Score: '

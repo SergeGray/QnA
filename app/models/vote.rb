@@ -2,6 +2,8 @@ class Vote < ApplicationRecord
   belongs_to :user
   belongs_to :votable, polymorphic: true
 
-  scope :positive, -> { where(positive: true) }
-  scope :negative, -> { where(positive: false) }
+  validates :value, presence: true
+
+  scope :positive, -> { where('value > 0') }
+  scope :negative, -> { where('value < 0') }
 end

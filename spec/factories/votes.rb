@@ -2,10 +2,10 @@ FactoryBot.define do
   factory :vote do
     user
     votable { |factory| factory.association(:question) }
-    positive { true }
+    value { 1 }
 
     trait :negative do
-      positive { false }
+      value { -1 }
     end
   end
 end
