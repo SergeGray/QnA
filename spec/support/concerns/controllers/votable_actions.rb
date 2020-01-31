@@ -37,12 +37,22 @@ RSpec.shared_examples_for VotableActions do
         expect { post :upvote, params: { id: resource } }
           .to_not change(resource, :score)
       end
+
+      it 'responds with a forbidden http status' do
+        post :upvote, params: { id: resource }
+        expect(response).to have_http_status(:forbidden)
+      end
     end
 
     context 'Unauthenticated user' do
       it 'does not change the resource score' do
         expect { post :upvote, params: { id: resource } }
           .to_not change(resource, :score)
+      end
+
+      it 'redirects to login page' do
+        post :upvote, params: { id: resource }
+        expect(response).to redirect_to(new_user_session_path)
       end
     end
   end
@@ -81,12 +91,22 @@ RSpec.shared_examples_for VotableActions do
         expect { post :downvote, params: { id: resource } }
           .to_not change(resource, :score)
       end
+
+      it 'responds with a forbidden http status' do
+        post :upvote, params: { id: resource }
+        expect(response).to have_http_status(:forbidden)
+      end
     end
 
     context 'Unauthenticated user' do
       it 'does not change the resource score' do
         expect { post :downvote, params: { id: resource } }
           .to_not change(resource, :score)
+      end
+
+      it 'redirects to login page' do
+        post :upvote, params: { id: resource }
+        expect(response).to redirect_to(new_user_session_path)
       end
     end
   end
@@ -99,6 +119,17 @@ RSpec.shared_examples_for VotableActions do
         it 'does not change score' do
           expect { delete :cancel, params: { id: resource } }
             .to_not change(resource, :score)
+        end
+
+        it 'renders score, resource class, and resource id as json' do
+          post :upvote, params: { id: resource }
+          expect(response.body).to eq(
+            {
+              score: resource.score,
+              class_name: resource.class.name.downcase,
+              id: resource.id
+            }.to_json
+          )
         end
       end
 
@@ -132,6 +163,11 @@ RSpec.shared_examples_for VotableActions do
         expect { post :downvote, params: { id: resource } }
           .to_not change(resource, :score)
       end
+
+      it 'responds with a forbidden http status' do
+        post :upvote, params: { id: resource }
+        expect(response).to have_http_status(:forbidden)
+      end
     end
 
     context 'Unauthenticated user' do
@@ -140,6 +176,11 @@ RSpec.shared_examples_for VotableActions do
       it 'does not change the resource score' do
         expect { delete :cancel, params: { id: resource } }
           .to_not change(resource, :score)
+      end
+
+      it 'redirects to login page' do
+        post :upvote, params: { id: resource }
+        expect(response).to redirect_to(new_user_session_path)
       end
     end
   end
