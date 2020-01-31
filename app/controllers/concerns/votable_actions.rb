@@ -2,7 +2,6 @@ module VotableActions
   extend ActiveSupport::Concern
 
   included do
-    before_action :authenticate_user!
     before_action :set_resource, only: %i[upvote downvote cancel]
     before_action :deny_owner, only: %i[upvote downvote cancel]
   end
@@ -18,7 +17,7 @@ module VotableActions
   end
 
   def cancel
-    @votable.clear!(current_user)
+    @votable.clear_votes!(current_user)
     render_json
   end
 

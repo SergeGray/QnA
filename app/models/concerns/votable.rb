@@ -6,31 +6,31 @@ module Votable
   end
 
   def score
-    votes.positive.count - votes.negative.count
+    votes.sum(:value)
   end
 
   def upvote!(user)
-    vote(user, true)
+    vote(user, 1)
   end
 
   def downvote!(user)
-    vote(user, false)
+    vote(user, -1)
   end
 
-  def clear!(user)
+  def clear_votes!(user)
     votes.where(user: user).destroy_all
   end
 
-  def opinion(user)
-    votes.find_by(user: user)&.positive?
+  def vote_value(user)
+    votes.find_by(user: user)&.value || 0
   end
 
   private
 
-  def vote(user, positive)
+  def vote(user, value)
     transaction do
-      clear!(user)
-      votes.create!(user: user, positive: positive)
+      clear_votes!(user)
+      votes.create!(user: user, value: value)
     end
   end
 end

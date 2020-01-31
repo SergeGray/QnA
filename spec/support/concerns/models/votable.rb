@@ -71,12 +71,12 @@ RSpec.shared_examples_for Votable do
     end
   end
 
-  describe '#clear!' do
+  describe '#clear_votes!' do
     let(:user) { create(:user) }
 
     context 'with no vote from user' do
       it 'does not change the score' do
-        expect { resource.clear!(user) }
+        expect { resource.clear_votes!(user) }
           .to_not change(resource, :score)
       end
     end
@@ -85,7 +85,7 @@ RSpec.shared_examples_for Votable do
       before { resource.downvote!(user) }
 
       it 'removes the negative vote' do
-        expect { resource.clear!(user) }
+        expect { resource.clear_votes!(user) }
           .to change(resource, :score).by 1
       end
     end
@@ -94,27 +94,27 @@ RSpec.shared_examples_for Votable do
       before { resource.upvote!(user) }
 
       it 'removes the positive vote' do
-        expect { resource.clear!(user) }
+        expect { resource.clear_votes!(user) }
           .to change(resource, :score).by(-1)
       end
     end
   end
 
-  describe '#opinion' do
+  describe '#vote_value' do
     let(:user) { create(:user) }
 
-    it 'returns nil with no vote from user' do
-      expect(resource.opinion(user)).to be nil
+    it 'returns 0 with no vote from user' do
+      expect(resource.vote_value(user)).to be 0
     end
 
-    it 'returns true with a positive vote from user' do
+    it 'returns 1 with a positive vote from user' do
       resource.upvote!(user)
-      expect(resource.opinion(user)).to be true
+      expect(resource.vote_value(user)).to eq 1
     end
 
-    it 'returns false with a negative vote from user' do
+    it 'returns -1 with a negative vote from user' do
       resource.downvote!(user)
-      expect(resource.opinion(user)).to be false
+      expect(resource.vote_value(user)).to eq(-1)
     end
   end
 end
