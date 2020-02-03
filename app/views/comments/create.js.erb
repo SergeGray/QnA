@@ -1,7 +1,16 @@
-$('.comment-errors').html('<%= render 'shared/errors', resource: @comment %>');
+var commentableClass = '<%= resource_name(@commentable) %>'
+var commentableId = '<%= @commentable.id %>'
+
+$('.' + commentableClass + '-' + commentableId + '-comment-errors')
+  .html('<%= render 'shared/errors', resource: @comment %>');
 
 <% if @comment.persisted? %>
-  $('.comments').append('<%= j render @comment %>');
-  $('.new-comment #comment_body').val('');
+  $('<%= j render @comment %>')
+  .insertBefore('.new-comment-link#' + commentableClass + '-' + commentableId);
+  $('#new-' + commentableClass + '-' + commentableId + '-comment #comment_body')
+    .val('');
+  $('#new-' + commentableClass + '-' + commentableId + '-comment')
+    .addClass('hidden');
+  $('.new-comment-link#' + commentableClass + '-' + commentableId).show();
   $('.notice').html('Your comment was successfully created.');
 <% end %>

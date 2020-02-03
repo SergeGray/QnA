@@ -1,6 +1,15 @@
-.comment-errors
+= content_tag :div,
+              '',
+              class: "#{resource_name(resource)}-#{resource.id}"\
+                     "-comment-errors"
 
 .comments
   = render resource.comments
 
-= render 'comments/form', commentable: resource if user_signed_in?
+  - if user_signed_in?
+    = link_to 'New comment',
+              '#',
+              class: "new-comment-link",
+              id: "#{resource_name(resource)}-#{resource.id}",
+              data: { "#{resource_name(resource)}_id" => resource.id }
+    = render 'comments/form', commentable: resource

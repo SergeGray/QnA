@@ -13,7 +13,7 @@ p= @question.body
 .question-links
   = render 'shared/links', resource: @question
 
-.question-comments
+= content_tag :div, class: "question-#{@question.id}-comments" do
   = render 'shared/comments', resource: @question
 
 h2 Answers
