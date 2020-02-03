@@ -7,6 +7,8 @@ class QuestionsController < ApplicationController
     check_ownership(@question, questions_path)
   end
 
+  after_action :publish_question, only: :create
+
   def index
     @questions = Question.all
   end
@@ -46,6 +48,18 @@ class QuestionsController < ApplicationController
 
   def set_question
     @question = Question.with_attached_files.find(params[:id])
+  end
+
+  def publish_question
+    return if @question.errors.any?
+
+    ActionCable.server.broadcast(
+      'questions',
+      ApplicationController.render(
+        partial: 'questions/question',
+        locals: { question: @question, current_user: current_user }
+      )
+    )
   end
 
   def question_params
