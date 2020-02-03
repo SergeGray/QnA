@@ -108,6 +108,30 @@ feature 'User can create question', %q(
     end
   end
 
+  context 'In multiple sessions', js: true do
+    scenario "new question appears on another user's page" do
+      using_session('guest') do
+        visit questions_path
+        expect(page).to_not have_content 'How do I do this'
+        expect(page).to_not have_content 'Help'
+      end
+
+      using_session('user') do
+        sign_in(user)
+        visit new_question_path
+
+        fill_in 'Title', with: 'How do I do this'
+        fill_in 'Body', with: 'Help'
+        click_button 'Submit'
+      end
+
+      using_session('guest') do
+        expect(page).to have_content 'How do I do this'
+        expect(page).to have_content 'Help'
+      end
+    end
+  end
+
   scenario 'Unauthenticated user tries to create a question' do
     visit questions_path
 
