@@ -14,7 +14,6 @@ class QuestionsController < ApplicationController
   end
 
   def show
-    @answer = Answer.new
     gon.push({ question_id: @question.id })
   end
 

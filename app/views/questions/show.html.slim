@@ -13,6 +13,9 @@ p= @question.body
 .question-links
   = render 'shared/links', resource: @question
 
+.question-comments
+  = render 'shared/comments', resource: @question
+
 h2 Answers
 table.answers
   th Body
