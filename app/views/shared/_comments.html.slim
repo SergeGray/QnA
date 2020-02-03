@@ -1,0 +1,6 @@
+.comment-errors
+
+.comments
+  = render resource.comments
+
+= render 'comments/form', commentable: resource if user_signed_in?

@@ -1,4 +1,5 @@
 class Answer < ApplicationRecord
+  include Commentable
   include Linkable
   include Votable
 

@@ -10,6 +10,7 @@ RSpec.describe Question, type: :model do
 
   it { should accept_nested_attributes_for :award }
 
+  it_behaves_like Commentable
   it_behaves_like Linkable
   it_behaves_like Votable do
     let(:resource) { create(:question) }
