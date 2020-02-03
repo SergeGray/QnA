@@ -5,8 +5,9 @@ feature 'User can create a comment', %q(
   As an authenticated user
   I want to be able to post a comment on a resource
 ) do
-  given(:user) { create(:user) }
-  given(:question) { create(:question) }
+  given!(:user) { create(:user) }
+  given!(:question) { create(:question) }
+  given!(:answer) { create(:answer, question: question) }
 
   describe 'Authenticated user', js: true do
     background do
@@ -14,16 +15,69 @@ feature 'User can create a comment', %q(
       visit question_path(question)
     end
 
-    scenario 'tries to create a comment' do
+    scenario 'tries to create a question comment' do
       expect(page).to_not have_content 'Can you post a code snippet?'
 
-      within('.question-comments') do
+      within(".question-#{question.id}-comments") do
+        click_link 'New comment'
+
         fill_in 'comment[body]', with: 'Can you post a code snippet?'
         click_button 'Comment'
       end
 
       expect(page).to have_content 'Your comment was successfully created.'
       expect(page).to have_content 'Can you post a code snippet?'
+    end
+
+    scenario 'tries to create an answer comment' do
+      expect(page).to_not have_content 'Can you post a code snippet?'
+
+      within(".answer-#{answer.id}-comments") do
+        click_link 'New comment'
+
+        fill_in 'comment[body]', with: 'Can you post a code snippet?'
+        click_button 'Comment'
+      end
+
+      expect(page).to have_content 'Your comment was successfully created.'
+      expect(page).to have_content 'Can you post a code snippet?'
+    end
+
+    scenario 'tries to create a question comment with errors' do
+      within(".question-#{question.id}-comments") do
+        click_link 'New comment'
+
+        click_button 'Comment'
+      end
+
+      expect(page).to have_content "Body can't be blank"
+    end
+
+    scenario 'tries to create an answer comment with errors' do
+      within(".answer-#{answer.id}-comments") do
+        click_link 'New comment'
+
+        click_button 'Comment'
+      end
+
+      expect(page).to have_content "Body can't be blank"
+    end
+  end
+
+  scenario 'Unauthenticated user tries to create a question comment' do
+    visit question_path(question)
+
+    within(".question-#{question.id}-comments") do
+      expect(page).to_not have_link 'New comment'
+    end
+  end
+    
+
+  scenario 'Unauthenticated user tries to create a question comment' do
+    visit question_path(question)
+
+    within(".answer-#{answer.id}-comments") do
+      expect(page).to_not have_link 'New comment'
     end
   end
 end

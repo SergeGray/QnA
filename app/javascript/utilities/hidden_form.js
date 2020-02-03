@@ -1,9 +1,12 @@
 $(document).on('turbolinks:load', function() {
-  hiddenForm('answer');
-  hiddenForm('question');
+  hiddenEditForm('answer');
+  hiddenEditForm('question');
+  hiddenNewForm('comment', 'question');
+  hiddenNewForm('comment', 'answer');
+
 });
 
-function hiddenForm(resource) {
+function hiddenEditForm(resource) {
   $('.' + resource + 's').on(
     'click',
     '.edit-' + resource + '-link',
@@ -12,6 +15,20 @@ function hiddenForm(resource) {
       $(this).hide();
       let resourceId = $(this).data(resource + 'Id');
       $('form#edit-' + resource + '-' + resourceId).removeClass('hidden');
+    }
+  );
+}
+
+function hiddenNewForm(resource, parent) {
+  $('.' + resource + 's').on(
+    'click',
+    '.new-' + resource + '-link',
+    function(event) {
+      event.preventDefault();
+      $(this).hide();
+      let parentId = $(this).data(parent + 'Id');
+      $('form#new-' + parent + '-' + parentId + '-' + resource)
+        .removeClass('hidden');
     }
   );
 }

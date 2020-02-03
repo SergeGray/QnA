@@ -11,6 +11,9 @@
   = content_tag :td, class: "answer-#{answer.id}-files" do
     = render 'shared/files', resource: answer
 
+  = content_tag :td, class: "answer-#{answer.id}-comments" do
+    = render 'shared/comments', resource: answer
+
   - if current_user&.author_of?(answer)
     td
       = link_to 'Edit',

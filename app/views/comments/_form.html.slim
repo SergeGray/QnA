@@ -1,4 +1,7 @@
-= form_with model: [commentable, Comment.new], class: 'new-comment' do |f|
+= form_with model: [commentable, Comment.new],
+            class: 'hidden',
+            html: { id: "new-#{resource_name(commentable)}"\
+                        "-#{commentable.id}-comment" } do |f|
   p
     = f.label :comment_body
     = f.text_area :body
