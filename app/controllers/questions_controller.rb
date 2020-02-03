@@ -15,6 +15,7 @@ class QuestionsController < ApplicationController
 
   def show
     @answer = Answer.new
+    gon.push({ question_id: @question.id })
   end
 
   def new
@@ -55,9 +56,9 @@ class QuestionsController < ApplicationController
 
     ActionCable.server.broadcast(
       'questions',
-      ApplicationController.render(
+      wardenized_renderer.render(
         partial: 'questions/question',
-        locals: { question: @question, current_user: current_user }
+        locals: { question: @question }
       )
     )
   end

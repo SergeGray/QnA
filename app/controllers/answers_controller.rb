@@ -8,6 +8,8 @@ class AnswersController < ApplicationController
     check_ownership(@answer, question_path(@answer.question))
   end
 
+  after_action :publish_answer, only: :create
+
   before_action only: :select do
     check_ownership(@answer.question, questions_path)
   end
@@ -18,6 +20,7 @@ class AnswersController < ApplicationController
     @answer = current_user.answers.create(
       answer_params.merge(question: @question)
     )
+    gon.push({ question_id: @answer.question_id })
   end
 
   def update
@@ -41,6 +44,18 @@ class AnswersController < ApplicationController
 
   def set_answer
     @answer = Answer.with_attached_files.find(params[:id])
+  end
+
+  def publish_answer
+    return if @answer.errors.any?
+
+    ActionCable.server.broadcast(
+      "questions/#{@answer.question_id}/answers",
+      wardenized_renderer.render(
+        partial: 'answers/answer',
+        locals: { answer: @answer }
+      )
+    )
   end
 
   def answer_params
