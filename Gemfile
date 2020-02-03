@@ -30,6 +30,7 @@ gem "aws-sdk-s3", require: false
 gem 'bootsnap', '>= 1.4.2', require: false
 gem 'cocoon'
 gem 'devise'
+gem 'gon'
 gem 'jquery-rails'
 gem 'pg'
 gem 'slim-rails'

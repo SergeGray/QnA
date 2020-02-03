@@ -82,6 +82,27 @@ feature 'User can answer a question', %q(
     end
   end
 
+  context 'In multiple sessions', js: true do
+    scenario "new answer appears on another user's page" do
+      using_session('guest') do
+        visit question_path(question)
+        expect(page).to_not have_content 'Just use puts'
+      end
+
+      using_session('user') do
+        sign_in(user)
+        visit question_path(question)
+
+        fill_in 'Body', with: 'Just use puts'
+        click_button 'Answer'
+      end
+
+      using_session('guest') do
+        expect(page).to have_content 'Just use puts'
+      end
+    end
+  end
+
   scenario 'Unauthenticated user tries to answer a question' do
     visit question_path(question)
 
