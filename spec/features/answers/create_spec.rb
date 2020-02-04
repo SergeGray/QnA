@@ -95,6 +95,8 @@ feature 'User can answer a question', %q(
 
         fill_in 'Body', with: 'Just use puts'
         click_button 'Answer'
+
+        expect(page).to have_content 'Just use puts', count: 1
       end
 
       using_session('guest') do

@@ -20,7 +20,7 @@ function hiddenEditForm(resource) {
 }
 
 function hiddenNewForm(resource, parent) {
-  $('.' + resource + 's').on(
+  $('.' + resource + '-links').on(
     'click',
     '.new-' + resource + '-link',
     function(event) {
