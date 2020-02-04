@@ -1,8 +1,7 @@
-import consumer from "./consumer"
+import consumer from './consumer'
 
-consumer.subscriptions.create("QuestionsChannel", {
+consumer.subscriptions.create('QuestionsChannel', {
   received(data) {
-    let questionsList = $(".questions")
-    questionsList.append(data)
+    $('.questions').append(data)
   }
 })
