@@ -6,6 +6,7 @@
 .comments
   = render resource.comments
 
+.comment-links
   - if user_signed_in?
     = link_to 'New comment',
               '#',

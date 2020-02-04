@@ -81,6 +81,8 @@ feature 'User can create a comment', %q(
 
           fill_in 'comment[body]', with: 'Good question'
           click_button 'Comment'
+
+          expect(page).to have_content 'Good question', count: 1
         end
       end
 
@@ -107,6 +109,8 @@ feature 'User can create a comment', %q(
 
           fill_in 'comment[body]', with: 'Good answer'
           click_button 'Comment'
+
+          expect(page).to have_content 'Good answer', count: 1
         end
       end
 

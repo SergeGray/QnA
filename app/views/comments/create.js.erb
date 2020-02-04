@@ -5,8 +5,6 @@ $('.' + commentableClass + '-' + commentableId + '-comment-errors')
   .html('<%= render 'shared/errors', resource: @comment %>');
 
 <% if @comment.persisted? %>
-  $('<%= j render @comment %>')
-  .insertBefore('.new-comment-link#' + commentableClass + '-' + commentableId);
   $('#new-' + commentableClass + '-' + commentableId + '-comment #comment_body')
     .val('');
   $('#new-' + commentableClass + '-' + commentableId + '-comment')

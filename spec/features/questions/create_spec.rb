@@ -123,6 +123,9 @@ feature 'User can create question', %q(
         fill_in 'Title', with: 'How do I do this'
         fill_in 'Body', with: 'Help'
         click_button 'Submit'
+
+        expect(page).to have_content 'How do I do this', count: 1
+        expect(page).to have_content 'Help', count: 1
       end
 
       using_session('guest') do
