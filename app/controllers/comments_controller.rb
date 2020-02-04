@@ -40,7 +40,6 @@ class CommentsController < ApplicationController
     )
   end
 
-
   def question_id
     @commentable.is_a?(Question) ? @commentable.id : @commentable.question_id
   end

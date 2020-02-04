@@ -16,7 +16,7 @@ Rails.application.routes.draw do
     resources :answers,
               except: %i[index show],
               shallow: true,
-               concerns: %i[votable commentable] do
+              concerns: %i[votable commentable] do
       patch :select, on: :member
     end
   end
