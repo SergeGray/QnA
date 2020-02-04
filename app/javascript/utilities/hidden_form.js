@@ -3,7 +3,6 @@ $(document).on('turbolinks:load', function() {
   hiddenEditForm('question');
   hiddenNewForm('comment', 'question');
   hiddenNewForm('comment', 'answer');
-
 });
 
 function hiddenEditForm(resource) {
