@@ -20,7 +20,6 @@ class AnswersController < ApplicationController
     @answer = current_user.answers.create(
       answer_params.merge(question: @question)
     )
-    gon.push({ question_id: @answer.question_id })
   end
 
   def update

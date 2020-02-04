@@ -14,7 +14,7 @@ class QuestionsController < ApplicationController
   end
 
   def show
-    gon.push({ question_id: @question.id })
+    gon.push(question_id: @question.id)
   end
 
   def new

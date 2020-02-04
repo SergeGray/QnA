@@ -75,7 +75,7 @@ feature 'User can create a comment', %q(
       using_session('user') do
         sign_in(user)
         visit question_path(question)
-        
+
         within(".question-#{question.id}-comments") do
           click_link 'New comment'
 
@@ -96,14 +96,14 @@ feature 'User can create a comment', %q(
     scenario "new answer comment appears on another user's page" do
       using_session('guest') do
         visit question_path(question)
-        
+
         expect(page).to_not have_content 'Good answer'
       end
 
       using_session('user') do
         sign_in(user)
         visit question_path(question)
-        
+
         within(".answer-#{answer.id}-comments") do
           click_link 'New comment'
 
@@ -115,7 +115,6 @@ feature 'User can create a comment', %q(
       end
 
       using_session('guest') do
-
         within(".answer-#{answer.id}-comments") do
           expect(page).to have_content 'Good answer'
         end
@@ -130,7 +129,6 @@ feature 'User can create a comment', %q(
       expect(page).to_not have_link 'New comment'
     end
   end
-    
 
   scenario 'Unauthenticated user tries to create a question comment' do
     visit question_path(question)
