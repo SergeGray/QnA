@@ -11,7 +11,7 @@ RSpec.describe LinksController, type: :controller do
       before { login(user) }
 
       context "on another user's question" do
-        it 'does not delete the attachment' do
+        it 'does not delete the link' do
           expect do
             delete :destroy, params: { id: link, format: :js }
           end.to_not change(Link, :count)
@@ -26,7 +26,7 @@ RSpec.describe LinksController, type: :controller do
       context "on user's own question" do
         before { question.update!(user: user) }
 
-        it 'deletes the attachment' do
+        it 'deletes the link' do
           expect do
             delete :destroy, params: { id: link, format: :js }
           end.to change(question.links, :count).by(-1)
@@ -40,7 +40,7 @@ RSpec.describe LinksController, type: :controller do
     end
 
     describe 'Unauthenticated user' do
-      it 'does not delete the attachment' do
+      it 'does not delete the link' do
         expect do
           delete :destroy, params: { id: link, format: :js }
         end.to_not change(Link, :count)

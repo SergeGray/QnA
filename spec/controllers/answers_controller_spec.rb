@@ -214,7 +214,7 @@ RSpec.describe AnswersController, type: :controller do
       context "on someone else's question" do
         it 'does not select answer as best' do
           patch :select, params: { id: answer, format: :js }
-          expect { answer.reload }.to_not change(answer, :best)
+          expect { answer.reload }.to_not change { answer.best? }
         end
       end
 
@@ -226,11 +226,17 @@ RSpec.describe AnswersController, type: :controller do
         before { patch :select, params: { id: answer, format: :js } }
 
         it 'selects the answer as best' do
-          expect { answer.reload }.to change(answer, :best).to true
+          expect { answer.reload }
+            .to change { answer.best? }
+            .from(false)
+            .to(true)
         end
 
         it 'unselects the previous best answer' do
-          expect { answer2.reload }.to change(answer2, :best).to false
+          expect { answer2.reload }
+            .to change { answer2.best? }
+            .from(true)
+            .to(false)
         end
 
         it 'renders the select template' do
@@ -243,7 +249,7 @@ RSpec.describe AnswersController, type: :controller do
       before { patch :select, params: { id: answer, format: :js } }
 
       it 'does not select the answer as best' do
-        expect { answer.reload }.to_not change(answer, :best)
+        expect { answer.reload }.to_not change { answer.best? }
       end
 
       it_behaves_like 'malicious action'

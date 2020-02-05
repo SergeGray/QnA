@@ -39,6 +39,16 @@ RSpec.describe CommentsController, type: :controller do
           }
           expect(response).to render_template :create
         end
+
+        it 'broadcasts the new comment' do
+          expect do
+            post :create, params: {
+              question_id: question.id,
+              comment: attributes_for(:comment),
+              format: :js
+            }
+          end.to have_broadcasted_to("questions/#{question.id}/comments")
+        end
       end
 
       context 'with invalid attributes' do
@@ -60,6 +70,16 @@ RSpec.describe CommentsController, type: :controller do
           }
           expect(response).to render_template :create
         end
+
+        it 'does not broadcast the new comment' do
+          expect do
+            post :create, params: {
+              question_id: question.id,
+              comment: attributes_for(:comment, :invalid),
+              format: :js
+            }
+          end.to_not have_broadcasted_to("questions/#{question.id}/comments")
+        end
       end
     end
 
@@ -68,17 +88,27 @@ RSpec.describe CommentsController, type: :controller do
         expect do
           post :create, params: {
             question_id: question.id,
-            comment: attributes_for(:comment, :invalid),
+            comment: attributes_for(:comment),
             format: :js
           }
         end.to_not change(Comment, :count)
+      end
+
+      it 'does not broadcast the new comment' do
+        expect do
+          post :create, params: {
+            question_id: question.id,
+            comment: attributes_for(:comment),
+            format: :js
+          }
+        end.to_not have_broadcasted_to("questions/#{question.id}/comments")
       end
 
       context 'after action is called' do
         before do
           post :create, params: {
             question_id: question.id,
-            comment: attributes_for(:comment, :invalid),
+            comment: attributes_for(:comment),
             format: :js
           }
         end
