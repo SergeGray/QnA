@@ -4,31 +4,30 @@ RSpec.describe OauthCallbacksController, type: :controller do
   before { @request.env['devise.mapping'] = Devise.mappings[:user] }
 
   describe 'GET #github' do
-    let(:oauth_data) { { 'provider' => 'github', 'uid' => '123' } }
+    let(:oauth_data) do
+      OmniAuth::AuthHash.new(
+        provider: 'github',
+        uid: '123',
+        info: { email: 'new_user@example.com' }
+      )
+    end
 
-    it 'finds user from oauth data' do
+    before do
       allow(request.env).to receive(:[]).and_call_original
       allow(request.env)
         .to receive(:[])
         .with('omniauth.auth')
         .and_return(oauth_data)
-
-      expect(User).to receive(:find_for_oauth).with(oauth_data)
-      get :github
     end
 
     context 'user exists' do
-      let!(:user) { create(:user) }
+      let!(:user) { create(:user, email: oauth_data.info[:email]) }
 
-      before do
-        allow(User).to receive(:find_for_oauth).and_return(user)
-        get :github
-      end
+      before { get :github }
 
       it 'logs in' do
         expect(subject.current_user).to eq user
       end
-
 
       it 'redirects to root path' do
         expect(response).to redirect_to root_path
@@ -36,16 +35,17 @@ RSpec.describe OauthCallbacksController, type: :controller do
     end
 
     context 'user does not exist' do
-      before do
-        allow(User).to receive(:find_for_oauth)
-        get :github
+      it 'creates a new user' do
+        expect{ get :github }.to change(User, :count).by 1
       end
 
-      it 'does not log in' do
-        expect(subject.current_user).to_not be
+      it 'logs in the new user' do
+        get :github
+        expect(assigns(:user)).to eq(subject.current_user)
       end
 
       it 'redirects to root path' do
+        get :github
         expect(response).to redirect_to root_path
       end
     end
