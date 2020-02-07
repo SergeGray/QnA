@@ -1,27 +1,24 @@
 require 'rails_helper'
 
 RSpec.describe OauthCallbacksController, type: :controller do
-  before { @request.env['devise.mapping'] = Devise.mappings[:user] }
+  let(:email) { 'email@example.com' }
+  let(:mock_auth) do
+    OmniAuth.config.add_mock(
+      :github,
+      provider: 'github',
+      uid: '123456',
+      info: { email: email }
+    )
+  end
+
+  before do
+    @request.env['devise.mapping'] = Devise.mappings[:user]
+    @request.env['omniauth.auth'] = mock_auth
+  end
 
   describe 'GET #github' do
-    let(:oauth_data) do
-      OmniAuth::AuthHash.new(
-        provider: 'github',
-        uid: '123',
-        info: { email: 'new_user@example.com' }
-      )
-    end
-
-    before do
-      allow(request.env).to receive(:[]).and_call_original
-      allow(request.env)
-        .to receive(:[])
-        .with('omniauth.auth')
-        .and_return(oauth_data)
-    end
-
     context 'user exists' do
-      let!(:user) { create(:user, email: oauth_data.info[:email]) }
+      let!(:user) { create(:user, email: email) }
 
       before { get :github }
 
