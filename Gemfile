@@ -26,6 +26,7 @@ group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'dotenv-rails'
   gem 'factory_bot_rails'
+  gem 'letter_opener'
   gem 'rspec-rails', '~> 4.0.0.beta3'
 end
 
@@ -38,6 +39,7 @@ end
 
 group :test do
   gem 'capybara', '>= 2.15'
+  gem 'capybara-email'
   gem 'launchy'
   gem 'rails-controller-testing'
   gem 'selenium-webdriver'
