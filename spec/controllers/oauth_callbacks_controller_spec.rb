@@ -4,8 +4,8 @@ RSpec.describe OauthCallbacksController, type: :controller do
   let(:email) { 'email@example.com' }
   let(:mock_auth) do
     OmniAuth.config.add_mock(
-      :github,
-      provider: 'github',
+      provider,
+      provider: provider.to_s,
       uid: '123456',
       info: { email: email }
     )
@@ -17,6 +17,8 @@ RSpec.describe OauthCallbacksController, type: :controller do
   end
 
   describe 'GET #github' do
+    let(:provider) { :github }
+
     context 'user exists' do
       let!(:user) { create(:user, email: email) }
 
@@ -43,6 +45,40 @@ RSpec.describe OauthCallbacksController, type: :controller do
 
       it 'redirects to root path' do
         get :github
+        expect(response).to redirect_to root_path
+      end
+    end
+  end
+
+  describe 'GET #vkontakte' do
+    let(:provider) { :vkontakte }
+
+    context 'user exists' do
+      let!(:user) { create(:user, email: email) }
+
+      before { get :vkontakte }
+
+      it 'logs in' do
+        expect(subject.current_user).to eq user
+      end
+
+      it 'redirects to root path' do
+        expect(response).to redirect_to root_path
+      end
+    end
+
+    context 'user does not exist' do
+      it 'creates a new user' do
+        expect{ get :vkontakte }.to change(User, :count).by 1
+      end
+
+      it 'logs in the new user' do
+        get :vkontakte
+        expect(assigns(:user)).to eq(subject.current_user)
+      end
+
+      it 'redirects to root path' do
+        get :vkontakte
         expect(response).to redirect_to root_path
       end
     end
