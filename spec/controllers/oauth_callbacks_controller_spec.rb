@@ -35,7 +35,7 @@ RSpec.describe OauthCallbacksController, type: :controller do
 
     context 'user does not exist' do
       it 'creates a new user' do
-        expect{ get :github }.to change(User, :count).by 1
+        expect { get :github }.to change(User, :count).by 1
       end
 
       it 'logs in the new user' do
@@ -69,7 +69,7 @@ RSpec.describe OauthCallbacksController, type: :controller do
 
     context 'user does not exist' do
       it 'creates a new user' do
-        expect{ get :vkontakte }.to change(User, :count).by 1
+        expect { get :vkontakte }.to change(User, :count).by 1
       end
 
       it 'logs in the new user' do

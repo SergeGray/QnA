@@ -14,7 +14,7 @@ feature 'User can sign in with oauth providers', %q(
       scenario 'tries to sign in for the first time' do
         visit new_user_session_path
         click_link 'Sign in with GitHub'
-      
+
         expect(page).to have_content(
           'Successfully authenticated from Github account'
         )
@@ -34,7 +34,7 @@ feature 'User can sign in with oauth providers', %q(
         scenario 'tries to sign in' do
           visit new_user_session_path
           click_link 'Sign in with GitHub'
-      
+
           expect(page).to have_content(
             'Successfully authenticated from Github account'
           )
@@ -48,11 +48,32 @@ feature 'User can sign in with oauth providers', %q(
 
       visit new_user_session_path
       click_link 'Sign in with GitHub'
-      
+
       expect(page).to have_content(
         'Successfully authenticated from Github account'
       )
       expect(page).to have_content 'Sign out'
+    end
+
+    scenario 'provider does not give email' do
+      mock_auth_hash(:github, email: nil)
+
+      visit new_user_session_path
+      click_link 'Sign in with GitHub'
+
+      expect(page).to have_content 'Please complete registration'
+
+      fill_in 'Email', with: 'email@example.com'
+      click_button 'Sign up'
+
+      expect(page).to have_content 'Welcome! You have signed up successfully'
+      click_link 'Sign out'
+      visit new_user_session_path
+      click_link 'Sign in with GitHub'
+
+      expect(page).to have_content(
+        'Successfully authenticated from Github account'
+      )
     end
 
     context 'with invalid credentials' do
@@ -66,7 +87,7 @@ feature 'User can sign in with oauth providers', %q(
       end
     end
   end
-  
+
   describe 'VK' do
     describe 'Registered user' do
       background do
@@ -76,7 +97,7 @@ feature 'User can sign in with oauth providers', %q(
       scenario 'tries to sign in for the first time' do
         visit new_user_session_path
         click_link 'Sign in with Vkontakte'
-      
+
         expect(page).to have_content(
           'Successfully authenticated from Vkontakte account'
         )
@@ -96,7 +117,7 @@ feature 'User can sign in with oauth providers', %q(
         scenario 'tries to sign in' do
           visit new_user_session_path
           click_link 'Sign in with Vkontakte'
-      
+
           expect(page).to have_content(
             'Successfully authenticated from Vkontakte account'
           )
@@ -110,11 +131,33 @@ feature 'User can sign in with oauth providers', %q(
 
       visit new_user_session_path
       click_link 'Sign in with Vkontakte'
-      
+
       expect(page).to have_content(
         'Successfully authenticated from Vkontakte account'
       )
       expect(page).to have_content 'Sign out'
+    end
+
+    scenario 'provider does not give email' do
+      mock_auth_hash(:vkontakte, email: nil)
+
+      visit new_user_session_path
+      click_link 'Sign in with Vkontakte'
+
+      expect(page).to have_content 'Please complete registration'
+
+      fill_in 'Email', with: 'email@example.com'
+      click_button 'Sign up'
+
+      expect(page).to have_content 'Welcome! You have signed up successfully'
+
+      click_link 'Sign out'
+      visit new_user_session_path
+      click_link 'Sign in with Vkontakte'
+
+      expect(page).to have_content(
+        'Successfully authenticated from Vkontakte account'
+      )
     end
 
     context 'with invalid credentials' do
