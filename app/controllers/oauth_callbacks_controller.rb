@@ -22,10 +22,12 @@ class OauthCallbacksController < Devise::OmniauthCallbacksController
   end
 
   def successful_authorization
+    @user.skip_confirmation!
+    @user.save!
     sign_in_and_redirect @user, event: :authentication
-    if is_navigational_format?
-      set_flash_message(:notice, :success, kind: action_name.capitalize)
-    end
+    return unless is_navigational_format?
+
+    set_flash_message(:notice, :success, kind: action_name.capitalize)
   end
 
   def complete_registration
