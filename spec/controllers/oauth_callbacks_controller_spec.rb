@@ -3,12 +3,7 @@ require 'rails_helper'
 RSpec.describe OauthCallbacksController, type: :controller do
   let(:email) { 'email@example.com' }
   let(:mock_auth) do
-    OmniAuth.config.add_mock(
-      provider,
-      provider: provider.to_s,
-      uid: '123456',
-      info: { email: email }
-    )
+    mock_auth_hash(provider, email: email)
   end
 
   before do
