@@ -5,11 +5,10 @@ module OmniauthMacros
     email: nil
   )
     OmniAuth.config.add_mock(
-      provider, {
-        provider: provider.to_s,
-        uid: uid,
-        info: { email: email }
-      }
+      provider,
+      provider: provider.to_s,
+      uid: uid,
+      info: { email: email }
     )
   end
 end

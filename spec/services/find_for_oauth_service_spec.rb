@@ -85,6 +85,20 @@ RSpec.describe FindForOauthService do
         user = subject.call
         expect(user.email).to eq auth.info[:email]
       end
+
+      context 'provider does not supply email' do
+        let(:auth) do
+          OmniAuth::AuthHash.new(
+            provider: 'facebook',
+            uid: '123456',
+            info: {}
+          )
+        end
+
+        it 'returns an uninitialized user' do
+          expect(subject.call).to be_a_new User
+        end
+      end
     end
   end
 end
