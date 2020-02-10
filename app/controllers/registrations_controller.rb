@@ -5,7 +5,8 @@ class RegistrationsController < Devise::RegistrationsController
         if session[:omniauth]
           user.authorizations.create(auth_params)
         else
-          user # .skip_confirmation!
+          user.skip_confirmation!
+          user.save!
         end
       end
     end

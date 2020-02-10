@@ -66,9 +66,14 @@ feature 'User can sign in with oauth providers', %q(
       fill_in 'Email', with: 'email@example.com'
       click_button 'Sign up'
 
-      expect(page).to have_content 'Welcome! You have signed up successfully'
-      click_link 'Sign out'
-      visit new_user_session_path
+      expect(page).to have_content(
+        'A message with a confirmation link has been sent '\
+        'to your email address.'
+      )
+
+      open_email 'email@example.com'
+      current_email.click_link 'Confirm my account'
+
       click_link 'Sign in with GitHub'
 
       expect(page).to have_content(
@@ -149,10 +154,14 @@ feature 'User can sign in with oauth providers', %q(
       fill_in 'Email', with: 'email@example.com'
       click_button 'Sign up'
 
-      expect(page).to have_content 'Welcome! You have signed up successfully'
+      expect(page).to have_content(
+        'A message with a confirmation link has been sent '\
+        'to your email address.'
+      )
 
-      click_link 'Sign out'
-      visit new_user_session_path
+      open_email 'email@example.com'
+      current_email.click_link 'Confirm my account'
+
       click_link 'Sign in with Vkontakte'
 
       expect(page).to have_content(
