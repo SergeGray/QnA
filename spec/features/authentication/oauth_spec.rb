@@ -6,10 +6,11 @@ feature 'User can sign in with oauth providers', %q(
   I want to be able to sign in using oauth providers
 ) do
   given!(:user) { create(:user) }
+  given(:uid) { '123123' }
 
   describe 'Github' do
     describe 'Registered user' do
-      background { mock_auth_hash(:github, email: user.email, uid: '123123') }
+      background { mock_auth_hash(:github, email: user.email, uid: uid) }
 
       scenario 'tries to sign in for the first time' do
         visit new_user_session_path
@@ -27,7 +28,7 @@ feature 'User can sign in with oauth providers', %q(
             :authorization,
             user: user,
             provider: 'github',
-            uid: '123123'
+            uid: uid
           )
         end
 
@@ -96,7 +97,7 @@ feature 'User can sign in with oauth providers', %q(
   describe 'VK' do
     describe 'Registered user' do
       background do
-        mock_auth_hash(:vkontakte, email: user.email, uid: '123123')
+        mock_auth_hash(:vkontakte, email: user.email, uid: uid)
       end
 
       scenario 'tries to sign in for the first time' do
@@ -115,7 +116,7 @@ feature 'User can sign in with oauth providers', %q(
             :authorization,
             user: user,
             provider: 'vkontakte',
-            uid: '123123'
+            uid: uid
           )
         end
 
