@@ -3,7 +3,7 @@ class RegistrationsController < Devise::RegistrationsController
     super do |user|
       if user.persisted?
         if session[:omniauth]
-          user.authorizations.create(auth_params)
+          user.authorizations.create!(auth_params)
         else
           user.skip_confirmation!
           user.save!
