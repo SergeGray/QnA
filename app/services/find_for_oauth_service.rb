@@ -7,17 +7,19 @@ class FindForOauthService
     authorization = Authorization.find_by(auth_params)
     return authorization.user if authorization
 
-    user = find_or_create
-    user.authorizations.create(auth_params) if user.persisted?
-    user
+    ActiveRecord::Base.transaction do
+      user = find_or_create!
+      user.authorizations.create!(auth_params) if user.persisted?
+      user
+    end
   end
 
   private
 
-  def find_or_create
-    password = Devise.friendly_token[0, 20]
+  def find_or_create!
     return User.new unless email
 
+    password = Devise.friendly_token[0, 20]
     User.find_by(email: email) || User.create!(
       email: email,
       password: password,

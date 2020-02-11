@@ -18,6 +18,14 @@ RSpec.describe FindForOauthService do
     it 'returns the user' do
       expect(subject.call).to eq user
     end
+
+    it 'does not create a new user' do
+      expect { subject.call }.to_not change(User, :count)
+    end
+
+    it 'does not create a new authorization' do
+      expect { subject.call }.to_not change(user.authorizations, :count)
+    end
   end
 
   context 'user has no authorization' do
@@ -40,8 +48,8 @@ RSpec.describe FindForOauthService do
       end
 
       it 'gives the new authorization correct provider and uid' do
-        user = subject.call
-        authorization = user.authorizations.last
+        authorization = subject.call.authorizations
+          .order(created_at: :desc).first
 
         expect(authorization.provider).to eq auth.provider
         expect(authorization.uid).to eq auth.uid
