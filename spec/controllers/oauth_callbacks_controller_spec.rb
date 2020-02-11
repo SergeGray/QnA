@@ -17,14 +17,18 @@ RSpec.describe OauthCallbacksController, type: :controller do
     context 'user exists' do
       let!(:user) { create(:user, email: email) }
 
-      before { get :github }
-
       it 'logs in' do
+        get :github
         expect(subject.current_user).to eq user
       end
 
       it 'redirects to root path' do
+        get :github
         expect(response).to redirect_to root_path
+      end
+
+      it 'does not create new user' do
+        expect { get :github }.to_not change(User, :count)
       end
     end
 
@@ -51,14 +55,18 @@ RSpec.describe OauthCallbacksController, type: :controller do
     context 'user exists' do
       let!(:user) { create(:user, email: email) }
 
-      before { get :vkontakte }
-
       it 'logs in' do
+        get :vkontakte
         expect(subject.current_user).to eq user
       end
 
       it 'redirects to root path' do
+        get :vkontakte
         expect(response).to redirect_to root_path
+      end
+
+      it 'does not create new user' do
+        expect { get :vkontakte }.to_not change(User, :count)
       end
     end
 
