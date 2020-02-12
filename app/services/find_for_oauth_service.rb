@@ -9,7 +9,12 @@ class FindForOauthService
 
     ActiveRecord::Base.transaction do
       user = find_or_create!
-      user.authorizations.create!(auth_params) if user.persisted?
+      if user.persisted?
+        user.authorizations.create!(auth_params) 
+        user.skip_confirmation! unless user.confirmed?
+        user.save!
+      end
+
       user
     end
   end
