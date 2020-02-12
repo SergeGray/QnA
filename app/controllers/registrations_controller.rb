@@ -19,7 +19,6 @@ class RegistrationsController < Devise::RegistrationsController
 
     return unless session[:omniauth]
 
-    password = Devise.friendly_token[0, 20]
     @user.password = password if @user.password.blank?
     @user.password_confirmation = password if @user.password_confirmation.blank?
   end
@@ -29,5 +28,9 @@ class RegistrationsController < Devise::RegistrationsController
       provider: session[:omniauth]['provider'],
       uid: session[:omniauth]['uid'].to_s
     }
+  end
+
+  def password
+    @password ||= Devise.friendly_token[0, 20]
   end
 end
