@@ -31,8 +31,8 @@ RSpec.describe RegistrationsController, type: :controller do
     end
 
     it 'does not create authorizations for user' do
-        expect { post :create, params: { user: attributes_for(:user) } }
-          .to_not change(Authorization, :count)
+      expect { post :create, params: { user: attributes_for(:user) } }
+        .to_not change(Authorization, :count)
     end
   end
 end

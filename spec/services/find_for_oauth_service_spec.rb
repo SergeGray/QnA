@@ -52,8 +52,9 @@ RSpec.describe FindForOauthService do
       end
 
       it 'gives the new authorization correct provider and uid' do
-        authorization = subject.call.authorizations
-          .order(created_at: :desc).first
+        authorization = subject.call.authorizations.order(
+          created_at: :desc
+        ).first
 
         expect(authorization.provider).to eq auth.provider
         expect(authorization.uid).to eq auth.uid
