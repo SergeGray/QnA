@@ -7,6 +7,7 @@ gem 'rails', '~> 6.0.2', '>= 6.0.2.1'
 
 gem 'aws-sdk-s3', require: false
 gem 'bootsnap', '>= 1.4.2', require: false
+gem 'cancancan'
 gem 'cocoon'
 gem 'devise'
 gem 'gon'
