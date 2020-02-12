@@ -8,6 +8,8 @@ class AnswersController < ApplicationController
     check_ownership(@answer, question_path(@answer.question))
   end
 
+  authorize_resource
+
   after_action :publish_answer, only: :create
 
   before_action only: :select do

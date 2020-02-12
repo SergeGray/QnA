@@ -1,4 +1,10 @@
 class ApplicationController < ActionController::Base
+  rescue_from CanCan::AccessDenied do |exception|
+    redirect_to root_url, alert: exception.message
+  end
+
+  # check_authorization
+
   def check_ownership(attribute, path)
     return if current_user.author_of?(attribute)
 
