@@ -24,7 +24,6 @@ class FindForOauthService
   def find_or_create!
     return User.new unless email
 
-    password = Devise.friendly_token[0, 20]
     User.find_by(email: email) || User.create!(
       email: email,
       password: password,
@@ -38,5 +37,9 @@ class FindForOauthService
 
   def auth_params
     { provider: @auth.provider, uid: @auth.uid.to_s }
+  end
+
+  def password
+    @password ||= Devise.friendly_token[0, 20]
   end
 end
