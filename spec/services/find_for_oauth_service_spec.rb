@@ -26,6 +26,10 @@ RSpec.describe FindForOauthService do
     it 'does not create a new authorization' do
       expect { subject.call }.to_not change(user.authorizations, :count)
     end
+
+    it 'does not change user confirmation date' do
+      expect { subject.call }.to_not change(user, :confirmed_at)
+    end
   end
 
   context 'user has no authorization' do
@@ -57,6 +61,10 @@ RSpec.describe FindForOauthService do
 
       it 'returns correct user' do
         expect(subject.call).to eq user
+      end
+
+      it 'does not change user confirmation date' do
+        expect { subject.call }.to_not change(user, :confirmed_at)
       end
     end
 
@@ -94,6 +102,11 @@ RSpec.describe FindForOauthService do
         expect(user.email).to eq auth.info[:email]
       end
 
+      it 'confirms the user' do
+        user = subject.call
+        expect(user).to be_confirmed
+      end
+
       context 'provider does not supply email' do
         let(:auth) do
           OmniAuth::AuthHash.new(
@@ -105,6 +118,11 @@ RSpec.describe FindForOauthService do
 
         it 'returns an uninitialized user' do
           expect(subject.call).to be_a_new User
+        end
+
+        it 'does not confirm the user' do
+          user = subject.call
+          expect(user).to_not be_confirmed
         end
       end
     end
