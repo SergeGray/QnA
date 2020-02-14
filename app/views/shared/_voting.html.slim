@@ -1,24 +1,25 @@
 = content_tag :div,
               class: 'voting',
-              data: { vote_value: resource.vote_value(current_user),
-                      class_name: resource_name(resource),
+              data: { class_name: resource_name(resource),
                       id: resource.id } do
   = 'Score: '
   = content_tag :b, class: "#{resource_name(resource)}-#{resource.id}-score" do
     = resource.score
-  - if can? :vote, resource
-    = link_to 'Upvote',
-              polymorphic_path(resource, action: :upvote),
-              class: "upvote-#{resource_name(resource)}-#{resource.id}-link",
-              method: :post,
-              remote: true
-    = link_to 'Cancel vote',
-              polymorphic_path(resource, action: :cancel),
-              class: "cancel-#{resource_name(resource)}-#{resource.id}-link",
-              method: :delete,
-              remote: true
-    = link_to 'Downvote',
-              polymorphic_path(resource, action: :downvote),
-              class: "downvote-#{resource_name(resource)}-#{resource.id}-link",
-              method: :post,
-              remote: true
+  = link_to 'Upvote',
+            polymorphic_path(resource, action: :upvote),
+            class: "upvote-#{resource_name(resource)}-#{resource.id}-link",
+            style: can?(:upvote, resource) ? '' : 'display: none;',
+            method: :post,
+            remote: true
+  = link_to 'Cancel vote',
+            polymorphic_path(resource, action: :cancel),
+            class: "cancel-#{resource_name(resource)}-#{resource.id}-link",
+            style: can?(:cancel, resource) ? '' : 'display: none;',
+            method: :delete,
+            remote: true
+  = link_to 'Downvote',
+            polymorphic_path(resource, action: :downvote),
+            class: "downvote-#{resource_name(resource)}-#{resource.id}-link",
+            style: can?(:downvote, resource) ? '' : 'display: none;',
+            method: :post,
+            remote: true

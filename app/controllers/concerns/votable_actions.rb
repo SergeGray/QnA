@@ -2,35 +2,28 @@ module VotableActions
   extend ActiveSupport::Concern
 
   included do
-    before_action only: %i[upvote downvote cancel] do
-      set_resource
-      authorize_vote!
-    end
-
-    skip_authorize_resource only: %i[upvote downvote cancel]
-    skip_authorization_check only: %i[upvote downvote cancel]
+    before_action :set_resource, only: %i[upvote downvote cancel]
   end
 
   def upvote
+    authorize! :upvote, @votable
     @votable.upvote!(current_user)
     render_json
   end
 
   def downvote
+    authorize! :downvote, @votable
     @votable.downvote!(current_user)
     render_json
   end
 
   def cancel
+    authorize! :cancel, @votable
     @votable.clear_votes!(current_user)
     render_json
   end
 
   private
-
-  def authorize_vote!
-    authorize! :vote, @votable
-  end
 
   def set_resource
     @votable = votable_model.find(params[:id])
