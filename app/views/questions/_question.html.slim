@@ -2,7 +2,7 @@
   td= question.title
   td= question.body
   td= link_to 'Show', question
-  - if current_user&.author_of?(question)
+  - if can? :edit, question
     td
       = link_to 'Edit',
                 '#',
@@ -29,4 +29,5 @@
                                     :links,
                                     partial: 'shared/link_fields'
         p= f.submit 'Save'
+  -if can? :destroy, question
     td= link_to 'Destroy', question, method: :delete

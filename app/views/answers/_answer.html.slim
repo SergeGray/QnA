@@ -14,7 +14,7 @@
   = content_tag :td, class: "answer-#{answer.id}-comments" do
     = render 'shared/comments', resource: answer
 
-  - if current_user&.author_of?(answer)
+  - if can? :update, answer
     td
       = link_to 'Edit',
                 '#',
@@ -36,13 +36,14 @@
           = link_to_add_association 'add link', f, :links,
               partial: 'shared/link_fields'
         p= f.submit 'Save'
+  -if can? :destroy, answer
     td= link_to 'Destroy',
                 answer,
                 class: 'delete-answer-link',
                 method: :delete,
                 remote: true
   td
-    - if current_user&.author_of?(answer.question) && !answer.best?
+    - if can? :select, answer
       = link_to 'Select as best',
                 select_answer_path(answer),
                 method: :patch,

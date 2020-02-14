@@ -6,7 +6,7 @@
   = 'Score: '
   = content_tag :b, class: "#{resource_name(resource)}-#{resource.id}-score" do
     = resource.score
-  - if user_signed_in? && !current_user.author_of?(resource)
+  - if can? :vote, resource
     = link_to 'Upvote',
               polymorphic_path(resource, action: :upvote),
               class: "upvote-#{resource_name(resource)}-#{resource.id}-link",
