@@ -26,8 +26,16 @@ class Ability
     can :destroy, Link, linkable: { user_id: @user.id }
     can :select, Answer, best: false, question: { user_id: @user.id }
 
-    can :vote, [Question, Answer] do |votable|
-      votable.user_id != @user.id
+    can :upvote, [Question, Answer] do |votable|
+      votable.user_id != @user.id && votable.vote_value(@user) <= 0
+    end
+
+    can :downvote, [Question, Answer] do |votable|
+      votable.user_id != @user.id && votable.vote_value(@user) >= 0
+    end
+
+    can :cancel, [Question, Answer] do |votable|
+      votable.user_id != @user.id && votable.vote_value(@user) != 0
     end
   end
 
