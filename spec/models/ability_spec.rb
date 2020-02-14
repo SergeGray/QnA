@@ -28,6 +28,37 @@ RSpec.describe Ability do
       it { should_not be_able_to :vote, create(resource, user: user) }
     end
 
+    describe 'indirect ownership' do
+      let(:owned_question) { create(:question, user: user) }
+      let(:other_question) { create(:question, user: other_user) }
+
+      describe 'answers' do
+        let(:answer_to_owned) { create(:answer, question: owned_question) }
+        let(:answer_to_other) { create(:answer, question: other_question) }
+
+        it { should be_able_to :select, answer_to_owned }
+        it { should_not be_able_to :select, answer_to_other }
+      end
+
+      describe 'attachments' do
+        before do
+          owned_question.files.attach(create_file_blob)
+          owned_question.files.attach(create_file_blob)
+        end
+
+        it { should be_able_to :destroy, owned_question.files.first }
+        it { should_not be_able_to :destroy, other_question.files.first }
+      end
+
+      describe 'links' do
+        let(:owned_link) { create(:link, linkable: owned_question) }
+        let(:other_link) { create(:link, linkable: other_question) }
+
+        it { should be_able_to :destroy, owned_link }
+        it { should_not be_able_to :destroy, other_link }
+      end
+    end
+
     it { should_not be_able_to :manage, :all }
   end
 
