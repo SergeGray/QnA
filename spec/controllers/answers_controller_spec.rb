@@ -141,8 +141,8 @@ RSpec.describe AnswersController, type: :controller do
           expect { answer.reload }.to_not change(answer2, :attributes)
         end
 
-        it 'redirects to question' do
-          expect(response).to redirect_to(answer2.question)
+        it 'redirects to root' do
+          expect(response).to redirect_to root_path
         end
       end
 
@@ -216,6 +216,11 @@ RSpec.describe AnswersController, type: :controller do
           patch :select, params: { id: answer, format: :js }
           expect { answer.reload }.to_not change { answer.best? }
         end
+
+        it 'redirects to root' do
+          patch :select, params: { id: answer, format: :js }
+          expect(response).to redirect_to root_path
+        end
       end
 
       context "on user's own question" do
@@ -269,9 +274,9 @@ RSpec.describe AnswersController, type: :controller do
           end.to_not change(Answer, :count)
         end
 
-        it 'redirects to question' do
+        it 'redirects to root' do
           delete :destroy, params: { id: answer, format: :js }
-          expect(response).to redirect_to answer.question
+          expect(response).to redirect_to root_path
         end
       end
 

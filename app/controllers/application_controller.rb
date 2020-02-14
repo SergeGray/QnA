@@ -3,14 +3,7 @@ class ApplicationController < ActionController::Base
     redirect_to root_url, alert: exception.message
   end
 
-  # check_authorization
-
-  def check_ownership(attribute, path)
-    return if current_user.author_of?(attribute)
-
-    redirect_to path,
-                alert: "You can't change other people's #{attribute.class}!"
-  end
+  check_authorization unless: :devise_controller?
 
   def wardenized_renderer
     renderer = ApplicationController.renderer.new

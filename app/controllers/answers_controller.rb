@@ -4,17 +4,10 @@ class AnswersController < ApplicationController
   before_action :authenticate_user!
   before_action :set_question, only: :create
   before_action :set_answer, only: %i[edit update select destroy]
-  before_action only: %i[edit update destroy] do
-    check_ownership(@answer, question_path(@answer.question))
-  end
 
   authorize_resource
 
   after_action :publish_answer, only: :create
-
-  before_action only: :select do
-    check_ownership(@answer.question, questions_path)
-  end
 
   def edit; end
 
@@ -29,6 +22,7 @@ class AnswersController < ApplicationController
   end
 
   def select
+    authorize! :select, @answer
     @answer.select_as_best!
     @question = @answer.question
   end
