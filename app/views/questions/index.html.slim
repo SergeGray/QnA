@@ -7,4 +7,4 @@ table.questions
   th colspan="3" Link
   = render @questions
 
-= link_to 'Ask a question', new_question_path if current_user
+= link_to 'Ask a question', new_question_path if can? :create, Question

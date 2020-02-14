@@ -22,9 +22,9 @@ class Ability
 
     can :create, [Question, Answer, Comment]
     can %i[update destroy], [Question, Answer], user_id: @user.id
-    can :select, Answer, question: { user_id: @user.id }
     can :destroy, ActiveStorage::Attachment, record: { user_id: @user.id }
     can :destroy, Link, linkable: { user_id: @user.id }
+    can :select, Answer, best: false, question: { user_id: @user.id }
 
     can :vote, [Question, Answer] do |votable|
       votable.user_id != @user.id

@@ -25,4 +25,4 @@ table.answers
 .answer-errors
   = render 'shared/errors', resource: @answer
 
-= render 'answers/form' if current_user
+= render 'answers/form' if can? :create, Answer

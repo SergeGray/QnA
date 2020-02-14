@@ -35,8 +35,12 @@ RSpec.describe Ability do
       describe 'answers' do
         let(:answer_to_owned) { create(:answer, question: owned_question) }
         let(:answer_to_other) { create(:answer, question: other_question) }
+        let(:best_answer) do
+          create(:answer, best: true, question: owned_question)
+        end
 
         it { should be_able_to :select, answer_to_owned }
+        it { should_not be_able_to :select, best_answer }
         it { should_not be_able_to :select, answer_to_other }
       end
 
