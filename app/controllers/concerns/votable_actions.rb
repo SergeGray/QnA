@@ -2,34 +2,34 @@ module VotableActions
   extend ActiveSupport::Concern
 
   included do
-    before_action :set_resource, only: %i[upvote downvote cancel]
-    before_action :deny_owner, only: %i[upvote downvote cancel]
+    before_action only: %i[upvote downvote cancel] do
+      set_resource
+      authorize_vote!
+    end
 
-    skip_authorize_resource
+    skip_authorize_resource only: %i[upvote downvote cancel]
+    skip_authorization_check only: %i[upvote downvote cancel]
   end
 
   def upvote
-    authorize! :vote, @votable
     @votable.upvote!(current_user)
     render_json
   end
 
   def downvote
-    authorize! :vote, @votable
     @votable.downvote!(current_user)
     render_json
   end
 
   def cancel
-    authorize! :vote, @votable
     @votable.clear_votes!(current_user)
     render_json
   end
 
   private
 
-  def deny_owner
-    head 403 if current_user&.author_of?(@votable)
+  def authorize_vote!
+    authorize! :vote, @votable
   end
 
   def set_resource

@@ -173,8 +173,8 @@ RSpec.describe QuestionsController, type: :controller do
           expect { question2.reload }.to_not change(question2, :attributes)
         end
 
-        it 'redirects to index view' do
-          expect(response).to redirect_to(questions_path)
+        it 'redirects to root' do
+          expect(response).to redirect_to root_path
         end
       end
 
@@ -255,9 +255,9 @@ RSpec.describe QuestionsController, type: :controller do
           end.to_not change(Question, :count)
         end
 
-        it 'redirects to index view' do
+        it 'redirects to root' do
           delete :destroy, params: { id: question2 }
-          expect(response).to redirect_to(questions_path)
+          expect(response).to redirect_to root_path
         end
       end
 

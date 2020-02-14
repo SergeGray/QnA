@@ -3,9 +3,6 @@ class QuestionsController < ApplicationController
 
   before_action :authenticate_user!, except: %i[index show]
   before_action :set_question, only: %i[show edit update destroy]
-  before_action only: %i[edit update destroy] do
-    check_ownership(@question, questions_path)
-  end
 
   after_action :publish_question, only: :create
 
