@@ -1,5 +1,4 @@
 class OauthCallbacksController < Devise::OmniauthCallbacksController
-
   def github
     authenticate_with_oauth
   end
