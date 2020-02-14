@@ -14,14 +14,14 @@ RSpec.describe Ability do
     let(:other_user) { create(:user) }
 
     it { should be_able_to :read, :all }
-    
+
     [Question, Answer, Comment].each do |resource_class|
       it { should be_able_to :create, resource_class }
     end
 
-    [:question, :answer].each do |resource|
+    %i[question answer].each do |resource|
       it { should_not be_able_to :update, create(resource, user: other_user) }
-      it { should_not be_able_to :destroy, create(resource, user: other_user ) }
+      it { should_not be_able_to :destroy, create(resource, user: other_user) }
       it { should be_able_to :update, create(resource, user: user) }
       it { should be_able_to :destroy, create(resource, user: user) }
       it { should be_able_to :vote, create(resource, user: other_user) }

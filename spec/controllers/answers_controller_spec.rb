@@ -232,14 +232,14 @@ RSpec.describe AnswersController, type: :controller do
 
         it 'selects the answer as best' do
           expect { answer.reload }
-            .to change { answer.best? }
+            .to change(answer, :best?)
             .from(false)
             .to(true)
         end
 
         it 'unselects the previous best answer' do
           expect { answer2.reload }
-            .to change { answer2.best? }
+            .to change(answer2, :best?)
             .from(true)
             .to(false)
         end
