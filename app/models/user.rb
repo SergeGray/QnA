@@ -8,8 +8,4 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable,
          :confirmable, :omniauthable, omniauth_providers: %i[github vkontakte]
-
-  def author_of?(resource)
-    resource.user_id == id
-  end
 end
