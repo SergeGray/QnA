@@ -161,83 +161,103 @@ RSpec.describe QuestionsController, type: :controller do
         let(:user2) { create(:user) }
         let(:question2) { create(:question, user: user2) }
 
-        before do
+        it 'does not change the question' do
+          expect do
+            patch :update, params: {
+              id: question2,
+              question: attributes_for(:question, :new),
+              format: :js
+            }
+          end.to_not change { question2.reload.attributes }
+        end
+
+        it 'redirects to root' do
           patch :update, params: {
             id: question2,
             question: attributes_for(:question, :new),
             format: :js
           }
-        end
-
-        it 'does not change the question' do
-          expect { question2.reload }.to_not change(question2, :attributes)
-        end
-
-        it 'redirects to root' do
           expect(response).to redirect_to root_path
         end
       end
 
       context 'with valid attributes' do
-        before do
+        it 'assigns the requested question to @question' do
           patch :update, params: {
             id: question,
             question: attributes_for(:question, :new),
             format: :js
           }
-        end
-
-        it 'assigns the requested question to @question' do
           expect(assigns(:question)).to eq(question)
         end
 
         it 'changes question attributes' do
-          expect { question.reload }
-            .to change(question, :title).to(
-              attributes_for(:question, :new)[:title]
-            ).and change(question, :body).to(
-              attributes_for(:question, :new)[:body]
-            )
+          expect do
+            patch :update, params: {
+              id: question,
+              question: attributes_for(:question, :new),
+              format: :js
+            }
+          end.to change { question.reload.title }.to(
+            attributes_for(:question, :new)[:title]
+          ).and change(question, :body).to(
+            attributes_for(:question, :new)[:body]
+          )
         end
 
         it 'renders the update template' do
+          patch :update, params: {
+            id: question,
+            question: attributes_for(:question, :new),
+            format: :js
+          }
           expect(response).to render_template(:update)
         end
       end
 
       context 'with invalid attributes' do
-        before do
+        it 'does not change the question' do
+          expect do
+            patch :update, params: {
+              id: question,
+              question: attributes_for(:question, :invalid),
+              format: :js
+            }
+          end.to_not change { question.reload.attributes }
+        end
+
+        it 'renders the update template' do
           patch :update, params: {
             id: question,
             question: attributes_for(:question, :invalid),
             format: :js
           }
-        end
-
-        it 'does not change the question' do
-          expect { question.reload }.to_not change(question, :attributes)
-        end
-
-        it 'renders the update template' do
           expect(response).to render_template(:update)
         end
       end
     end
 
     describe 'Unauthenticated user' do
-      before do
-        patch :update, params: {
-          id: question,
-          question: attributes_for(:question, :new),
-          format: :js
-        }
-      end
-
       it 'does not save the question' do
-        expect { question.reload }.to_not change(question, :attributes)
+        expect do
+          patch :update, params: {
+            id: question,
+            question: attributes_for(:question, :new),
+            format: :js
+          }
+        end.to_not change { question.reload.attributes }
       end
+      context 'after the action is called' do
+        before do
+          patch :update, params: {
+            id: question,
+            question: attributes_for(:question, :new),
+            format: :js
+          }
+        end
 
-      it_behaves_like 'malicious action'
+        it_behaves_like 'malicious action'
+      end
     end
   end
 

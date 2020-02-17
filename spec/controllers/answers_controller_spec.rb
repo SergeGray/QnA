@@ -129,79 +129,101 @@ RSpec.describe AnswersController, type: :controller do
       context "on someone else's answer" do
         let(:answer2) { create(:answer) }
 
-        before do
+        it "doesn't change answer attributes" do
+          expect do
+            patch :update, params: {
+              id: answer2,
+              answer: attributes_for(:answer, :new),
+              format: :js
+            }
+          end.to_not change { answer2.reload.attributes }
+        end
+
+        it 'redirects to root' do
           patch :update, params: {
             id: answer2,
             answer: attributes_for(:answer, :new),
             format: :js
           }
-        end
-
-        it "doesn't change answer attributes" do
-          expect { answer.reload }.to_not change(answer2, :attributes)
-        end
-
-        it 'redirects to root' do
           expect(response).to redirect_to root_path
         end
       end
 
       context 'with valid attributes' do
-        before do
+        it 'assigns the requested answer to @answer' do
           patch :update, params: {
             id: answer,
             answer: attributes_for(:answer, :new),
             format: :js
           }
-        end
-
-        it 'assigns the requested answer to @answer' do
           expect(assigns(:answer)).to eq(answer)
         end
 
         it 'changes answer attributes' do
-          expect { answer.reload }
-            .to change(answer, :body).to(attributes_for(:answer, :new)[:body])
+          expect do
+            patch :update, params: {
+              id: answer,
+              answer: attributes_for(:answer, :new),
+              format: :js
+            }
+          end.to change { answer.reload.body }
+            .to(attributes_for(:answer, :new)[:body])
         end
 
         it 'renders update view' do
+          patch :update, params: {
+            id: answer,
+            answer: attributes_for(:answer, :new),
+            format: :js
+          }
           expect(response).to render_template :update
         end
       end
 
       context 'with invalid attributes' do
-        before do
+        it 'does not change the answer' do
+          expect do
+            patch :update, params: {
+              id: answer,
+              answer: attributes_for(:answer, :invalid),
+              format: :js
+            }
+          end.to_not change { answer.reload.attributes }
+        end
+
+        it 'renders update view' do
           patch :update, params: {
             id: answer,
             answer: attributes_for(:answer, :invalid),
             format: :js
           }
-        end
-
-        it 'does not change the answer' do
-          expect { answer.reload }.to_not change(answer, :attributes)
-        end
-
-        it 'renders update view' do
           expect(response).to render_template :update
         end
       end
     end
 
     describe 'Unauthenticated user' do
-      before do
-        patch :update, params: {
-          id: answer,
-          answer: attributes_for(:answer, :new),
-          format: :js
-        }
-      end
-
       it 'does not save the answer' do
-        expect { answer.reload }.to_not change(answer, :attributes)
+        expect do
+          patch :update, params: {
+            id: answer,
+            answer: attributes_for(:answer, :new),
+            format: :js
+          }
+        end.to_not change { answer.reload.attributes }
       end
+      
+      context 'after the action is called' do
+        before do
+          patch :update, params: {
+            id: answer,
+            answer: attributes_for(:answer, :new),
+            format: :js
+          }
+        end
 
-      it_behaves_like 'malicious action'
+        it_behaves_like 'malicious action'
+      end
     end
   end
 
@@ -213,8 +235,8 @@ RSpec.describe AnswersController, type: :controller do
 
       context "on someone else's question" do
         it 'does not select answer as best' do
-          patch :select, params: { id: answer, format: :js }
-          expect { answer.reload }.to_not change { answer.best? }
+          expect { patch :select, params: { id: answer, format: :js } }
+            .to_not change { answer.reload.best? }
         end
 
         it 'redirects to root' do
@@ -228,36 +250,34 @@ RSpec.describe AnswersController, type: :controller do
         let!(:answer) { create(:answer, question: question) }
         let!(:answer2) { create(:answer, question: question, best: true) }
 
-        before { patch :select, params: { id: answer, format: :js } }
-
         it 'selects the answer as best' do
-          expect { answer.reload }
-            .to change(answer, :best?)
-            .from(false)
-            .to(true)
+          expect { patch :select, params: { id: answer, format: :js } }
+            .to change { answer.reload.best? }.from(false).to(true)
         end
 
         it 'unselects the previous best answer' do
-          expect { answer2.reload }
-            .to change(answer2, :best?)
-            .from(true)
-            .to(false)
+          expect { patch :select, params: { id: answer, format: :js } }
+            .to change { answer2.reload.best? }.from(true).to(false)
         end
 
         it 'renders the select template' do
+          patch :select, params: { id: answer, format: :js }
           expect(response).to render_template :select
         end
       end
     end
 
     describe 'Unauthenticated user' do
-      before { patch :select, params: { id: answer, format: :js } }
-
       it 'does not select the answer as best' do
-        expect { answer.reload }.to_not change { answer.best? }
+        expect { patch :select, params: { id: answer, format: :js } }
+          .to_not change { answer.reload.best? }
       end
 
-      it_behaves_like 'malicious action'
+      context 'after the action is called' do
+        before { patch :select, params: { id: answer, format: :js } }
+
+        it_behaves_like 'malicious action'
+      end
     end
   end
 
