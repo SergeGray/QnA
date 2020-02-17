@@ -4,14 +4,14 @@ RSpec.describe Ability do
   subject(:ability) { Ability.new(user) }
 
   describe 'for admin' do
-    let(:user) { create(:user, :admin) }
+    let(:user) { build(:user, :admin) }
 
     it { should be_able_to :manage, :all }
   end
 
   describe 'for user' do
-    let(:user) { create(:user) }
-    let(:other_user) { create(:user) }
+    let(:user) { build(:user, id: 1) }
+    let(:other_user) { build(:user, id: 2) }
 
     it { should be_able_to :read, :all }
 
@@ -20,23 +20,26 @@ RSpec.describe Ability do
     end
 
     %i[question answer].each do |resource|
-      it { should_not be_able_to :update, create(resource, user: other_user) }
-      it { should_not be_able_to :destroy, create(resource, user: other_user) }
-      it { should be_able_to :update, create(resource, user: user) }
-      it { should be_able_to :destroy, create(resource, user: user) }
-      it { should be_able_to :vote, create(resource, user: other_user) }
-      it { should_not be_able_to :vote, create(resource, user: user) }
+      let(:owned_resource) { build(resource, user: user) }
+      let(:other_resource) { build(resource, user: other_user) }
+
+      it { should_not be_able_to :update, other_resource }
+      it { should_not be_able_to :destroy, other_resource }
+      it { should be_able_to :update, owned_resource }
+      it { should be_able_to :destroy, owned_resource }
+      it { should be_able_to :vote, other_resource }
+      it { should_not be_able_to :vote, owned_resource }
     end
 
     describe 'indirect ownership' do
-      let(:owned_question) { create(:question, user: user) }
-      let(:other_question) { create(:question, user: other_user) }
+      let(:owned_question) { create(:question, user: user, id: 1) }
+      let(:other_question) { create(:question, user: other_user, id: 2) }
 
       describe 'answers' do
-        let(:answer_to_owned) { create(:answer, question: owned_question) }
-        let(:answer_to_other) { create(:answer, question: other_question) }
+        let(:answer_to_owned) { build(:answer, question: owned_question) }
+        let(:answer_to_other) { build(:answer, question: other_question) }
         let(:best_answer) do
-          create(:answer, best: true, question: owned_question)
+          build(:answer, best: true, question: owned_question)
         end
 
         it { should be_able_to :select, answer_to_owned }
@@ -55,8 +58,8 @@ RSpec.describe Ability do
       end
 
       describe 'links' do
-        let(:owned_link) { create(:link, linkable: owned_question) }
-        let(:other_link) { create(:link, linkable: other_question) }
+        let(:owned_link) { build(:link, linkable: owned_question) }
+        let(:other_link) { build(:link, linkable: other_question) }
 
         it { should be_able_to :destroy, owned_link }
         it { should_not be_able_to :destroy, other_link }
