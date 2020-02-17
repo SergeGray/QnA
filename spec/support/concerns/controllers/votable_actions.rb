@@ -50,9 +50,9 @@ RSpec.shared_examples_for VotableActions do
           .to_not change(resource, :score)
       end
 
-      it 'redirects to login page' do
+      it 'redirects to root' do
         post :upvote, params: { id: resource }
-        expect(response).to redirect_to new_user_session_path
+        expect(response).to redirect_to root_path
       end
     end
   end
@@ -104,9 +104,9 @@ RSpec.shared_examples_for VotableActions do
           .to_not change(resource, :score)
       end
 
-      it 'redirects to login page' do
+      it 'redirects to root' do
         post :upvote, params: { id: resource }
-        expect(response).to redirect_to new_user_session_path
+        expect(response).to redirect_to root_path
       end
     end
   end
@@ -178,9 +178,9 @@ RSpec.shared_examples_for VotableActions do
           .to_not change(resource, :score)
       end
 
-      it 'redirects to login page' do
+      it 'redirects to root' do
         post :upvote, params: { id: resource }
-        expect(response).to redirect_to new_user_session_path
+        expect(response).to redirect_to root_path
       end
     end
   end
