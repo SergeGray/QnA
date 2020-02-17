@@ -214,7 +214,7 @@ RSpec.describe AnswersController, type: :controller do
       context "on someone else's question" do
         it 'does not select answer as best' do
           patch :select, params: { id: answer, format: :js }
-          expect { answer.reload }.to_not change(answer, :best?)
+          expect { answer.reload }.to_not change { answer.best? }
         end
 
         it 'redirects to root' do
@@ -254,7 +254,7 @@ RSpec.describe AnswersController, type: :controller do
       before { patch :select, params: { id: answer, format: :js } }
 
       it 'does not select the answer as best' do
-        expect { answer.reload }.to_not change(answer, :best?)
+        expect { answer.reload }.to_not change { answer.best? }
       end
 
       it_behaves_like 'malicious action'
