@@ -5,6 +5,8 @@ class ApplicationController < ActionController::Base
 
   check_authorization unless: :devise_controller?
 
+  private
+
   def wardenized_renderer
     renderer = ApplicationController.renderer.new
     renderer.instance_variable_set(
