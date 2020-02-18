@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  use_doorkeeper
+
   devise_for :users, controllers: {
     omniauth_callbacks: 'oauth_callbacks',
     registrations: 'registrations'
@@ -29,6 +31,14 @@ Rails.application.routes.draw do
   resources :links, only: :destroy
 
   resources :awards, only: :index
+
+  namespace :api do
+    namespace :v1 do
+      resources :profiles, only: [] do
+        get :me, on: :collection
+      end
+    end
+  end
 
   root to: 'questions#index'
 
