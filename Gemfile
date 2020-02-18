@@ -5,6 +5,7 @@ ruby '2.6.5'
 
 gem 'rails', '~> 6.0.2', '>= 6.0.2.1'
 
+gem 'active_model_serializers', '~> 0.10.0'
 gem 'aws-sdk-s3', require: false
 gem 'bootsnap', '>= 1.4.2', require: false
 gem 'cancancan'
@@ -14,6 +15,7 @@ gem 'doorkeeper'
 gem 'gon'
 gem 'jbuilder', '~> 2.7'
 gem 'jquery-rails'
+gem 'oj'
 gem 'omniauth'
 gem 'omniauth-github'
 gem 'omniauth-vkontakte'
