@@ -2,21 +2,11 @@ require 'rails_helper'
 
 describe 'Questions API', type: :request do
   let(:api_path) { '/api/v1/questions' }
-  let(:headers) do
-    { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json' }
-  end
 
   describe 'GET index' do
-    context 'unauthorized' do
-      it 'returns 401 status of there is no access_token' do
-        get "#{api_path}", headers: headers
-        expect(response.status).to eq 401
-      end
-
-      it 'returns 401 status if access_token is invalid' do
-        get "#{api_path}", params: { access_token: '123' }, headers: headers
-        expect(response.status).to eq 401
-      end
+    it_behaves_like 'API Authorizable' do
+      let(:method) { :get }
+      let(:path) { "#{api_path}" }
     end
 
     context 'authorized' do
@@ -30,10 +20,6 @@ describe 'Questions API', type: :request do
         get "#{api_path}",
             params: { access_token: access_token.token },
             headers: headers
-      end
-
-      it 'returns 200 status' do
-        expect(response).to be_successful
       end
 
       it 'returns a list of questions' do
