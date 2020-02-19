@@ -10,8 +10,9 @@ describe 'Profiles API', type: :request do
     end
 
     context 'authorized' do
-      let(:user) { create(:user) }
-      let(:access_token) { create(:access_token, resource_owner_id: user.id) }
+      let(:me) { create(:user) }
+      let(:access_token) { create(:access_token, resource_owner_id: me.id) }
+      let(:user_response) { json['user'] }
 
       before do
         get "#{api_path}/me",
@@ -21,13 +22,56 @@ describe 'Profiles API', type: :request do
 
       it 'returns all public fields' do
         %w[id email admin created_at updated_at].each do |attr|
-          expect(json[attr]).to eq user.send(attr).as_json
+          expect(user_response[attr]).to eq me.send(attr).as_json
         end
       end
 
       it 'does not return private fields' do
         %w[password encrypted_password].each do |attr|
-          expect(json).to_not have_key(attr)
+          expect(user_response).to_not have_key(attr)
+        end
+      end
+    end
+  end
+
+  describe 'GET /api/v1/profiles' do
+    it_behaves_like 'API Authorizable' do
+      let(:method) { :get }
+      let(:path) { "#{api_path}" }
+    end
+    
+    context 'authorized' do
+      let!(:me) { create(:user) }
+      let!(:other_users) { create_list(:user, 4) }
+      let(:other_user) { other_users.first }
+      let(:access_token) { create(:access_token, resource_owner_id: me.id) }
+      let(:user_response) { json['users'].first }
+
+      before do
+        get "#{api_path}",
+            params: { access_token: access_token.token },
+            headers: headers
+      end
+
+      it 'returns a list of users' do
+        expect(json['users'].size).to eq 4
+      end
+
+      it 'does not return me' do
+        json['users'].each do |user|
+          expect(user['id']).to_not eq me.id
+        end
+      end
+
+      it 'returns all public fields' do
+        %w[id email admin created_at updated_at].each do |attr|
+          expect(user_response[attr]).to eq other_user.send(attr).as_json
+        end
+      end
+
+      it 'does not return private fields' do
+        %w[password encrypted_password].each do |attr|
+          expect(user_response).to_not have_key(attr)
         end
       end
     end
