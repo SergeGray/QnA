@@ -6,7 +6,7 @@ describe 'Questions API', type: :request do
   describe 'GET index' do
     it_behaves_like 'API Authorizable' do
       let(:method) { :get }
-      let(:path) { "#{api_path}" }
+      let(:path) { api_path }
     end
 
     context 'authorized' do
@@ -17,19 +17,16 @@ describe 'Questions API', type: :request do
       let(:question_response) { json['questions'].first }
 
       before do
-        get "#{api_path}",
+        get api_path, 
             params: { access_token: access_token.token },
             headers: headers
       end
 
-      it 'returns a list of questions' do
-        expect(json['questions'].size).to eq 2
-      end
-
-      it 'returns all public fields' do
-        %w[id title body created_at updated_at].each do |attr|
-          expect(question_response[attr]).to eq question.send(attr).as_json
-        end
+      it_behaves_like 'API get many' do
+        let!(:resource_list) { questions }
+        let(:resources) { json['questions'] }
+        let(:public_fields) { %w[id title body created_at updated_at] }
+        let(:private_fields) { [] }
       end
 
       it 'contains user object' do
@@ -42,17 +39,11 @@ describe 'Questions API', type: :request do
       end
 
       describe 'answer' do
-        let(:answer) { answers.first }
-        let(:answer_response) { question_response['answers'].first }
-
-        it 'returns a list of answers' do
-          expect(question_response['answers'].size).to eq 3
-        end
-
-        it 'returns all answer public fields' do
-          %w[id body created_at updated_at].each do |attr|
-            expect(answer_response[attr]).to eq answer.send(attr).as_json
-          end
+        it_behaves_like 'API get many' do
+          let!(:resource_list) { answers }
+          let(:resources) { json['questions'].first['answers'] }
+          let(:public_fields) { %w[id body created_at updated_at] }
+          let(:private_fields) { [] }
         end
       end
     end
