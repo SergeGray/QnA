@@ -22,6 +22,8 @@ describe 'Profiles API', type: :request do
             headers: headers
       end
 
+      it_behaves_like 'Successful response'
+
       it_behaves_like 'API get one' do
         let(:resource) { me }
         let(:resource_response) { user_response }
@@ -46,6 +48,8 @@ describe 'Profiles API', type: :request do
             params: { access_token: access_token.token },
             headers: headers
       end
+
+      it_behaves_like 'Successful response'
 
       it_behaves_like 'API get many' do
         let!(:resource_list) { other_users }

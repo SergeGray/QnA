@@ -21,6 +21,8 @@ describe 'Questions API', type: :request do
             headers: headers
       end
 
+      it_behaves_like 'Successful response'
+
       it_behaves_like 'API get many' do
         let!(:resource_list) { questions }
         let(:resource_json) { json['questions'] }
@@ -30,7 +32,6 @@ describe 'Questions API', type: :request do
 
   describe 'GET /api/v1/questions/:id' do
     let!(:question) { create(:question) }
-    let(:question_path) { "#{api_path}/#{question.id}" }
     let!(:answers) { create_list(:answer, 3, question: question) }
     let!(:comments) { create_list(:comment, 3, commentable: question) }
     let!(:links) { create_list(:link, 3, linkable: question) }
@@ -39,7 +40,7 @@ describe 'Questions API', type: :request do
 
     it_behaves_like 'API Authorizable' do
       let(:method) { :get }
-      let(:path) { question_path }
+      let(:path) { "#{api_path}/#{question.id}" }
     end
 
     context 'authorized' do
@@ -47,10 +48,12 @@ describe 'Questions API', type: :request do
       let(:question_response) { json['question'] }
 
       before do
-        get question_path, 
+        get "#{api_path}/#{question.id}", 
             params: { access_token: access_token.token },
             headers: headers
       end
+
+      it_behaves_like 'Successful response'
 
       it_behaves_like 'API get one' do
         let(:resource) { question }
@@ -97,6 +100,67 @@ describe 'Questions API', type: :request do
           let!(:resource_list) { links }
           let(:resource_json) { question_response['links'] }
           let(:public_fields) { %w[id name url created_at updated_at] }
+        end
+      end
+    end
+  end
+
+  describe 'POST /api/v1/questions/' do
+    it_behaves_like 'API Authorizable' do
+      let(:method) { :post }
+      let(:path) { api_path }
+    end
+
+    context 'authorized' do
+      let(:access_token) { create(:access_token) }
+
+      context 'with valid params' do
+        let(:valid_params) { attributes_for(:question) }
+
+        it 'creates a new question' do
+          expect do
+            post api_path,
+                 params: {
+                   access_token: access_token.token, question: valid_params
+                 },
+                 headers: headers
+          end.to change(Question, :count).by 1
+        end
+
+        context 'After the action is called' do
+          before do
+            post api_path,
+                 params: {
+                   access_token: access_token.token, question: valid_params
+                 },
+                 headers: headers
+          end
+
+          it_behaves_like 'Successful response'
+        end
+      end
+
+      context 'with invalid params' do
+        let(:invalid_params) { attributes_for(:question, :invalid) }
+
+        it 'returns error response' do
+          post api_path,
+               params: {
+                 access_token: access_token.token, question: invalid_params
+               },
+               headers: headers
+
+          expect(response).to have_http_status(400)
+        end
+
+        it 'does not create a new question' do
+          expect do
+            post api_path,
+                 params: {
+                   access_token: access_token.token, question: invalid_params
+                 },
+                 headers: headers
+          end.to_not change(Question, :count)
         end
       end
     end
