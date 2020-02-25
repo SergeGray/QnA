@@ -22,6 +22,8 @@ describe 'Answers API', type: :request do
             headers: headers
       end
 
+      it_behaves_like 'Successful response'
+
       it_behaves_like 'API get many' do
         let!(:resource_list) { answers }
         let(:resource_json) { json['answers'] }
@@ -31,7 +33,6 @@ describe 'Answers API', type: :request do
   
   describe 'GET /api/v1/answers/:id' do
     let!(:answer) { create(:answer) }
-    let(:answer_path) { "#{api_path}/answers/#{answer.id}" }
     let!(:comments) { create_list(:comment, 3, commentable: answer) }
     let!(:links) { create_list(:link, 3, linkable: answer) }
 
@@ -39,7 +40,7 @@ describe 'Answers API', type: :request do
 
     it_behaves_like 'API Authorizable' do
       let(:method) { :get }
-      let(:path) { answer_path }
+      let(:path) { "#{api_path}/answers/#{answer.id}" }
     end
 
     context 'authorized' do
@@ -47,10 +48,12 @@ describe 'Answers API', type: :request do
       let(:answer_response) { json['answer'] }
 
       before do
-        get answer_path, 
+        get "#{api_path}/answers/#{answer.id}", 
             params: { access_token: access_token.token },
             headers: headers
       end
+
+      it_behaves_like 'Successful response'
 
       it_behaves_like 'API get one' do
         let(:resource) { answer }

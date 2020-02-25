@@ -4,7 +4,7 @@ module ApiHelpers
   end
 
   def headers
-    { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json' }
+    { 'ACCEPT' => 'application/json' }
   end
 
   def do_request(method, path, options = {})
