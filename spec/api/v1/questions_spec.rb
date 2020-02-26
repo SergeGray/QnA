@@ -165,4 +165,94 @@ describe 'Questions API', type: :request do
       end
     end
   end
+
+  describe 'PATCH /api/v1/questions/:id' do
+    let!(:question) { create(:question) }
+    let(:valid_params) { { title: "New Title" } }
+
+    it_behaves_like 'API Authorizable' do
+      let(:method) { :patch }
+      let(:path) { "#{api_path}/#{question.id}" }
+    end
+
+    context 'authorized' do
+      let(:access_token) { create(:access_token) }
+
+      context 'on owned question' do
+        let!(:question) do
+          create(:question, user_id: access_token.resource_owner_id)
+        end
+
+        context 'with valid params' do
+          it 'updates the question' do
+            expect do
+              patch "#{api_path}/#{question.id}",
+                    params: {
+                      access_token: access_token.token, question: valid_params
+                    },
+                    headers: headers
+            end.to change { question.reload.title }.to "New Title"
+          end
+
+          context 'After the action is called' do
+            before do
+              patch "#{api_path}/#{question.id}",
+                    params: {
+                      access_token: access_token.token, question: valid_params
+                    },
+                    headers: headers
+            end
+
+            it_behaves_like 'Successful response'
+          end
+        end
+
+        context 'with invalid params' do
+          let(:invalid_params) { { title: "" } }
+
+          it 'returns error response' do
+            patch "#{api_path}/#{question.id}",
+                  params: {
+                    access_token: access_token.token, question: invalid_params
+                  },
+                  headers: headers
+
+            expect(response).to have_http_status(400)
+          end
+
+          it 'does not update the question' do
+            expect do
+              patch "#{api_path}/#{question.id}",
+                    params: {
+                      access_token: access_token.token, question: invalid_params
+                    },
+                    headers: headers
+            end.to_not change { question.reload.title }
+          end
+        end
+      end
+
+      context 'on unowned question' do
+        it 'returns forbidden response' do
+          patch "#{api_path}/#{question.id}",
+                params: {
+                  access_token: access_token.token, question: valid_params
+                },
+                headers: headers
+
+          expect(response).to have_http_status(403)
+        end
+
+        it 'does not update the question' do
+          expect do
+            patch "#{api_path}/#{question.id}",
+                  params: {
+                    access_token: access_token.token, question: valid_params
+                  },
+                  headers: headers
+          end.to_not change { question.reload.title }
+        end
+      end
+    end
+  end
 end

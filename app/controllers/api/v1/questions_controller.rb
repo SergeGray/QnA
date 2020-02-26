@@ -1,10 +1,14 @@
 class Api::V1::QuestionsController < Api::V1::BaseController
+  before_action :set_question, only: %i[show update]
+
+  authorize_resource
+
   def index
     render json: Question.all
   end
 
   def show
-    render json: Question.find(params[:id])
+    render json: @question
   end
 
   def create
@@ -16,7 +20,19 @@ class Api::V1::QuestionsController < Api::V1::BaseController
     end
   end
 
+  def update
+    if @question.update(question_params)
+      head 200
+    else
+      head 400
+    end
+  end
+
   private
+
+  def set_question
+    @question = Question.find(params[:id])
+  end
 
   def question_params
     params.require(:question).permit(
