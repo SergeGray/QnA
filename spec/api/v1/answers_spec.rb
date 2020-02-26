@@ -17,7 +17,7 @@ describe 'Answers API', type: :request do
       let!(:answers) { create_list(:answer, 2, question: question) }
 
       before do
-        get "#{api_path}/questions/#{question.id}/answers", 
+        get "#{api_path}/questions/#{question.id}/answers",
             params: { access_token: access_token.token },
             headers: headers
       end
@@ -30,7 +30,7 @@ describe 'Answers API', type: :request do
       end
     end
   end
-  
+
   describe 'GET /api/v1/answers/:id' do
     let!(:answer) { create(:answer) }
     let!(:comments) { create_list(:comment, 3, commentable: answer) }
@@ -48,7 +48,7 @@ describe 'Answers API', type: :request do
       let(:answer_response) { json['answer'] }
 
       before do
-        get "#{api_path}/answers/#{answer.id}", 
+        get "#{api_path}/answers/#{answer.id}",
             params: { access_token: access_token.token },
             headers: headers
       end
@@ -59,10 +59,10 @@ describe 'Answers API', type: :request do
         let(:resource) { answer }
         let(:resource_response) { answer_response }
       end
-      
+
       describe 'returns attached user' do
         it_behaves_like 'API get one' do
-          let(:resource) {  answer.user }
+          let(:resource) { answer.user }
           let(:resource_response) { answer_response['user'] }
           let(:public_fields) { %w[id email admin created_at updated_at] }
           let(:private_fields) { %w[password encrypted_password] }

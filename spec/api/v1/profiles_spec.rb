@@ -36,7 +36,7 @@ describe 'Profiles API', type: :request do
       let(:method) { :get }
       let(:path) { api_path }
     end
-    
+
     context 'authorized' do
       let!(:me) { create(:user) }
       let!(:other_users) { create_list(:user, 4) }
