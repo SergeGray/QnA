@@ -1,5 +1,5 @@
 class Api::V1::QuestionsController < Api::V1::BaseController
-  before_action :set_question, only: %i[show update]
+  before_action :set_question, only: %i[show update destroy]
 
   authorize_resource
 
@@ -26,6 +26,10 @@ class Api::V1::QuestionsController < Api::V1::BaseController
     else
       head 400
     end
+  end
+
+  def destroy
+    @question.destroy
   end
 
   private

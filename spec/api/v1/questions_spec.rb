@@ -255,4 +255,59 @@ describe 'Questions API', type: :request do
       end
     end
   end
+
+  describe 'DELETE /api/v1/questions/:id' do
+    let!(:question) { create(:question) }
+
+    it_behaves_like 'API Authorizable' do
+      let(:method) { :delete }
+      let(:path) { "#{api_path}/#{question.id}" }
+    end
+
+    context 'authorized' do
+      let(:access_token) { create(:access_token) }
+
+      context 'on owned question' do
+        let!(:question) do
+          create(:question, user_id: access_token.resource_owner_id)
+        end
+
+        it 'deletes the question' do
+          expect do
+            delete "#{api_path}/#{question.id}",
+                   params: { access_token: access_token.token, id: question },
+                   headers: headers
+          end.to change(Question, :count).by(-1)
+        end
+
+        context 'After the action is called' do
+          before do
+            delete "#{api_path}/#{question.id}",
+                   params: { access_token: access_token.token, id: question },
+                   headers: headers
+          end
+
+          it_behaves_like 'Successful response'
+        end
+      end
+
+      context 'on unowned question' do
+        it 'returns forbidden response' do
+          delete "#{api_path}/#{question.id}",
+                 params: { access_token: access_token.token, id: question },
+                 headers: headers
+
+          expect(response).to have_http_status(403)
+        end
+
+        it 'does not delete the question' do
+          expect do
+            delete "#{api_path}/#{question.id}",
+                   params: { access_token: access_token.token, id: question },
+                   headers: headers
+          end.to_not change(Question, :count)
+        end
+      end
+    end
+  end
 end
