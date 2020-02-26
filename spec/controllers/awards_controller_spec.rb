@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'shared/controller_examples'
 
 RSpec.describe AwardsController, type: :controller do
   let(:user) { create(:user) }

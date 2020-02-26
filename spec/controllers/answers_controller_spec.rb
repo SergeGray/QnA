@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'shared/controller_examples'
 
 RSpec.describe AnswersController, type: :controller do
   it_behaves_like VotableActions do

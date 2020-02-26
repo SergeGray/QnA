@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'shared/controller_examples'
 
 RSpec.describe LinksController, type: :controller do
   let(:user) { create(:user) }
