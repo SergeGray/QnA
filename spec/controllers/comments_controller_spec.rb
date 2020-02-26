@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'shared/controller_examples'
 
 RSpec.describe CommentsController, type: :controller do
   let(:question) { create(:question) }

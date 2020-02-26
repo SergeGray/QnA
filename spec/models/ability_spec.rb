@@ -15,6 +15,8 @@ RSpec.describe Ability do
 
     it { should be_able_to :read, :all }
 
+    it { should be_able_to :me, User }
+
     [Question, Answer, Comment].each do |resource_class|
       it { should be_able_to :create, resource_class }
     end
