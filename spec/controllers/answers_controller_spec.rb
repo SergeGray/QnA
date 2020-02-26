@@ -211,7 +211,7 @@ RSpec.describe AnswersController, type: :controller do
           }
         end.to_not change { answer.reload.attributes }
       end
-      
+
       context 'after the action is called' do
         before do
           patch :update, params: {

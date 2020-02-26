@@ -16,7 +16,7 @@ describe 'Questions API', type: :request do
       let!(:questions) { create_list(:question, 2) }
 
       before do
-        get api_path, 
+        get api_path,
             params: { access_token: access_token.token },
             headers: headers
       end
@@ -48,7 +48,7 @@ describe 'Questions API', type: :request do
       let(:question_response) { json['question'] }
 
       before do
-        get "#{api_path}/#{question.id}", 
+        get "#{api_path}/#{question.id}",
             params: { access_token: access_token.token },
             headers: headers
       end
@@ -62,7 +62,7 @@ describe 'Questions API', type: :request do
 
       describe 'returns attached user' do
         it_behaves_like 'API get one' do
-          let(:resource) {  question.user }
+          let(:resource) { question.user }
           let(:resource_response) { question_response['user'] }
           let(:public_fields) { %w[id email admin created_at updated_at] }
           let(:private_fields) { %w[password encrypted_password] }
