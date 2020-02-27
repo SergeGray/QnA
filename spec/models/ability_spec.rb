@@ -74,6 +74,8 @@ RSpec.describe Ability do
   describe 'for guest' do
     let(:user) { nil }
 
+    it { should_not be_able_to :me, User }
+
     it { should be_able_to :read, :all }
 
     it { should_not be_able_to :manage, :all }
