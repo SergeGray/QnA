@@ -136,6 +136,11 @@ describe 'Questions API', type: :request do
                  headers: headers
           end
 
+          it_behaves_like 'API get one' do
+            let(:resource) { Question.order(created_at: :desc).first }
+            let(:resource_response) { json['question'] }
+          end
+
           it_behaves_like 'Successful response'
         end
       end
@@ -150,7 +155,7 @@ describe 'Questions API', type: :request do
                },
                headers: headers
 
-          expect(response).to have_http_status(400)
+          expect(response).to have_http_status(422)
         end
 
         it 'does not create a new question' do
@@ -161,6 +166,15 @@ describe 'Questions API', type: :request do
                  },
                  headers: headers
           end.to_not change(Question, :count)
+        end
+
+        it 'returns a list of errors' do
+          post api_path,
+               params: {
+                 access_token: access_token.token, question: invalid_params
+               },
+               headers: headers
+          expect(json['question']['errors']['title']).to eq(["can't be blank"])
         end
       end
     end
@@ -203,6 +217,11 @@ describe 'Questions API', type: :request do
                     headers: headers
             end
 
+            it_behaves_like 'API get one' do
+              let(:resource) { question.reload }
+              let(:resource_response) { json['question'] }
+            end
+
             it_behaves_like 'Successful response'
           end
         end
@@ -217,7 +236,7 @@ describe 'Questions API', type: :request do
                   },
                   headers: headers
 
-            expect(response).to have_http_status(400)
+            expect(response).to have_http_status(422)
           end
 
           it 'does not update the question' do
@@ -228,6 +247,16 @@ describe 'Questions API', type: :request do
                     },
                     headers: headers
             end.to_not change { question.reload.title }
+          end
+
+          it 'returns a list of errors' do
+            post api_path,
+                 params: {
+                   access_token: access_token.token, question: invalid_params
+                 },
+                 headers: headers
+            expect(json['question']['errors']['title'])
+              .to eq(["can't be blank"])
           end
         end
       end

@@ -128,6 +128,11 @@ describe 'Answers API', type: :request do
                  headers: headers
           end
 
+          it_behaves_like 'API get one' do
+            let(:resource) { Answer.order(created_at: :desc).first }
+            let(:resource_response) { json['answer'] }
+          end
+
           it_behaves_like 'Successful response'
         end
       end
@@ -144,7 +149,7 @@ describe 'Answers API', type: :request do
                },
                headers: headers
 
-          expect(response).to have_http_status(400)
+          expect(response).to have_http_status(422)
         end
 
         it 'does not create a new answer' do
@@ -155,6 +160,15 @@ describe 'Answers API', type: :request do
                  },
                  headers: headers
           end.to_not change(question.answers, :count)
+        end
+
+        it 'returns a list of errors' do
+          post "#{api_path}/questions/#{question.id}/answers",
+               params: {
+                 access_token: access_token.token, answer: invalid_params
+               },
+               headers: headers
+          expect(json['answer']['errors']['body']).to eq(["can't be blank"])
         end
       end
     end
@@ -197,6 +211,11 @@ describe 'Answers API', type: :request do
                     headers: headers
             end
 
+            it_behaves_like 'API get one' do
+              let(:resource) { answer.reload }
+              let(:resource_response) { json['answer'] }
+            end
+
             it_behaves_like 'Successful response'
           end
         end
@@ -211,7 +230,7 @@ describe 'Answers API', type: :request do
                   },
                   headers: headers
 
-            expect(response).to have_http_status(400)
+            expect(response).to have_http_status(422)
           end
 
           it 'does not update the answer' do
@@ -222,6 +241,15 @@ describe 'Answers API', type: :request do
                     },
                     headers: headers
             end.to_not change { answer.reload.body }
+          end
+
+          it 'returns a list of errors' do
+            patch "#{api_path}/answers/#{answer.id}",
+                 params: {
+                   access_token: access_token.token, answer: invalid_params
+                 },
+                 headers: headers
+            expect(json['answer']['errors']['body']).to eq(["can't be blank"])
           end
         end
       end

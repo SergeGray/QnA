@@ -17,17 +17,19 @@ class Api::V1::AnswersController < Api::V1::BaseController
       answer_params.merge(question: @question)
     )
     if @answer.save
-      head 200
+      render json: @answer, status: :created
     else
-      head 400
+      render json: { answer: { errors: @answer.errors } },
+             status: :unprocessable_entity
     end
   end
 
   def update
     if @answer.update(answer_params)
-      head 200
+      render json: @answer
     else
-      head 400
+      render json: { answer: { errors: @answer.errors } },
+             status: :unprocessable_entity
     end
   end
 
