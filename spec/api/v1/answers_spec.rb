@@ -36,7 +36,7 @@ describe 'Answers API', type: :request do
     let!(:comments) { create_list(:comment, 2, commentable: answer) }
     let!(:links) { create_list(:link, 2, linkable: answer) }
 
-    before { 3.times { answer.files.attach(create_file_blob) } }
+    before { 2.times { answer.files.attach(create_file_blob) } }
 
     it_behaves_like 'API Authorizable' do
       let(:method) { :get }
