@@ -32,9 +32,9 @@ describe 'Questions API', type: :request do
 
   describe 'GET /api/v1/questions/:id' do
     let!(:question) { create(:question) }
-    let!(:answers) { create_list(:answer, 3, question: question) }
-    let!(:comments) { create_list(:comment, 3, commentable: question) }
-    let!(:links) { create_list(:link, 3, linkable: question) }
+    let!(:answers) { create_list(:answer, 2, question: question) }
+    let!(:comments) { create_list(:comment, 2, commentable: question) }
+    let!(:links) { create_list(:link, 2, linkable: question) }
 
     before { 3.times { question.files.attach(create_file_blob) } }
 
@@ -314,6 +314,11 @@ describe 'Questions API', type: :request do
             delete "#{api_path}/#{question.id}",
                    params: { access_token: access_token.token, id: question },
                    headers: headers
+          end
+
+          it_behaves_like 'API get one' do
+            let(:resource) { question }
+            let(:resource_response) { json['question'] }
           end
 
           it_behaves_like 'Successful response'

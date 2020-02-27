@@ -34,7 +34,7 @@ class Api::V1::AnswersController < Api::V1::BaseController
   end
 
   def destroy
-    @answer.destroy
+    render json: @answer.destroy
   end
 
   private

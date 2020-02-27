@@ -33,8 +33,8 @@ describe 'Answers API', type: :request do
 
   describe 'GET /api/v1/answers/:id' do
     let!(:answer) { create(:answer) }
-    let!(:comments) { create_list(:comment, 3, commentable: answer) }
-    let!(:links) { create_list(:link, 3, linkable: answer) }
+    let!(:comments) { create_list(:comment, 2, commentable: answer) }
+    let!(:links) { create_list(:link, 2, linkable: answer) }
 
     before { 3.times { answer.files.attach(create_file_blob) } }
 
@@ -245,10 +245,10 @@ describe 'Answers API', type: :request do
 
           it 'returns a list of errors' do
             patch "#{api_path}/answers/#{answer.id}",
-                 params: {
-                   access_token: access_token.token, answer: invalid_params
-                 },
-                 headers: headers
+                  params: {
+                    access_token: access_token.token, answer: invalid_params
+                  },
+                  headers: headers
             expect(json['answer']['errors']['body']).to eq(["can't be blank"])
           end
         end
@@ -307,6 +307,11 @@ describe 'Answers API', type: :request do
             delete "#{api_path}/answers/#{answer.id}",
                    params: { access_token: access_token.token, id: answer },
                    headers: headers
+          end
+
+          it_behaves_like 'API get one' do
+            let(:resource) { answer }
+            let(:resource_response) { json['answer'] }
           end
 
           it_behaves_like 'Successful response'
