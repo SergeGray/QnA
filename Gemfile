@@ -22,10 +22,13 @@ gem 'omniauth-vkontakte'
 gem 'pg'
 gem 'puma', '~> 4.1'
 gem 'sass-rails', '>= 6'
+gem 'sidekiq'
+gem 'sinatra', require: false
 gem 'slim-rails'
 gem 'sqlite3', '~> 1.4'
 gem 'turbolinks', '~> 5'
 gem 'webpacker', '~> 4.0'
+gem 'whenever', require: false
 
 group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
