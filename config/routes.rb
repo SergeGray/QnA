@@ -1,3 +1,5 @@
+require 'sidekiq/web'
+
 Rails.application.routes.draw do
   use_doorkeeper
 
@@ -47,4 +49,8 @@ Rails.application.routes.draw do
   root to: 'questions#index'
 
   mount ActionCable.server => '/cable'
+  
+  authenticate :user, lambda { |user| user.admin? } do
+    mount Sidekiq::Web => '/sidekiq'
+  end
 end
