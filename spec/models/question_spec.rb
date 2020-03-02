@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Question, type: :model do
+  let(:user) { create(:user) }
+
   it { should have_many(:answers).dependent(:destroy) }
   it { should have_many(:subscriptions).dependent(:destroy) }
   it { should have_one(:award).dependent(:destroy) }
@@ -20,5 +22,10 @@ RSpec.describe Question, type: :model do
   it 'has many attached files' do
     expect(Question.new.files)
       .to be_an_instance_of(ActiveStorage::Attached::Many)
+  end
+
+  it 'subscribes author on creation' do
+    expect { create(:question, user: user) }
+      .to change(user.subscriptions, :count).by 1
   end
 end
