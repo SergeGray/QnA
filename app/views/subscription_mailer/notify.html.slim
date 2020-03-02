@@ -1,4 +1,5 @@
-=h2 "The question #{link_to @answer.question.title, @answer.question}"\
-  "has received a new answer:"
+h1 The question you are subscribed to has received a new answer
 
-= @answer.body
+h2= link_to @answer.question.title, question_url(@answer.question)
+
+p= @answer.body
