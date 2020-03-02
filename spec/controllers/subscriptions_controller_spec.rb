@@ -1,13 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe SubscriptionsController, type: :controller do
-
   describe "POST #create" do
-    let(:question) { create(:question) }
+    let!(:question) { create(:question) }
 
     context 'Authenticated user' do
       let(:user) { create(:user) }
-      
+
       before { login(user) }
 
       it 'creates a question subscription' do
@@ -55,11 +54,11 @@ RSpec.describe SubscriptionsController, type: :controller do
   describe "DELETE #destroy" do
     let(:user) { create(:user) }
     let(:question) { create(:question) }
-    let!(:subscription) do 
+    let!(:subscription) do
       create(:subscription, user: user, question: question)
     end
- 
-    context 'Authenticated user' do     
+
+    context 'Authenticated user' do
       before { login(user) }
 
       it 'destroys a question subscription' do

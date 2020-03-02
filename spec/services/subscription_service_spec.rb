@@ -11,15 +11,22 @@ RSpec.describe SubscriptionService do
 
   it 'sends a notification to all subscribed users' do
     users.each do |user|
-      expect(SubscriptionMailer).to receive(:notify).with(user, answer)
+      expect(SubscriptionMailer)
+        .to receive(:notify)
+        .with(user, answer)
         .and_call_original
     end
+
+    expect(SubscriptionMailer)
+      .to receive(:notify)
+      .with(question.user, answer)
+      .and_call_original
 
     subject.call
   end
 
   it 'does not send notifications to unsubscribed users' do
-    expect(SubscriptionMailer).to receive(:notify).twice.and_call_original
+    expect(SubscriptionMailer).to receive(:notify).thrice.and_call_original
 
     subject.call
   end

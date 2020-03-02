@@ -23,6 +23,17 @@ feature 'User can subscribe to a question', %q(
       expect(page).to_not have_link 'Subscribe'
       expect(page).to have_link 'Unsubscribe'
     end
+
+    scenario 'tries to create a new question' do
+      visit new_question_path
+
+      fill_in 'Title', with: 'How do I do this'
+      fill_in 'Body', with: 'Help'
+      click_button 'Submit'
+
+      expect(page).to_not have_link 'Subscribe'
+      expect(page).to have_link 'Unsubscribe'
+    end
   end
 
   scenario 'Unauthenticated user tries to subscribe to a question' do
