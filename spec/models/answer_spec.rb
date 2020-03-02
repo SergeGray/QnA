@@ -37,4 +37,9 @@ RSpec.describe Answer, type: :model do
   it 'should put best answer first' do
     expect(question.answers).to match_array [answer2, answer]
   end
+
+  it 'should call subscription job on creation' do
+    expect(SubscriptionJob).to receive(:perform_later).and_call_original
+    create(:answer)
+  end
 end

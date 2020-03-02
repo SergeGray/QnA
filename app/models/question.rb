@@ -6,6 +6,7 @@ class Question < ApplicationRecord
   belongs_to :user
 
   has_many :answers, dependent: :destroy
+  has_many :subscriptions, dependent: :destroy
 
   has_one :award, dependent: :destroy
 

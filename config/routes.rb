@@ -26,6 +26,8 @@ Rails.application.routes.draw do
               concerns: %i[votable commentable] do
       patch :select, on: :member
     end
+
+    resources :subscriptions, only: %i[create destroy], shallow: true
   end
 
   resources :attachments, only: :destroy

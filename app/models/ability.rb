@@ -21,10 +21,11 @@ class Ability
     guest_abilities
 
     can :me, User
-    can :create, [Question, Answer, Comment]
+    can :create, [Question, Answer, Comment, Subscription]
     can %i[update destroy], [Question, Answer], user_id: @user.id
     can :destroy, ActiveStorage::Attachment, record: { user_id: @user.id }
     can :destroy, Link, linkable: { user_id: @user.id }
+    can :destroy, Subscription, user_id: @user.id
     can :select, Answer, best: false, question: { user_id: @user.id }
 
     can :vote, [Question, Answer] do |votable|
