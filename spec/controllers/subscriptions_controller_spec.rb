@@ -53,10 +53,42 @@ RSpec.describe SubscriptionsController, type: :controller do
   end
 
   describe "DELETE #destroy" do
-    context 'Authenticated user' do
+    let(:user) { create(:user) }
+    let(:question) { create(:question) }
+    let!(:subscription) do 
+      create(:subscription, user: user, question: question)
+    end
+ 
+    context 'Authenticated user' do     
+      before { login(user) }
+
+      it 'destroys a question subscription' do
+        expect { delete :destroy, params: { id: subscription }, format: :js }
+          .to change(question.subscriptions, :count).by(-1)
+      end
+
+      it 'destroys a current_user subscription' do
+        expect { delete :destroy, params: { id: subscription }, format: :js }
+          .to change(user.subscriptions, :count).by(-1)
+      end
+
+      it 'renders the destroy template' do
+        delete :destroy, params: { id: subscription }, format: :js
+        expect(response).to render_template :destroy
+      end
     end
 
     context 'Unauthenticated user' do
+      it 'does not destroy a subscription' do
+        expect { delete :destroy, params: { id: subscription }, format: :js }
+          .to_not change(Subscription, :count)
+      end
+
+      context 'after action is called' do
+        before { delete :destroy, params: { id: subscription }, format: :js }
+
+        it_behaves_like 'malicious action'
+      end
     end
   end
 end
