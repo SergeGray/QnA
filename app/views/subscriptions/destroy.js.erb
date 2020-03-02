@@ -1,0 +1,3 @@
+$('.question-subscriptions')
+  .html('<%= j render 'subscriptions/subscription', question: @subscription.question %>');
+$('.notice').html('You have successfully unsubscribed from the question.');

@@ -13,6 +13,7 @@ class QuestionsController < ApplicationController
   end
 
   def show
+    @subscription = @question.subscriptions.find_by(user_id: current_user&.id)
     gon.push(question_id: @question.id)
   end
 
