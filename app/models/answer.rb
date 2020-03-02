@@ -13,6 +13,8 @@ class Answer < ApplicationRecord
   validates :body, presence: true
   validates :best, uniqueness: { scope: :question_id, best: true }, if: :best
 
+  after_create :after_create_notify_subscribed
+
   scope :best, -> { where(best: true) }
 
   def select_as_best!
@@ -21,5 +23,11 @@ class Answer < ApplicationRecord
       question.award&.update!(user: user)
       update!(best: true)
     end
+  end
+
+  private
+
+  def after_create_notify_subscribed
+    SubscriptionJob.perform_later(self)
   end
 end

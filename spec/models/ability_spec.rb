@@ -17,7 +17,12 @@ RSpec.describe Ability do
 
     it { should be_able_to :me, User }
 
-    [Question, Answer, Comment].each do |resource_class|
+    it { should be_able_to :destroy, build(:subscription, user: user) }
+    it do
+      should_not be_able_to :destroy, build(:subscription, user: other_user)
+    end
+
+    [Question, Answer, Comment, Subscription].each do |resource_class|
       it { should be_able_to :create, resource_class }
     end
 

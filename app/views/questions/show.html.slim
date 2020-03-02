@@ -7,6 +7,10 @@ p= @question.body
   .question-award
     = render @question.award
 
+-if can? :create, Subscription
+  .question-subscriptions
+    = render 'subscriptions/subscription', question: @question
+
 .question-files
   = render 'shared/files', resource: @question
 
