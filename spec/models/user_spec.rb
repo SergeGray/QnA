@@ -23,11 +23,11 @@ RSpec.describe User, type: :model do
     it 'returns true when user is subscribed to question' do
       create(:subscription, user: user, question: question)
 
-      expect(user.subscribed?(question)).to be true
+      expect(user).to be_subscribed(question)
     end
 
     it 'returns false when user is not subscribed to question' do
-      expect(user.subscribed?(question)).to be false
+      expect(user).to_not be_subscribed(question)
     end
   end
 end
