@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe SubscriptionJob, type: :job do
+RSpec.describe NewAnswerNotificationJob, type: :job do
   let(:service) { double('SubscriptionService') }
   let(:answer) { create(:answer) }
 
@@ -8,6 +8,6 @@ RSpec.describe SubscriptionJob, type: :job do
 
   it 'calls SubscriptionService#call' do
     expect(service).to receive(:call)
-    SubscriptionJob.perform_now(answer)
+    NewAnswerNotificationJob.perform_now(answer)
   end
 end

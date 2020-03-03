@@ -39,7 +39,9 @@ RSpec.describe Answer, type: :model do
   end
 
   it 'should call subscription job on creation' do
-    expect(SubscriptionJob).to receive(:perform_later).and_call_original
+    expect(NewAnswerNotificationJob)
+      .to receive(:perform_later)
+      .and_call_original
     create(:answer)
   end
 end

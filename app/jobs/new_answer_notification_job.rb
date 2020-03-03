@@ -1,4 +1,4 @@
-class SubscriptionJob < ApplicationJob
+class NewAnswerNotificationJob < ApplicationJob
   queue_as :default
 
   def perform(answer)
