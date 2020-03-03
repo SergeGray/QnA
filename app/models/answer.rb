@@ -13,7 +13,7 @@ class Answer < ApplicationRecord
   validates :body, presence: true
   validates :best, uniqueness: { scope: :question_id, best: true }, if: :best
 
-  after_create :after_create_notify_subscribed
+  after_create_commit :after_create_commit_notify_subscribed
 
   scope :best, -> { where(best: true) }
 
@@ -27,7 +27,7 @@ class Answer < ApplicationRecord
 
   private
 
-  def after_create_notify_subscribed
-    SubscriptionJob.perform_later(self)
+  def after_create_commit_notify_subscribed
+    NewAnswerNotificationJob.perform_later(self)
   end
 end
