@@ -7,7 +7,7 @@ class Question < ApplicationRecord
 
   has_many :answers, dependent: :destroy
   has_many :subscriptions, dependent: :destroy
-
+  has_many :subscribed_users, through: :subscriptions, source: :user
   has_one :award, dependent: :destroy
 
   has_many_attached :files
@@ -21,6 +21,6 @@ class Question < ApplicationRecord
   private
 
   def after_create_subscribe_author
-    subscriptions.create(user: user)
+    subscriptions.create!(user: user)
   end
 end

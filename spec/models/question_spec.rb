@@ -5,6 +5,11 @@ RSpec.describe Question, type: :model do
 
   it { should have_many(:answers).dependent(:destroy) }
   it { should have_many(:subscriptions).dependent(:destroy) }
+  it do
+    should have_many(:subscribed_users)
+      .through(:subscriptions)
+      .source(:user)
+  end
   it { should have_one(:award).dependent(:destroy) }
   it { should belong_to :user }
 

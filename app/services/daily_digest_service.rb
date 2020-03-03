@@ -1,7 +1,7 @@
 class DailyDigestService
-  def initialize; end
+  def self.call
+    return unless Question.where(created_at: Date.yesterday.all_day).exists?
 
-  def call
     User.find_each do |user|
       DailyDigestMailer.digest(user).deliver_later
     end

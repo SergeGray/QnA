@@ -4,6 +4,7 @@ class User < ApplicationRecord
   has_many :comments, dependent: :destroy
   has_many :authorizations, dependent: :destroy
   has_many :subscriptions, dependent: :destroy
+  has_many :subscribed_questions, through: :subscriptions, source: :question
   has_many :awards
 
   devise :database_authenticatable, :registerable,
@@ -11,6 +12,6 @@ class User < ApplicationRecord
          :confirmable, :omniauthable, omniauth_providers: %i[github vkontakte]
 
   def subscribed?(question)
-    subscriptions.find_by(question_id: question.id).present?
+    subscriptions.exists?(question_id: question.id)
   end
 end
