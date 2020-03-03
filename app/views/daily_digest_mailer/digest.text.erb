@@ -1,0 +1,6 @@
+Greetings!
+
+Here is a list of questions asked today:
+
+<% @questions.each do |question| %>
+  <%= question.title %>, <%= question_url(question) %>
