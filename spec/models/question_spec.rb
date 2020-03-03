@@ -30,7 +30,7 @@ RSpec.describe Question, type: :model do
   end
 
   it 'subscribes author on creation' do
-    expect { create(:question, user: user) }
+    expect { Question.create(attributes_for(:question).merge(user: user)) }
       .to change(user.subscriptions, :count).by 1
   end
 end

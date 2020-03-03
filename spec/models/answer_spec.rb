@@ -42,6 +42,6 @@ RSpec.describe Answer, type: :model do
     expect(NewAnswerNotificationJob)
       .to receive(:perform_later)
       .and_call_original
-    create(:answer)
+    Answer.create(attributes_for(:answer).merge(question: question, user: user))
   end
 end
