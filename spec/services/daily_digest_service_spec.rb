@@ -27,7 +27,7 @@ RSpec.describe DailyDigestService do
     let!(:old_question) { create(:question, created_at: Date.today - 4.days) }
 
     it 'does not send daily digest to anyone' do
-      users.each do |user|
+      users.each do
         expect(DailyDigestMailer)
           .to_not receive(:digest)
       end
@@ -35,5 +35,4 @@ RSpec.describe DailyDigestService do
       subject.call
     end
   end
-
 end
