@@ -17,8 +17,8 @@ RSpec.describe User, type: :model do
   it { should validate_presence_of :password }
 
   describe '#subscribed?' do
-    let(:question) { create(:question) }
-    let(:user) { create(:user) }
+    let!(:question) { create(:question) }
+    let!(:user) { create(:user) }
 
     it 'returns true when user is subscribed to question' do
       create(:subscription, user: user, question: question)
