@@ -24,7 +24,7 @@ RSpec.describe DailyDigestService do
 
   context 'without questions created yesterday' do
     let!(:new_question) { create(:question) }
-    let!(:old_question) { create(:question, created_at: Date.today - 4.days) }
+    let!(:old_question) { create(:question, created_at: 4.days.ago) }
 
     it 'does not send daily digest to anyone' do
       users.each do
