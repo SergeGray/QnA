@@ -4,7 +4,7 @@ class SubscriptionService
   end
 
   def call
-    @answer.question.subscribed_users.find_each do |user|
+    @answer.question.subscribers.find_each do |user|
       SubscriptionMailer.notify(user, @answer).deliver_later
     end
   end
