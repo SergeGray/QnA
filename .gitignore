@@ -11,6 +11,7 @@
 /db/*.sqlite3
 /db/*.sqlite3-journal
 /db/*.sqlite3-*
+/db/sphinx
 
 # Ignore all logfiles and tempfiles.
 /log/*
@@ -28,6 +29,7 @@
 # Ignore master key for decrypting credentials and more.
 /config/master.key
 /config/database.yml
+/config/*.sphinx.conf
 
 /public/packs
 /public/packs-test
