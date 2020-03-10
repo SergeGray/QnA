@@ -32,12 +32,11 @@ feature 'User can search resources', %q(
     ]
   end
 
-
   before do
     visit root_path
   end
 
-  after do   
+  after do
     other_attributes.each do |attribute|
       expect(page).to_not have_content attribute
     end
@@ -47,7 +46,7 @@ feature 'User can search resources', %q(
     ThinkingSphinx::Test.run do
       fill_in 'query', with: 'ruby'
       click_button 'Search'
-      
+
       ruby_attributes.each do |_, attribute|
         expect(page).to have_content attribute
       end
@@ -58,7 +57,7 @@ feature 'User can search resources', %q(
     ThinkingSphinx::Test.run do
       fill_in 'query', with: 'python'
       click_button 'Search'
-      
+
       ruby_attributes.each do |_, attribute|
         expect(page).to_not have_content attribute
       end
@@ -66,7 +65,7 @@ feature 'User can search resources', %q(
       expect(page).to have_content 'No results'
     end
   end
-  
+
   SearchService::RESOURCES.each do |resource|
     scenario "User tries to do a #{resource} search" do
       ThinkingSphinx::Test.run do
