@@ -1,0 +1,3 @@
+td= @result.each do |entry|
+  tr= entry.attributes.each do |name, attribute|
+    p= "#{name.titleize}: #{attribute}"

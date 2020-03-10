@@ -17,6 +17,8 @@ RSpec.describe Ability do
 
     it { should be_able_to :me, User }
 
+    it { should be_able_to :result, :search }
+
     it { should be_able_to :destroy, build(:subscription, user: user) }
     it do
       should_not be_able_to :destroy, build(:subscription, user: other_user)
@@ -80,6 +82,8 @@ RSpec.describe Ability do
     let(:user) { nil }
 
     it { should_not be_able_to :me, User }
+
+    it { should be_able_to :result, :search }
 
     it { should be_able_to :read, :all }
 

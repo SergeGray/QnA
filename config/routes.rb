@@ -48,6 +48,8 @@ Rails.application.routes.draw do
     end
   end
 
+  get :search, to: 'search#result'
+
   root to: 'questions#index'
 
   mount ActionCable.server => '/cable'
