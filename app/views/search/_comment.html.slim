@@ -1,0 +1,5 @@
+strong Comment:
+- if resource.commentable_type == "Question"
+  p= link_to resource.body, resource.commentable
+- else
+  p= link_to resource.body, resource.commentable.question

@@ -1,3 +1,5 @@
-td= @result.each do |entry|
-  tr= entry.attributes.each do |name, attribute|
-    p= "#{name.titleize}: #{attribute}"
+-if @result.empty?
+  p No results
+- else
+  - @result.each do |entry|
+    = render partial: entry.class.name.downcase, locals: { resource: entry }

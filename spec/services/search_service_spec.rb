@@ -23,7 +23,7 @@ RSpec.describe SearchService do
     it 'calls sphinx search method' do
       expect(ThinkingSphinx).to receive(:search).with('ruby')
 
-      subject.new(query: 'ruby', resource: 'Question').call
+      subject.new(query: 'ruby', resource: 'Fake').call
     end
   end
 end
