@@ -1,5 +1,5 @@
 class SearchService
-  RESOURCES = %w[Question Answer Comment User]
+  RESOURCES = %w[Question Answer Comment User].freeze
 
   def initialize(params)
     @params = params
@@ -12,6 +12,6 @@ class SearchService
                    ThinkingSphinx
                  end
 
-    searchable.search ThinkingSphinx::Query.escape(@params[:query]) 
+    searchable.search ThinkingSphinx::Query.escape(@params[:query])
   end
 end
