@@ -15,12 +15,12 @@ feature 'User can search resources', %q(
   given!(:other_user) { create(:user) }
 
   given!(:ruby_attributes) do
-    [
-      ruby_question.title,
-      ruby_answer.body,
-      ruby_comment.body,
-      ruby_user.email
-    ]
+    {
+      'Question' => ruby_question.title,
+      'Answer' => ruby_answer.body,
+      'Comment' => ruby_comment.body,
+      'User' => ruby_user.email
+    }
   end
 
   given!(:other_attributes) do
@@ -49,21 +49,23 @@ feature 'User can search resources', %q(
     ThinkingSphinx::Test.run do
       click_button 'Search'
       
-      ruby_attributes.each do |attribute|
+      ruby_attributes.each do |_, attribute|
         expect(page).to have_content attribute
       end
     end
   end
+  
+  SearchService::RESOURCES.each do |resource|
+    scenario "User tries to do a #{resource} search" do
+      ThinkingSphinx::Test.run do
+        select resource, from: 'resource'
+        click_button 'Search'
 
-  scenario 'User tries to do a question search' do
-    ThinkingSphinx::Test.run do
-      select 'Question', from: 'resource'
-      click_button 'Search'
+        expect(page).to have_content ruby_attributes[resource]
 
-      expect(page).to have_content ruby_question.title
-
-      (ruby_attributes - [ruby_question.title]).each do |attribute|
-        expect(page).to_not have_content attribute
+        ruby_attributes.except(resource).each do |_, attribute|
+          expect(page).to_not have_content attribute
+        end
       end
     end
   end
