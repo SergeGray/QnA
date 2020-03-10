@@ -8,6 +8,6 @@ class SearchController < ApplicationController
   private
 
   def search_params
-    params.permit(:query)
+    params.permit(:query, :resource)
   end
 end
