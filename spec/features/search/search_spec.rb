@@ -1,4 +1,4 @@
-require 'sphinx_helper'
+require 'rails_helper'
 
 feature 'User can search resources', %q(
   In order to find existing information on my problem
