@@ -5,7 +5,7 @@ feature 'User can subscribe to a question', %q(
   As an authenticated user
   I want to be able to subscribe to a question
 ) do
-  given(:question) { create(:question) }
+  given!(:question) { create(:question) }
 
   context 'Authenticated user', js: true do
     given(:user) { create(:user) }
