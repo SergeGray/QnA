@@ -4,7 +4,7 @@ RSpec.describe SearchController, type: :controller do
   before { allow(SearchService).to receive(:call) }
 
   it 'calls SearchService#call with permitted params' do
-    expect(SearchService).to receive(:call).with(query: 'ruby')
+    expect(SearchService).to receive(:call).with(query: 'ruby', resource: nil)
     get :index, params: { query: 'ruby' }
   end
 
