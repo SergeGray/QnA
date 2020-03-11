@@ -1,17 +1,14 @@
 class SearchService
   RESOURCES = %w[Question Answer Comment User].freeze
 
-  def initialize(params)
-    @params = params
-  end
+  def self.call(query: "", resource: nil)
+    klass = if RESOURCES.include?(resource)
+              resource.constantize
+            else
+              ThinkingSphinx
+            end
 
-  def call
-    searchable = if RESOURCES.include?(@params[:resource])
-                   @params[:resource].constantize
-                 else
-                   ThinkingSphinx
-                 end
-
-    searchable.search ThinkingSphinx::Query.escape(@params[:query])
+    escape_query = ThinkingSphinx::Query.escape(query)
+    klass.search escape_query
   end
 end
