@@ -1,8 +1,8 @@
 class SearchController < ApplicationController
   authorize_resource class: false
 
-  def result
-    @result = SearchService.new(search_params).call
+  def index
+    @result = SearchService.call(search_params.to_h.symbolize_keys)
   end
 
   private

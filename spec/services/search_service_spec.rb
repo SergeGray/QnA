@@ -7,7 +7,7 @@ RSpec.describe SearchService do
     it 'calls sphinx search method' do
       expect(ThinkingSphinx).to receive(:search).with('ruby')
 
-      subject.new(query: 'ruby').call
+      subject.call(query: 'ruby')
     end
   end
 
@@ -15,7 +15,7 @@ RSpec.describe SearchService do
     it 'calls sphinx search method on that resource' do
       expect(Question).to receive(:search).with('ruby')
 
-      subject.new(query: 'ruby', resource: 'Question').call
+      subject.call(query: 'ruby', resource: 'Question')
     end
   end
 
@@ -23,7 +23,7 @@ RSpec.describe SearchService do
     it 'calls sphinx search method' do
       expect(ThinkingSphinx).to receive(:search).with('ruby')
 
-      subject.new(query: 'ruby', resource: 'Fake').call
+      subject.call(query: 'ruby', resource: 'Fake')
     end
   end
 end
