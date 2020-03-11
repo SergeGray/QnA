@@ -1,7 +1,7 @@
 class SearchService
   RESOURCES = %w[Question Answer Comment User].freeze
 
-  def self.call(query: "", resource: nil)
+  def self.call(query: '', resource: nil)
     klass = if RESOURCES.include?(resource)
               resource.constantize
             else
