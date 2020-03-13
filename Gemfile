@@ -23,7 +23,7 @@ gem 'omniauth-vkontakte'
 gem 'pg'
 gem 'puma', '~> 4.3'
 gem 'sass-rails', '>= 6'
-gem 'sidekiq'
+gem 'sidekiq', '< 6'
 gem 'sinatra', require: false
 gem 'slim-rails'
 gem 'sqlite3', '~> 1.4'
@@ -46,6 +46,7 @@ group :development do
   gem 'capistrano-passenger', require: false
   gem 'capistrano-rails', require: false
   gem 'capistrano-rvm', require: false
+  gem 'capistrano-sidekiq', require: false
   gem 'listen', '>= 3.0.5', '< 3.2'
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
