@@ -4,7 +4,7 @@ RSpec.describe Link, type: :model do
   let(:link) { build(:link) }
   let(:gist) { build(:link, :gist) }
 
-  it { should belong_to :linkable }
+  it { should belong_to(:linkable).touch(true) }
 
   it { should validate_presence_of :name }
   it { should validate_presence_of :url }
