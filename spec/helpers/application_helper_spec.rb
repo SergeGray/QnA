@@ -24,15 +24,4 @@ RSpec.describe ApplicationHelper, type: :helper do
       expect(resource_name(question)).to eq('question')
     end
   end
-
-  describe '#collection_cache_key_for' do
-    let!(:questions) { create_list(:question, 2) }
-
-    it 'returns a string with a model counter and the date of last update' do
-      expect(collection_cache_key_for(:question)).to eq(
-        "questions/collection-2-"\
-        "#{Question.maximum(:updated_at).try(:utc).try(:to_s, :number)}"
-      )
-    end
-  end
 end
