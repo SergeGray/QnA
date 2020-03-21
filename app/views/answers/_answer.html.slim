@@ -1,51 +1,52 @@
-= content_tag :tr, class: "answer-#{answer.id}" do
-  td
-    - if answer.best?
-      b Best answer
-  td= answer.body
-  td= render 'shared/voting', resource: answer
-
-  = content_tag :td, class: "answer-#{answer.id}-links" do
-    = render 'shared/links', resource: answer
-
-  = content_tag :td, class: "answer-#{answer.id}-files" do
-    = render 'shared/files', resource: answer
-
-  = content_tag :td, class: "answer-#{answer.id}-comments" do
-    = render 'shared/comments', resource: answer
-
-  - if can? :update, answer
+- cache [answer, current_user] do
+  = content_tag :tr, class: "answer-#{answer.id}" do
     td
-      = link_to 'Edit',
-                '#',
-                class: 'edit-answer-link',
-                data: { answer_id: answer.id }
-      = form_with model: answer,
-                  class: 'hidden',
-                  html: { id: "edit-answer-#{answer.id}" } do |f|
-        p
-          = f.label :body
-          = f.text_area :body
-        p
-          = f.label :files
-          = f.file_field :files , multiple: true, direct_upload: true
-        p Links:
-        #links
-          = f.fields_for :links do |link|
-            = render 'shared/link_fields', f: link
-          = link_to_add_association 'add link', f, :links,
-              partial: 'shared/link_fields'
-        p= f.submit 'Save'
-  -if can? :destroy, answer
-    td= link_to 'Destroy',
-                answer,
-                class: 'delete-answer-link',
-                method: :delete,
-                remote: true
-  td
-    - if can? :select, answer
-      = link_to 'Select as best',
-                select_answer_path(answer),
-                method: :patch,
-                remote: true,
-                class: "select-answer-#{answer.id}"
+      - if answer.best?
+        b Best answer
+    td= answer.body
+    td= render 'shared/voting', resource: answer
+
+    = content_tag :td, class: "answer-#{answer.id}-links" do
+      = render 'shared/links', resource: answer
+
+    = content_tag :td, class: "answer-#{answer.id}-files" do
+      = render 'shared/files', resource: answer
+
+    = content_tag :td, class: "answer-#{answer.id}-comments" do
+      = render 'shared/comments', resource: answer
+
+    - if can? :update, answer
+      td
+        = link_to 'Edit',
+                  '#',
+                  class: 'edit-answer-link',
+                  data: { answer_id: answer.id }
+        = form_with model: answer,
+                    class: 'hidden',
+                    html: { id: "edit-answer-#{answer.id}" } do |f|
+          p
+            = f.label :body
+            = f.text_area :body
+          p
+            = f.label :files
+            = f.file_field :files , multiple: true, direct_upload: true
+          p Links:
+          #links
+            = f.fields_for :links do |link|
+              = render 'shared/link_fields', f: link
+            = link_to_add_association 'add link', f, :links,
+                                      partial: 'shared/link_fields'
+          p= f.submit 'Save'
+    -if can? :destroy, answer
+      td= link_to 'Destroy',
+                  answer,
+                  class: 'delete-answer-link',
+                  method: :delete,
+                  remote: true
+    td
+      - if can? :select, answer
+        = link_to 'Select as best',
+                  select_answer_path(answer),
+                  method: :patch,
+                  remote: true,
+                  class: "select-answer-#{answer.id}"

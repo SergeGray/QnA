@@ -1,32 +1,33 @@
-h1= @question.title
-p= @question.body
+- cache [@question, current_user] do
+  h1= @question.title
+  p= @question.body
 
-= render 'shared/voting', resource: @question
+  = render 'shared/voting', resource: @question
 
--if @question.award.present?
-  .question-award
-    = render @question.award
+  -if @question.award.present?
+    .question-award
+      = render @question.award
 
--if can? :create, Subscription
-  .question-subscriptions
-    = render 'subscriptions/subscription', question: @question
+  -if can? :create, Subscription
+    .question-subscriptions
+      = render 'subscriptions/subscription', question: @question
 
-.question-files
-  = render 'shared/files', resource: @question
+  .question-files
+    = render 'shared/files', resource: @question
 
-.question-links
-  = render 'shared/links', resource: @question
+  .question-links
+    = render 'shared/links', resource: @question
 
-= content_tag :div, class: "question-#{@question.id}-comments" do
-  = render 'shared/comments', resource: @question
+  = content_tag :div, class: "question-#{@question.id}-comments" do
+    = render 'shared/comments', resource: @question
 
-h2 Answers
-table.answers
-  th Body
-  th Actions
-  = render @question.answers
+  h2 Answers
+  table.answers
+    th Body
+    th Actions
+    = render @question.answers
 
-.answer-errors
-  = render 'shared/errors', resource: @answer
+  .answer-errors
+    = render 'shared/errors', resource: @answer
 
-= render 'answers/form' if can? :create, Answer
+  = render 'answers/form' if can? :create, Answer

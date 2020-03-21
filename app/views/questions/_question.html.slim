@@ -1,33 +1,34 @@
-= content_tag :tr, class: "question-#{question.id}" do
-  td= question.title
-  td= question.body
-  td= link_to 'Show', question
-  - if can? :edit, question
-    td
-      = link_to 'Edit',
-                '#',
-                class: 'edit-question-link',
-                data: { question_id: question.id }
-      = form_with model: question,
-                  class: 'hidden',
-                  html: { id: "edit-question-#{question.id}" } do |f|
-        p
-          = f.label :title
-          = f.text_field :title
-        p
-          = f.label :body
-          = f.text_area :body
-        p
-          = f.label :files
-          = f.file_field :files , multiple: true, direct_upload: true
-        p Links:
-        p#links
-          = f.fields_for :links do |link|
-            = render 'shared/link_fields', f: link
-          = link_to_add_association 'add link',
-                                    f,
-                                    :links,
-                                    partial: 'shared/link_fields'
-        p= f.submit 'Save'
-  -if can? :destroy, question
-    td= link_to 'Destroy', question, method: :delete
+- cache [question, current_user] do
+  = content_tag :tr, class: "question-#{question.id}" do
+    td= question.title
+    td= question.body
+    td= link_to 'Show', question
+    - if can? :edit, question
+      td
+        = link_to 'Edit',
+                  '#',
+                  class: 'edit-question-link',
+                  data: { question_id: question.id }
+        = form_with model: question,
+                    class: 'hidden',
+                    html: { id: "edit-question-#{question.id}" } do |f|
+          p
+            = f.label :title
+            = f.text_field :title
+          p
+            = f.label :body
+            = f.text_area :body
+          p
+            = f.label :files
+            = f.file_field :files , multiple: true, direct_upload: true
+          p Links:
+          p#links
+            = f.fields_for :links do |link|
+              = render 'shared/link_fields', f: link
+            = link_to_add_association 'add link',
+                                      f,
+                                      :links,
+                                      partial: 'shared/link_fields'
+          p= f.submit 'Save'
+    -if can? :destroy, question
+      td= link_to 'Destroy', question, method: :delete

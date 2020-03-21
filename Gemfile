@@ -22,6 +22,7 @@ gem 'omniauth-github'
 gem 'omniauth-vkontakte'
 gem 'pg'
 gem 'puma', '~> 4.3'
+gem 'redis-rails'
 gem 'sass-rails', '>= 6'
 gem 'sidekiq', '< 6'
 gem 'sinatra', require: false
