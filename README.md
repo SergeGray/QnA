@@ -32,10 +32,63 @@ Install the ruby mysql packages.
 Install Sphinx.
 Install all the necessary gems using Bundler.
 Install yarn and packages.
-Create a postgres role with a 'createdb' role, create a config/database.yml file
-with a postgresql adapter.
-Add OAuth application id and secret to credentials for github and vk.
+Create a postgres role with a `createdb` role, create a `config/database.yml`
+file with a postgresql adapter.
+To get OAuth working, add OAuth application ids and secrets to credentials for
+github and vk.
+
+Credentials example:
+
+```
+development:
+  github:
+    app_id: ...
+    app_secret: ...
+  vk:
+    app_id: ...
+    app_secret: ...
+
+test:
+  github:
+    app_id: ...
+    app_secret: ...
+  vk:
+    app_id: ...
+    app_secret: ...
+
+profuction:
+  github:
+    app_id: ...
+    app_secret: ...
+  vk:
+    app_id: ...
+    app_secret: ...
+```
 
 ## Additional information
 
+- This was a learning project for the online school Thinknetica. In the
+development of this project I've used various methods and techniques.
 
+- The entirety of the project was developed with accordance to the TDD/BDD
+methods.
+
+- Most of the UI actions have Ajax integrated and are streamed using ActionCable.
+
+- Uploaded files are stored in an AWS cloud.
+
+- Application allows authentication with user credentials (implemented with the
+devise gem), or using OAuth (implemented with the omniauth gem).
+
+- All of the actions need to be authorized (implemented with the cancancan gem).
+
+- The application has API, which implements authentication with doorkeeper and
+allows CRUD actions on questions and answers.
+
+- The weekly digest function and subscription notification functions are
+implemented using ActiveJobs with sidekiq.
+
+- Full text search is implemented using thinkingsphinx. The database is indexed
+every 30 minutes (implemented with the whenever gem).
+
+- The application also implements page caching.
