@@ -24,7 +24,7 @@ gem 'pg'
 gem 'puma', '~> 4.3'
 gem 'redis-rails'
 gem 'sass-rails', '>= 6'
-gem 'sidekiq', '< 6'
+gem 'sidekiq', '< 7'
 gem 'sinatra', require: false
 gem 'slim-rails'
 gem 'sqlite3', '~> 1.4'
