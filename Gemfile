@@ -3,7 +3,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '2.6.5'
 
-gem 'rails', '~> 6.0.2', '>= 6.0.2.1'
+gem 'rails', '~> 6.0.6'
 
 gem 'active_model_serializers', '~> 0.10.0'
 gem 'aws-sdk-s3', require: false
@@ -24,7 +24,7 @@ gem 'pg'
 gem 'puma', '~> 4.3'
 gem 'redis-rails'
 gem 'sass-rails', '>= 6'
-gem 'sidekiq', '< 6'
+gem 'sidekiq', '< 7'
 gem 'sinatra', require: false
 gem 'slim-rails'
 gem 'sqlite3', '~> 1.4'
